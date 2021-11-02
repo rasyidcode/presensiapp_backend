@@ -25,8 +25,11 @@ $paths = new Config\Paths();
 
 // Location of the framework bootstrap file.
 $bootstrap = rtrim($paths->systemDirectory, '\\/ ') . DIRECTORY_SEPARATOR . 'bootstrap.php';
+// print_r($bootstrap);die();
 $app       = require realpath($bootstrap) ?: $bootstrap;
-
+// require_once(dirname(__FILE__).'/../modules/web/home/controllers/home_controller.php');
+// require_once(dirname(__FILE__).'/../modules/web/home/views/home_view.php');
+// print_r($app);die();
 /*
  *---------------------------------------------------------------
  * LAUNCH THE APPLICATION

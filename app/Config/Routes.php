@@ -21,7 +21,7 @@ $routes->setDefaultController('Home');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
 $routes->set404Override();
-$routes->setAutoRoute(true);
+$routes->setAutoRoute(false);
 
 /*
  * --------------------------------------------------------------------
@@ -31,7 +31,21 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
+// $routes->get('/', 'Home::index');
+
+/** scan only the path below modules to find routes.php */
+$dir = scandir(ROOTPATH.'modules');
+
+foreach($dir as $module) {
+    if ($module == '.' || $module == '..')
+        continue;
+    
+    $module_contents = scandir(ROOTPATH.'modules/'.$module);
+    if (in_array('routes.php', $module_contents)) {
+        $routes_namespace = '\Modules\\'.ucfirst($module).'\\';
+        include ROOTPATH.'modules/'.$module.'/routes.php';
+    }
+}
 
 /*
  * --------------------------------------------------------------------
