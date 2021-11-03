@@ -13,6 +13,25 @@ $routes->group('api/v1', ['namespace' => $routes_namespace], function($routes) {
      * 
      */
 
+    // presensi
+    $routes->group('presensi', function($routes) {
+        // @note: only user dosen has access on this endpoint
+        // @body:
+        // {
+        //     "presensi_secret": "random_string"
+        // }
+        $routes->post('makePresensi', 'Presensi\Controllers\PresensiController::makePresensi');
+
+        // @note: - only user mhs has access on this endpoint
+        //        - presensi hanya boleh dilakukan sekali untuk 1 presensi/pertemuan
+        // @body
+        // {
+        //     "presensi_secret": "random_string",
+        //     "id_jadwal": 0,
+        // }
+        $routes->post('doPresensi', 'Presensi\Controllers\PresensiController::doPresensi');
+    });
+
     // dosen
     $routes->group('dosen', function($routes) {
         $routes->group('perkuliahan', function($routes) {

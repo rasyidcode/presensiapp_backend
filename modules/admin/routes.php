@@ -33,34 +33,60 @@ $routes->group('dashboard/admin', ['namespace' => $routes_namespace], function($
 
     /** manage jurusan */
 
-    /** kelas */
-    /****
-     * properties :
-     * (id, id_dosen, id_matkul, jumlah_pertemuan, presensi_secret, semester, created_at, updated_at, deleted_at)
-     */
-
-    /** kelas_pertemuan */
-    /****
-     * properties :
-     * (id, id_kelas, id_pertemuan)
-     */
-
-    /** pertemuan */
-    /***
-     * properties : 
-     * (id, day, begin_time, end_time, created_at, updated_at, deleted_at)
-     */
-
-    /** mhs_kelas */
-    /***
-     * properties :
-     * (id, id_kelas, id_mhs)
-     */
-
-    /** perkuliahan */
-    /*** properties : 
-     * (id, id_kelas_pertemuan, id_mhs, pertemuan_ke, status_presensi, created_at, updated_at, deleted_at)
-     */
-
     /** logout */
 });
+
+// DB Design
+/** mahasiswa */
+/**
+ * properties : 
+ * (id, nama)
+ */
+
+/** dosen */
+/**
+ * properties :
+ * (id, nama)
+ */
+
+/** periode */
+/**
+* properties :
+* (id, semester, year, start_at, end_at, created_at, updated_at, deleted_at)
+*/
+
+/** kelas */
+/****
+ * properties :
+ * (id, id_dosen, id_matkul, id_periode, created_at, updated_at, deleted_at)
+ */
+
+/** jadwal */
+/***
+ * properties : 
+ * (id, id_kelas, date, begin_time, end_time, created_at, updated_at, deleted_at)
+ */
+
+/** presensi */
+/**
+ * properties : 
+ * (id, id_jadwal, secret, expired_at, created_at)
+ */
+
+/** kelas_mhs */
+/***
+ * properties :
+ * (id, id_kelas, id_mhs)
+ */
+
+/** perkuliahan */
+/*** properties : 
+ * (id, id_presensi, id_mhs, status_presensi, created_at)
+ */
+
+// unused
+// /** kelas_pertemuan */
+// /****
+//  * properties :
+//  * (id, id_kelas, id_pertemuan)
+//  */
