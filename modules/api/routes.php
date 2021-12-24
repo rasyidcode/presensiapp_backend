@@ -1,7 +1,7 @@
 <?php
 
 $routes->group('api/v1', ['namespace' => $routes_namespace], function($routes) {
-    $routes->get('/', 'Default\Controllers\DefaultController::index');
+    $routes->get('/', 'Entry\Controllers\EntryController::index');
 
     // auth
     $routes->group('auth', function($routes) {

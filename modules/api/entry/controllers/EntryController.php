@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\Api\Default\Controllers;
+namespace Modules\Api\Entry\Controllers;
 
 use CodeIgniter\HTTP\ResponseInterface;
 
-class DefaultController extends \App\Controllers\BaseController
+class EntryController extends \App\Controllers\BaseController
 {
     public function index()
     {
