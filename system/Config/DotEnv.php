@@ -31,6 +31,7 @@ class DotEnv
     public function __construct(string $path, string $file = '.env')
     {
         $this->path = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $file;
+        // print_r($this->path);die();
     }
 
     /**

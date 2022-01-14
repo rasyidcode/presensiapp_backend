@@ -1,0 +1,31 @@
+// Mhs
+{
+    "success": true,
+    "status": 200,
+    "_links": {
+        "base": "http://baseurl.com/api/v1",
+        "next": "/mhs?limit=5&start=10",
+        "prev": "/mhs?limit=5&start=0"
+    },
+    "data": [
+        {
+            "id": 1,
+            "nim": "",
+            "nama_lengkap": "",
+            "id_user": "",
+            "id_jurusan": "",
+            "tahun_masuk": "",
+            "jenis_kelamin": "L",
+            "alamat": "",
+            "created_at": "",
+            "updated_at": ""
+        }
+    ]
+}
+
+//Auth
+///Sign In - Body
+{
+    "username": "testuser",
+    "password": "12345"
+}

@@ -47,3 +47,12 @@ Options All -Indexes
 # Disable server signature start
 	ServerSignature Off
 # Disable server signature end
+
+# Multi envs config
+# <IfModule mod_env.c>
+#     SetEnv CI_ENV dev
+# </IfModule>
+
+# <IfModule mod_env.c>
+#     SetEnv CI_ENV dev
+# </IfModule>

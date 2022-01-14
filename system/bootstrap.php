@@ -125,8 +125,39 @@ if (is_file(COMPOSER_PATH)) {
 
 // Load environment settings from .env files into $_SERVER and $_ENV
 require_once SYSTEMPATH . 'Config/DotEnv.php';
+# start jamil - hack envs
+$envPath = ROOTPATH . 'envs';
+$envFile = '';
 
-$env = new DotEnv(ROOTPATH);
+if (!isset($_SERVER['SERVER_NAME'])) {
+    if (!isset($_SERVER['argv'][2])) {
+        echo 'Error: You need to provide the third argument for the environment.';
+        exit;
+    }
+    $envFile = $_SERVER['argv'][2] . '.env';
+} else {
+    $subdomain = explode('.', $_SERVER['SERVER_NAME'])[0];
+
+    $isSecured = false;
+
+    if (!empty($_SERVER['HTTPS'])) {
+        if ($_SERVER['HTTPS'] === 'on') $isSecured = true;
+        else $isSecured = false;
+    } else {
+        if ($_SERVER['SERVER_PORT'] === 443) $isSecured = true;
+        else $isSecured = false;
+    }
+
+    if ($isSecured) {
+        $envFile .= $subdomain . '.env';
+    } else {
+        $envFile .= 'local-' . $subdomain . '.env';
+    }
+}
+
+
+$env = new DotEnv($envPath, $envFile);
+# end jamil - hack envs
 $env->load();
 
 // Always load the URL helper, it should be used in most of apps.
