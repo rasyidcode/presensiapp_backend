@@ -29,3 +29,9 @@
     "username": "testuser",
     "password": "12345"
 }
+
+//Auth
+///Sign In - Response - Failed
+{
+    "message": "Sign in failed, check your credentials",
+}
