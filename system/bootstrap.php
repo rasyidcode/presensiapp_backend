@@ -130,11 +130,22 @@ $envPath = ROOTPATH . 'envs';
 $envFile = '';
 
 if (!isset($_SERVER['SERVER_NAME'])) {
-    if (!isset($_SERVER['argv'][2])) {
-        echo 'Error: You need to provide the third argument for the environment.';
+    $envArgs = '';
+    foreach($_SERVER['argv'] as $arg) {
+        if (strpos($arg, '--env') !== false) {
+            $envArg = $arg;
+            break;
+        }
+    }
+
+    if (empty($envArg)) {
+        echo 'Error: You need to provide the --env argument for the environment.';
         exit;
     }
-    $envFile = $_SERVER['argv'][2] . '.env';
+
+    $envFile = explode('=', $envArg)[1];
+
+    $envFile = $envFile . '.env';
 } else {
     $subdomain = explode('.', $_SERVER['SERVER_NAME'])[0];
 
