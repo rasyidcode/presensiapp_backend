@@ -1,6 +1,9 @@
 <?php
 
 // Path to the front controller (this file)
+
+use App\Exceptions\ApiAccessErrorException;
+
 define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
 
 /*
@@ -37,4 +40,15 @@ $app       = require realpath($bootstrap) ?: $bootstrap;
  * Now that everything is setup, it's time to actually fire
  * up the engines and make this app do its thang.
  */
+// try {
+//     $app->run();
+// } catch (MyException $e) {
+//     return response
+// 			->setJSON([
+// 				'status'    => ResponseInterface::HTTP_OK,
+// 				'message'   => $e->getMessage(),
+// 			])
+// 			->setStatusCode(ResponseInterface::HTTP_OK);
+// }
+// throw new ApiAccessErrorException();
 $app->run();
