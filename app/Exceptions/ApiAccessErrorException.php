@@ -7,24 +7,31 @@ use Exception;
 class ApiAccessErrorException extends Exception {
 
     private $extras;
-    private $httpCode;
+    private $statusCode;
+    private $reason;
 
-    public function __construct(string $message = 'Unknown error', int $httpCode = 0, array $extras = [])
+    public function __construct(string $message = 'Unknown error', int $statusCode = 0, string $reason = '', array $extras = [])
     {
         parent::__construct($message);
 
-        $this->httpCode = $httpCode;
-        $this->extras = $extras;
+        $this->statusCode = $statusCode;
+        $this->extras   = $extras;
+        $this->reason   = $reason;
     }
 
-    public function getHttpCode()
+    public function getStatusCode()
     {
-        return $this->httpCode;
+        return $this->statusCode;
     }
 
     public function getExtras()
     {
         return $this->extras;
+    }
+
+    public function getReason()
+    {
+        return $this->reason;
     }
 
 }

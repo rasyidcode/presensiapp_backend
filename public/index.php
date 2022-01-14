@@ -2,8 +2,6 @@
 
 // Path to the front controller (this file)
 
-use App\Exceptions\ApiAccessErrorException;
-
 define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
 
 /*
@@ -51,4 +49,21 @@ $app       = require realpath($bootstrap) ?: $bootstrap;
 // 			->setStatusCode(ResponseInterface::HTTP_OK);
 // }
 // throw new ApiAccessErrorException();
-$app->run();
+try {
+    $app->run();
+} catch (App\Exceptions\ApiAccessErrorException $e) {
+    $response = ['message' => $e->getMessage()];
+    
+    if (!empty($e->getExtras()))
+        $response = array_merge($response, $e->getExtras());
+
+    header('Content-Type: application/json');
+    if ($e->getStatusCode() > 0) {
+        // header("HTTP/1.1 {$e->getStatusCode()}", true, $e->getStatusCode());
+        header(sprintf("HTTP/%s %s %s", $_SERVER['SERVER_PROTOCOL'], $e->getStatusCode(), $e->getReason()), true, $e->getStatusCode());
+    }
+    
+    echo json_encode([
+        'message'   => $e->getMessage()
+    ]);
+}

@@ -29,45 +29,36 @@ class AuthController extends BaseController
 
     public function signIn()
     {
-        try {
-            if (!$this->validate([
-                    'username'  => 'required',
-                    'password'  => 'required'
-                ]))
-                throw new ApiAccessErrorException(
-                    'Validation error', 
-                    ResponseInterface::HTTP_BAD_REQUEST,
-                    ['errors'    => $this->validator->getErrors()]
-                );
+        if (!$this->validate([
+                'username'  => 'required',
+                'password'  => 'required'
+            ]))
+            throw new ApiAccessErrorException(
+                message: 'Validation error', 
+                statusCode: ResponseInterface::HTTP_BAD_REQUEST,
+                extras: ['errors'    => $this->validator->getErrors()]
+            );
 
-            $username   = $this->request->getVar('username');
-            $password   = $this->request->getVar('password');
+        $username   = $this->request->getVar('username');
+        $password   = $this->request->getVar('password');
 
-            $userdata = $this->authModel->getUser($username);
-            if (is_null($userdata)) {
-                return $this->response
-                    ->setJSON([
-                        'message'   => 'Credentials not match'
-                    ])
-                    ->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST);
-            }
+        $userdata = $this->authModel->getUser($username);
+        if (is_null($userdata))
+            throw new ApiAccessErrorException(
+                message: 'Credentials not match', 
+                statusCode: ResponseInterface::HTTP_BAD_REQUEST
+            );
 
-            if (!password_verify($password, $userdata['password'])) {
-                return $this->response
-                    ->setJSON([
-                        'message'   => 'Credentials not match'
-                    ])
-                    ->setStatusCode(ResponseInterface::HTTP_BAD_REQUEST);
-            }
-        } catch (ApiAccessErrorException $e) {
-            $response = ['message'   => $e->getMessage()];
+        if (!password_verify($password, $userdata['password']))
+            throw new ApiAccessErrorException(
+                message: 'Credentials not match', 
+                statusCode: ResponseInterface::HTTP_BAD_REQUEST
+            );
 
-            if (!empty($e->getExtras()))
-                $response = array_merge($response, $e->getExtras());
-
-            return $this->response
-                    ->setJSON($response)
-                    ->setStatusCode($e->getHttpCode());
-        }
+        return $this->response
+            ->setJSON([
+                'message'   => 'success'
+            ])
+            ->setStatusCode(ResponseInterface::HTTP_OK);
     }
 }
