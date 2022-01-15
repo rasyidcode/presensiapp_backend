@@ -15,6 +15,8 @@ class AuthController extends BaseController
     public function __construct()
     {
         $this->authModel = new AuthModel();
+
+        helper('jwt');
     }
 
     public function index()
@@ -54,6 +56,13 @@ class AuthController extends BaseController
                 message: 'Credentials not match', 
                 statusCode: ResponseInterface::HTTP_BAD_REQUEST
             );
+
+        unset($userdata['password']);
+
+        $accessToken = createAccessToken($userdata);
+        $refreshToken = createRefreshToken([
+            'username'  => $userdata['username']
+        ]);
 
         return $this->response
             ->setJSON([
