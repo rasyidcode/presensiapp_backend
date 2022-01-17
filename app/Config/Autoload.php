@@ -41,10 +41,9 @@ class Autoload extends AutoloadConfig
      * @var array<string, string>
      */
     public $psr4 = [
-        APP_NAMESPACE => APPPATH, // For custom app namespace
-        'Config'      => APPPATH . 'Config',
-        'Modules'     => ROOTPATH . 'modules',
-        'PhpJwt'      => "ThirdParty/php-jwt"
+        APP_NAMESPACE   => APPPATH, // For custom app namespace
+        'Config'        => APPPATH . 'Config',
+        'Modules'       => ROOTPATH . 'modules',
     ];
 
     /**
@@ -66,7 +65,9 @@ class Autoload extends AutoloadConfig
      *
      * @var array<string, string>
      */
-    public $classmap = [];
+    public $classmap = [
+        'Firebase\JWT\JWT'   => APPPATH . 'ThirdParty/php-jwt/src/JWT.php',
+    ];
 
     /**
      * -------------------------------------------------------------------

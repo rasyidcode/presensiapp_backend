@@ -14,8 +14,7 @@ function createAccessToken(array $data): string
         'exp'   => $exp,
         'data'  => $data
     ];
-
-    $jwtToken = PhpJwt::encode($payload, Services::getAccessTokenKey(), ['HS256']);
+    $jwtToken = PhpJwt::encode($payload, Services::getAccessTokenKey(), 'HS256');
     return $jwtToken;
 }
 
@@ -27,6 +26,6 @@ function createRefreshToken(array $data): string
         'iat'   => time(),
         'data'  => $data
     ];
-    $jwtToken = PhpJwt::encode($payload, Services::getAccessTokenKey(), ['HS256']);
+    $jwtToken = PhpJwt::encode($payload, Services::getAccessTokenKey(), 'HS256');
     return $jwtToken;
 }

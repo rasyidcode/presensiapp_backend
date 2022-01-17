@@ -203,6 +203,7 @@ class JWT
      */
     public static function sign($msg, $key, $alg)
     {
+        // print_r(static::$supported_algs[$alg]);die();
         if (empty(static::$supported_algs[$alg])) {
             throw new DomainException('Algorithm not supported');
         }
