@@ -29,6 +29,9 @@ class AuthController extends BaseController
 			->setStatusCode(ResponseInterface::HTTP_OK);
     }
 
+    /**
+     * route -> auth/signIn
+     */
     public function signIn()
     {
         if (!$this->validate([
@@ -64,10 +67,43 @@ class AuthController extends BaseController
             'username'  => $userdata['username']
         ]);
 
+        // update the token if exist
+        $token_update = $this->authModel->updateToken($userdata['username'], $refreshToken);
+        if (!$token_update)
+            throw new ApiAccessErrorException(
+                message: 'Failed to update token, please contact your admin for details',
+                statusCode: ResponseInterface::HTTP_INTERNAL_SERVER_ERROR
+            );
+
+        // update last login
+        $last_login_update = $this->authModel->updateLastLogin($userdata['username']);
+        if (!$last_login_update)
+            throw new ApiAccessErrorException(
+                message: 'Failed to update last login, please contact your admin for details',
+                statusCode: ResponseInterface::HTTP_INTERNAL_SERVER_ERROR
+            );
+
         return $this->response
             ->setJSON([
-                'message'   => 'success'
+                'access_token'  => $accessToken,
+                'refresh_token' => $refreshToken
             ])
             ->setStatusCode(ResponseInterface::HTTP_OK);
     }
+
+    /**
+     * route -> auth/signOut
+     */
+
+    /**
+     * route -> auth/renewToken
+     */
+
+    /**
+     * route -> auth/deleteToken
+     */
+
+    /**
+     * route -> auth/forgotPassword
+     */
 }

@@ -14,10 +14,6 @@ class ModifyUsersTable extends Migration
                 'constraint'    => 100,
                 'null'          => true,
                 'after'         => 'level'
-            ],
-            'last_login'    => [
-                'type'          => 'varchar',
-                ''
             ]
         ]);
     }

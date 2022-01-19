@@ -53,7 +53,7 @@ try {
     $app->run();
 } catch (App\Exceptions\ApiAccessErrorException $e) {
     $response = ['message' => $e->getMessage()];
-    
+
     if (!empty($e->getExtras()))
         $response = array_merge($response, $e->getExtras());
 
@@ -63,7 +63,5 @@ try {
         header(sprintf("HTTP/%s %s %s", $_SERVER['SERVER_PROTOCOL'], $e->getStatusCode(), $e->getReason()), true, $e->getStatusCode());
     }
     
-    echo json_encode([
-        'message'   => $e->getMessage()
-    ]);
+    echo json_encode($response);
 }
