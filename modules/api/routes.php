@@ -5,7 +5,7 @@ $routes->group('api/v1', ['namespace' => $routes_namespace], function($routes) {
 
     // auth
     $routes->group('auth', function($routes) {
-        $routes->get('/', 'Auth\Controllers\AuthController::index');
+        $routes->get('/', 'Auth\Controllers\AuthController::index', ['filter' => 'auth_filter']);
         $routes->post('signIn', 'Auth\Controllers\AuthController::signIn');
         $routes->post('signOut', 'Auth\Controllers\AuthController::signOut');
     });

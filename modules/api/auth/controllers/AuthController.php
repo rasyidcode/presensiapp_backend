@@ -48,12 +48,15 @@ class AuthController extends BaseController
         $password   = $this->request->getVar('password');
 
         $userdata = $this->authModel->getUser($username);
+
+        // check username exist or not
         if (is_null($userdata))
             throw new ApiAccessErrorException(
                 message: 'Credentials not match', 
                 statusCode: ResponseInterface::HTTP_BAD_REQUEST
             );
-
+        
+        // check user password
         if (!password_verify($password, $userdata['password']))
             throw new ApiAccessErrorException(
                 message: 'Credentials not match', 
@@ -67,7 +70,7 @@ class AuthController extends BaseController
             'username'  => $userdata['username']
         ]);
 
-        // update the token if exist
+        // update the refresh token
         $token_update = $this->authModel->updateToken($userdata['username'], $refreshToken);
         if (!$token_update)
             throw new ApiAccessErrorException(

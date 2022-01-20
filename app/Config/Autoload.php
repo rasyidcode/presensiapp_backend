@@ -67,6 +67,7 @@ class Autoload extends AutoloadConfig
      */
     public $classmap = [
         'Firebase\JWT\JWT'   => APPPATH . 'ThirdParty/php-jwt/src/JWT.php',
+        'Firebase\JWT\Key'   => APPPATH . 'ThirdParty/php-jwt/src/Key.php'
     ];
 
     /**

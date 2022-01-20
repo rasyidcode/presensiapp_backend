@@ -1,7 +1,11 @@
 <?php
 
+use App\Exceptions\ApiAccessErrorException;
 use App\Libraries\PhpJwt;
+use App\Libraries\PhpJwtKey;
+use CodeIgniter\HTTP\ResponseInterface;
 use Config\Services;
+use Modules\Api\User\Models\UserModel;
 
 function createAccessToken(array $data): string
 {
@@ -28,4 +32,20 @@ function createRefreshToken(array $data): string
     ];
     $jwtToken = PhpJwt::encode($payload, Services::getAccessTokenKey(), 'HS256');
     return $jwtToken;
+}
+
+function getJwtFromAuthHeader(string $authHeader): string
+{
+    $authVal = explode(' ', $authHeader);
+    if (is_null($authHeader) || $authVal[0] !== 'Bearer')
+        throw new ApiAccessErrorException('Invalid JWT format', ResponseInterface::HTTP_UNAUTHORIZED);
+    
+    return $authVal[1];
+}
+
+function validateAccessToken($token): bool
+{
+    $decodedToken = PhpJwt::decode($token, new PhpJwtKey(Services::getAccessTokenKey(), 'HS256'));
+    $userModel = new UserModel();
+    return $userModel->checkUser($decodedToken->data->username);
 }
