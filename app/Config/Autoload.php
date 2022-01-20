@@ -66,8 +66,9 @@ class Autoload extends AutoloadConfig
      * @var array<string, string>
      */
     public $classmap = [
-        'Firebase\JWT\JWT'   => APPPATH . 'ThirdParty/php-jwt/src/JWT.php',
-        'Firebase\JWT\Key'   => APPPATH . 'ThirdParty/php-jwt/src/Key.php'
+        'Firebase\JWT\JWT'                  => APPPATH . 'ThirdParty/php-jwt/src/JWT.php',
+        'Firebase\JWT\Key'                  => APPPATH . 'ThirdParty/php-jwt/src/Key.php',
+        'Firebase\JWT\ExpiredException'     => APPPATH . 'ThirdParty/php-jwt/src/ExpiredException.php',
     ];
 
     /**

@@ -45,4 +45,20 @@ class UserModel extends Model
     //         ->select('')
     // }
 
+    /**
+     * Remove user token by username
+     * 
+     * @param string $username
+     * 
+     * @return bool
+     */
+    public function removeToken(string $username): bool
+    {
+        $result = $this->builder('users')
+            ->set('token', null)
+            ->where('username', $username)
+            ->update();
+        return $result;
+    }
+
 }

@@ -33,14 +33,17 @@ class AuthApiFilter implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         $authHandler = $request->header('Authorization');
-        
         if (is_null($authHandler))
             throw new ApiAccessErrorException('Unauthorized', ResponseInterface::HTTP_UNAUTHORIZED);
-        
+
         $encodedToken = getJwtFromAuthHeader($authHandler->getValue());
-        $validateResult = validateAccessToken($encodedToken);
-        if (!$validateResult)
+        if (isBlacklisted($encodedToken))
+            throw new ApiAccessErrorException('Token invalid', ResponseInterface::HTTP_UNAUTHORIZED);
+        
+        if (!validateAccessToken($encodedToken))
             throw new ApiAccessErrorException('User not found', ResponseInterface::HTTP_UNAUTHORIZED);
+
+        $request->setHeader('AccessToken', $encodedToken);
 
         return $request;
     }

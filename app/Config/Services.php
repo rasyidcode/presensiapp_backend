@@ -35,8 +35,13 @@ class Services extends BaseService
          return 'jwt_access_token_presensi_app';
      }
 
+     public static function getRefreshTokenKey() : string 
+     {
+         return 'jwt_refresh_token_presensi_app';
+     }
+
      public static function getAccessTokenLifetime() : int
      {
-        return 3600;
+        return 15;
      }
 }

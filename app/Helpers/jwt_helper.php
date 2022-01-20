@@ -2,9 +2,12 @@
 
 use App\Exceptions\ApiAccessErrorException;
 use App\Libraries\PhpJwt;
+use App\Libraries\PhpJwtExpiredException;
 use App\Libraries\PhpJwtKey;
 use CodeIgniter\HTTP\ResponseInterface;
 use Config\Services;
+use Firebase\JWT\ExpiredException;
+use Modules\Api\Shared\Models\BlacklistTokenModel;
 use Modules\Api\User\Models\UserModel;
 
 function createAccessToken(array $data): string
@@ -30,7 +33,7 @@ function createRefreshToken(array $data): string
         'iat'   => time(),
         'data'  => $data
     ];
-    $jwtToken = PhpJwt::encode($payload, Services::getAccessTokenKey(), 'HS256');
+    $jwtToken = PhpJwt::encode($payload, Services::getRefreshTokenKey(), 'HS256');
     return $jwtToken;
 }
 
@@ -45,7 +48,17 @@ function getJwtFromAuthHeader(string $authHeader): string
 
 function validateAccessToken($token): bool
 {
-    $decodedToken = PhpJwt::decode($token, new PhpJwtKey(Services::getAccessTokenKey(), 'HS256'));
     $userModel = new UserModel();
-    return $userModel->checkUser($decodedToken->data->username);
+    try {
+        $decodedToken = PhpJwt::decode($token, new PhpJwtKey(Services::getAccessTokenKey(), 'HS256'));
+        return $userModel->checkUser($decodedToken->data->username);
+    } catch (ExpiredException $e) {
+        throw new ApiAccessErrorException($e->getMessage(), ResponseInterface::HTTP_UNAUTHORIZED);
+    }
+}
+
+function isBlacklisted(string $token): bool
+{
+    $blacklistTokenModel = new BlacklistTokenModel();
+    return $blacklistTokenModel->tokenExist($token);
 }

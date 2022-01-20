@@ -6,27 +6,20 @@ use App\Exceptions\ApiAccessErrorException;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use Modules\Api\Auth\Models\AuthModel;
+use Modules\Api\Shared\Models\BlacklistTokenModel;
 
 class AuthController extends BaseController
 {
 
     private $authModel;
+    private $blacklistTokenModel;
 
     public function __construct()
     {
         $this->authModel = new AuthModel();
+        $this->blacklistTokenModel = new BlacklistTokenModel();
 
         helper('jwt');
-    }
-
-    public function index()
-    {
-        return $this->response
-			->setJSON([
-				'status'    => ResponseInterface::HTTP_OK,
-				'message'   => 'Hello auth',
-			])
-			->setStatusCode(ResponseInterface::HTTP_OK);
     }
 
     /**
@@ -71,16 +64,16 @@ class AuthController extends BaseController
         ]);
 
         // update the refresh token
-        $token_update = $this->authModel->updateToken($userdata['username'], $refreshToken);
-        if (!$token_update)
+        $tokenUpdate = $this->authModel->updateToken($userdata['username'], $refreshToken);
+        if (!$tokenUpdate)
             throw new ApiAccessErrorException(
                 message: 'Failed to update token, please contact your admin for details',
                 statusCode: ResponseInterface::HTTP_INTERNAL_SERVER_ERROR
             );
 
         // update last login
-        $last_login_update = $this->authModel->updateLastLogin($userdata['username']);
-        if (!$last_login_update)
+        $lastLoginUpdate = $this->authModel->updateLastLogin($userdata['username']);
+        if (!$lastLoginUpdate)
             throw new ApiAccessErrorException(
                 message: 'Failed to update last login, please contact your admin for details',
                 statusCode: ResponseInterface::HTTP_INTERNAL_SERVER_ERROR
@@ -97,7 +90,12 @@ class AuthController extends BaseController
     /**
      * route -> auth/signOut
      */
-
+    public function signOut()
+    {
+        $accessToken = $this->request->header('AccessToken')->getValue();
+        $this->blacklistTokenModel->addToken($accessToken);
+        
+    }
     /**
      * route -> auth/renewToken
      */

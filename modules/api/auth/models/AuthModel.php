@@ -64,4 +64,21 @@ class AuthModel extends Model
 
         return $result;
     }
+
+    /**
+     * Delete user refresh token
+     * 
+     * @param string $username
+     * 
+     * @return bool
+     */
+    public function deleteToken(string $username): bool
+    {
+        $result = $this->builder('users')
+            ->set('token', null)
+            ->where('username', $username)
+            ->update();
+
+        return $result;
+    }
 }
