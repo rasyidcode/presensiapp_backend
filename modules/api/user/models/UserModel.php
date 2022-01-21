@@ -61,4 +61,24 @@ class UserModel extends Model
         return $result;
     }
 
+    /**
+     * Get user by refreshtoken
+     * 
+     * @param string $refreshToken
+     * 
+     * @return bool
+     */
+    public function checkUserByRt(string $refreshToken): bool
+    {
+        $result = $this->builder('users')
+            ->selectCount('*', 'count')
+            ->where('token', $refreshToken)
+            ->get()
+            ->getRowArray();
+        
+        if (is_null($result))
+            return false;
+
+        return $result['count'] > 0;
+    }
 }

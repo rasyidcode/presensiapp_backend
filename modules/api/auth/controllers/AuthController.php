@@ -93,9 +93,15 @@ class AuthController extends BaseController
     public function signOut()
     {
         $accessToken = $this->request->header('AccessToken')->getValue();
+        $refreshToken = $this->request->header('RefreshToken')->getValue();
+
         $insertRes = $this->blacklistTokenModel->addToken($accessToken);
         if (!$insertRes)
-            throw new ApiAccessErrorException('Failed to blacklist the token', ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
+            throw new ApiAccessErrorException('Failed to sign out', ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
+        
+        $removeTokenRes = $this->authModel->removeTokenByRf($refreshToken);
+        if (!$removeTokenRes)
+            throw new ApiAccessErrorException('Failed to sign out', ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
 
         return $this->response
             ->setJSON([

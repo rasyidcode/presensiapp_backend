@@ -81,4 +81,21 @@ class AuthModel extends Model
 
         return $result;
     }
+
+    /**
+     * Remove token by user's refresh token
+     * 
+     * @param string $refreshToken
+     * 
+     * @return bool
+     */
+    public function removeTokenByRf(string $refreshToken): bool
+    {
+        $result = $this->builder('users')
+            ->set('token', null)
+            ->where('token', $refreshToken)
+            ->update();
+
+        return $result;
+    }
 }

@@ -3,6 +3,7 @@
 namespace Config;
 
 use App\Filters\AuthApiFilter;
+use App\Filters\SignOutFilter;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -21,6 +22,7 @@ class Filters extends BaseConfig
         'toolbar'       => DebugToolbar::class,
         'honeypot'      => Honeypot::class,
         'authfilter'    => AuthApiFilter::class,
+        'signoutfilter' => SignOutFilter::class,
     ];
 
     /**
