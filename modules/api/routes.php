@@ -6,8 +6,8 @@ $routes->group('api/v1', ['namespace' => $routes_namespace], function($routes) {
     // auth
     $routes->group('auth', function($routes) {
         $routes->post('signIn', 'Auth\Controllers\AuthController::signIn');
-        $routes->post('signOut', 'Auth\Controllers\AuthController::signOut');
-        $routes->post('signOut', 'Auth\Controllers\AuthController::signOut');
+        $routes->post('signOut', 'Auth\Controllers\AuthController::signOut', ['filter' => 'authfilter']);
+        // $routes->post('signOut', 'Auth\Controllers\AuthController::signOut');
     });
 
     // user

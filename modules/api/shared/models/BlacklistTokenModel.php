@@ -29,7 +29,7 @@ class BlacklistTokenModel extends Model
         
         if (is_null($result))
             return false;
-
+        
         return $result['count'] > 0;
     }
 
@@ -38,7 +38,7 @@ class BlacklistTokenModel extends Model
      * 
      * @param string $newToken
      * 
-     * @return void
+     * @return int
      */
     public function addToken(string $token)
     {
@@ -46,6 +46,13 @@ class BlacklistTokenModel extends Model
             ->insert([
                 'token' => $token
             ]);
+        return $this->db->insertID() > 0;
     }
+
+    /**
+     * Get last inserted id
+     * 
+     * @return int
+     */
 
 }

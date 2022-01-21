@@ -93,8 +93,15 @@ class AuthController extends BaseController
     public function signOut()
     {
         $accessToken = $this->request->header('AccessToken')->getValue();
-        $this->blacklistTokenModel->addToken($accessToken);
-        
+        $insertRes = $this->blacklistTokenModel->addToken($accessToken);
+        if (!$insertRes)
+            throw new ApiAccessErrorException('Failed to blacklist the token', ResponseInterface::HTTP_INTERNAL_SERVER_ERROR);
+
+        return $this->response
+            ->setJSON([
+                'message'   => 'You signed out'
+            ])
+            ->setStatusCode(ResponseInterface::HTTP_OK);
     }
     /**
      * route -> auth/renewToken
