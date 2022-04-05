@@ -4,27 +4,27 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class ModifyUsersTable extends Migration
+class ModifyUsersTable7 extends Migration
 {
     public function up()
     {
         $this->forge->modifyColumn('users', [
-            'password'  => [
-                'type'          => 'varchar',
-                'constraint'    => 100,
-                'null'          => false
-            ],
+            'token'    => [
+                'type'          => 'text',
+                'null'          => true
+            ]            
         ]);
     }
 
     public function down()
     {
         $this->forge->modifyColumn('users', [
-            'password'  => [
+            'token' => [
                 'type'          => 'varchar',
                 'constraint'    => 100,
-                'null'          => true
-            ],
+                'null'          => true,
+                'after'         => 'level'
+            ]     
         ]);
     }
 }

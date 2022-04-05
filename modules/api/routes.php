@@ -6,11 +6,14 @@ $routes->group('api/v1', ['namespace' => $routes_namespace], function($routes) {
     // auth
     $routes->group('auth', function($routes) {
         $routes->post('signIn', 'Auth\Controllers\AuthController::signIn');
-        $routes->post('signOut', 'Auth\Controllers\AuthController::signOut', ['filter' => ['authfilter', 'signoutfilter']]);
+        $routes->post('signOut', 'Auth\Controllers\AuthController::signOut', ['filter' => 'signoutfilter']);
         // $routes->post('signOut', 'Auth\Controllers\AuthController::signOut');
     });
 
     // user
+    $routes->group('user', function($routes) {
+
+    });
 
     // presensi
     $routes->group('presensi', function($routes) {
