@@ -127,4 +127,4 @@ nb-configuration.xml
 
 /envs/*.env
 
-/public/assets/adminlte3
+/public/adminlte3/
