@@ -2,13 +2,11 @@
 
 namespace App\Filters;
 
-use App\Exceptions\ApiAccessErrorException;
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
-use Modules\Api\User\Models\UserModel;
 
-class SignOutFilter implements FilterInterface
+class WebAuthFilter implements FilterInterface
 {
     /**
      * Do whatever processing this filter needs to do.
@@ -27,22 +25,8 @@ class SignOutFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
-        if ($request->getUri()->getSegments()[3] === 'signOut') {
-            $refreshTokenHandler = $request->header('RefreshToken');
-            if (is_null($refreshTokenHandler))
-                throw new ApiAccessErrorException('Please provide your refresh token', ResponseInterface::HTTP_BAD_REQUEST);
-            
-            $refreshToken = $refreshTokenHandler->getValue();
-            if (empty($refreshToken))
-                throw new ApiAccessErrorException('Please provide your refresh token', ResponseInterface::HTTP_BAD_REQUEST);
-
-            $userModel = new UserModel();
-            if (!$userModel->checkUserByRt($refreshToken))
-                throw new ApiAccessErrorException('Refresh token not found', ResponseInterface::HTTP_BAD_REQUEST);
-
-            $request->setHeader('refreshToken', $refreshToken);
-
-            return $request;
+        if (is_null(session()->get('logged_in'))) {
+            return redirect()->to(site_url('login'));
         }
     }
 

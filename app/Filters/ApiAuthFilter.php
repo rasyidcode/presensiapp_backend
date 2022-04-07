@@ -7,7 +7,7 @@ use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class AuthApiFilter implements FilterInterface
+class ApiAuthFilter implements FilterInterface
 {
 
     public function __construct()
