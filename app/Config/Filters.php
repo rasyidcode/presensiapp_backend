@@ -6,6 +6,7 @@ use App\Filters\ApiAuthFilter;
 use App\Filters\ApiLogoutFilter;
 use App\Filters\WebAuthFilter;
 use App\Filters\WebLogoutFilter;
+use App\Filters\WebRedirectIfAuth;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -20,15 +21,16 @@ class Filters extends BaseConfig
      * @var array
      */
     public $aliases = [
-        'csrf'                  => CSRF::class,
-        'toolbar'               => DebugToolbar::class,
-        'honeypot'              => Honeypot::class,
+        'csrf'                          => CSRF::class,
+        'toolbar'                       => DebugToolbar::class,
+        'honeypot'                      => Honeypot::class,
 
-        'api_auth_filter'       => ApiAuthFilter::class,
-        'api_logout_filter'     => ApiLogoutFilter::class,
+        'api_auth_filter'               => ApiAuthFilter::class,
+        'api_logout_filter'             => ApiLogoutFilter::class,
 
-        'web_auth_filter'       => WebAuthFilter::class,
-        'web_logout_filter'     => WebLogoutFilter::class,
+        'web_auth_filter'               => WebAuthFilter::class,
+        'web_logout_filter'             => WebLogoutFilter::class,
+        'web_redirect_if_auth_filter'   => WebRedirectIfAuth::class,
     ];
 
     /**

@@ -6,9 +6,10 @@
         <a href="#" class="h2"><b>PresensiApp</b><br>Admin Panel</a>
     </div>
     <div class="card-body">
-        <form action="#" method="post">
+        <form action="/login" method="post">
+            <?= csrf_field() ?>
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Username">
+                <input type="text" name="username" class="form-control" placeholder="Username" required>
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-user"></span>
@@ -16,7 +17,7 @@
                 </div>
             </div>
             <div class="input-group mb-3">
-                <input type="password" class="form-control" placeholder="Password">
+                <input type="password" name="password" class="form-control" placeholder="Password" required>
                 <div class="input-group-append">
                     <div class="input-group-text">
                         <span class="fas fa-lock"></span>
@@ -45,5 +46,12 @@
         </p>
     </div>
     <!-- /.card-body -->
+    <div class="card-footer">
+        <?php if (!empty(session()->getFlashdata('error'))): ?>
+        <div class="alert alert-danger" role="alert">
+            <?=session()->getFlashdata('error')?>
+        </div>
+        <?php endif; ?>
+    </div>
 </div>
 <?= $this->endSection() ?>

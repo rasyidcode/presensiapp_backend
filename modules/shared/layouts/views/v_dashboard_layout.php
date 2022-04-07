@@ -33,7 +33,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
+                    <a id="btn-logout" href="javascript:void(0)" class="nav-link">
                         Logout <i class="fas fa-sign-out-alt ml-2"></i>
                     </a>
                 </li>
@@ -147,9 +147,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- jQuery -->
     <script src="<?= site_url('adminlte3/plugins/jquery/jquery.min.js') ?>"></script>
     <!-- Bootstrap 4 -->
-    <script src="<?= site_url('adminlte3/plugins/bootstrap/js/bootstrap.bundle.min.js') ?>)"></script>
+    <script src="<?= site_url('adminlte3/plugins/bootstrap/js/bootstrap.bundle.min.js') ?>"></script>
     <!-- AdminLTE App -->
     <script src="<?= site_url('adminlte3/dist/js/adminlte.min.js') ?>"></script>
+
+    <script>
+    $(function() {
+        $('#btn-logout').click(function(e) {
+            $.ajax({
+                url: '<?=route_to('logout')?>',
+                type: 'POST',
+                data: {
+                    ['<?=csrf_token()?>']: '<?=csrf_hash()?>'
+                },
+                success: function(res) {
+                    console.log(res);
+                    location.reload();
+                },
+                error: function(err) {
+                    console.log(err);
+                    alert('Logout failed!');
+                }
+            })
+        });
+    });
+    </script>
 </body>
 
 </html>

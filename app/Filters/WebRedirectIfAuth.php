@@ -6,7 +6,7 @@ use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class WebLogoutFilter implements FilterInterface
+class WebRedirectIfAuth implements FilterInterface
 {
     /**
      * Do whatever processing this filter needs to do.
@@ -25,6 +25,9 @@ class WebLogoutFilter implements FilterInterface
      */
     public function before(RequestInterface $request, $arguments = null)
     {
+        if (!is_null(session()->get('logged_in')) && session()->get('logged_in')) {
+            return redirect()->to(base_url('admin'));
+        }
     }
 
     /**
