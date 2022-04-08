@@ -1,4 +1,4 @@
-<?= $this->extend('\Modules\Shared\Layouts\Views\v_dashboard_layout') ?>
+<?= $this->extend('\Modules\Shared\Layouts\Views\dashboard\layout') ?>
 
 <?= $this->section('content') ?>
 <div class="content">
