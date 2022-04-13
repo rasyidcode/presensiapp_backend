@@ -6,6 +6,7 @@ use CodeIgniter\Model;
 
 class AuthModel extends Model
 {
+
     public function __construct()
     {
         parent::__construct();
@@ -28,6 +29,49 @@ class AuthModel extends Model
             ->getRowArray();
         
         return $result;
+    }
+
+    /**
+     * Get mahasiswa data by username
+     * 
+     * @param string $username
+     * 
+     * @return array
+     */
+    public function getMhsData(string $username) : array
+    {
+        $this->builder('users')->select('
+            users.id,
+            users.username, 
+            users.email,
+            mahasiswa.nama_lengkap, 
+            mahasiswa.nim,
+            '
+        );
+        $this->builder('users')->join('mahasiswa', 'users.id = mahasiswa.id_user', 'left');
+        $this->builder('users')->where('username', $username);
+        $data = $this->builder('users')->get();
+        return $data->getResultArray();
+    }
+
+    /**
+     * Get dosen data by username
+     */
+    public function getDosenData(string $username)
+    {
+        $this->builder('users')->select('
+            users.id,
+            users.username, 
+            users.email,
+            users.level,
+            dosen.nama_lengkap, 
+            dosen.nip,
+            '
+        );
+        $this->builder('users')->join('dosen', 'users.id = dosen.id_user', 'left');
+        $this->builder('users')->where('username', $username);
+        $data = $this->builder('users')->get();
+        return $data->getResultArray();
     }
 
     /**

@@ -39,7 +39,7 @@ class AuthController extends BaseController
 
         $username   = $this->request->getVar('username');
         $password   = $this->request->getVar('password');
-
+        
         $userdata = $this->authModel->getUser($username);
 
         // check username exist or not
@@ -58,7 +58,11 @@ class AuthController extends BaseController
 
         unset($userdata['password']);
 
-        $accessToken = createAccessToken($userdata);
+        $accessToken = createAccessToken([
+            'username' => $userdata['username'],
+            'name'  => $userdata['nama_lengkap'],
+            'level' => $userdata['level']
+        ]);
         $refreshToken = createRefreshToken([
             'username'  => $userdata['username']
         ]);
