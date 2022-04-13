@@ -2,6 +2,7 @@
 
 namespace Config;
 
+use App\Filters\ApiAdminNotAllowed;
 use App\Filters\ApiAuthFilter;
 use App\Filters\ApiLogoutFilter;
 use App\Filters\WebAuthFilter;
@@ -26,7 +27,15 @@ class Filters extends BaseConfig
         'honeypot'                      => Honeypot::class,
 
         'api_auth_filter'               => ApiAuthFilter::class,
-        'api_logout_filter'             => ApiLogoutFilter::class,
+        'api_auth_filter_no_admin'      => [
+            ApiAuthFilter::class,
+            ApiAdminNotAllowed::class,
+        ],
+        'api_logout_filter'             => [
+            ApiAuthFilter::class,
+            ApiLogoutFilter::class
+        ],
+        'api_admin_not_allowed'         => ApiAdminNotAllowed::class,
 
         'web_auth_filter'               => WebAuthFilter::class,
         'web_logout_filter'             => WebLogoutFilter::class,
@@ -41,7 +50,9 @@ class Filters extends BaseConfig
      */
     public $globals = [
         'before' => [
-            'csrf',
+            'csrf' => [
+                'except'    => ['api/v1/*']
+            ],
             // 'honeypot',
             // 'authfilter'
         ],
