@@ -4,7 +4,7 @@ namespace Modules\Api\Mhs\Models;
 
 use CodeIgniter\Model;
 
-class LoginModel extends Model
+class AuthModel extends Model
 {
 
     public function __construct()
@@ -36,28 +36,28 @@ class LoginModel extends Model
      * 
      * @param string $username
      * 
-     * @return array
+     * @return object
      */
-    public function getMhsData(string $username) : array
+    public function getMahasiswa(string $username) : ?object
     {
         $this->builder('users')->select('
-            users.id,
-            users.username, 
+            users.username,
+            users.password,
             users.email,
-            mahasiswa.nama_lengkap, 
-            mahasiswa.nim,
+            mahasiswa.nama_lengkap,
             '
         );
         $this->builder('users')->join('mahasiswa', 'users.id = mahasiswa.id_user', 'left');
         $this->builder('users')->where('username', $username);
+
         $data = $this->builder('users')->get();
-        return $data->getResultArray();
+        return $data->getRowObject();
     }
 
     /**
      * Get dosen data by username
      */
-    public function getDosenData(string $username)
+    public function getDosen(string $username)
     {
         $this->builder('users')->select('
             users.id,
@@ -133,7 +133,7 @@ class LoginModel extends Model
      * 
      * @return bool
      */
-    public function removeTokenByRf(string $refreshToken): bool
+    public function removeToken(string $refreshToken): bool
     {
         $result = $this->builder('users')
             ->set('token', null)

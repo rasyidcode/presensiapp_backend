@@ -5,6 +5,8 @@ namespace Config;
 use App\Filters\ApiAdminNotAllowed;
 use App\Filters\ApiAuthFilter;
 use App\Filters\ApiLogoutFilter;
+use App\Filters\LevelFilter;
+use App\Filters\MhsOnly;
 use App\Filters\WebAuthFilter;
 use App\Filters\WebLogoutFilter;
 use App\Filters\WebRedirectIfAuth;
@@ -40,6 +42,13 @@ class Filters extends BaseConfig
         'web_auth_filter'               => WebAuthFilter::class,
         'web_logout_filter'             => WebLogoutFilter::class,
         'web_redirect_if_auth_filter'   => WebRedirectIfAuth::class,
+
+        'mhs-only'                      => MhsOnly::class,
+        'level-filter'                  => LevelFilter::class,
+        'level-auth-filter'             => [
+            LevelFilter::class,
+            ApiAuthFilter::class
+        ],
     ];
 
     /**

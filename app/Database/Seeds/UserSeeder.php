@@ -22,10 +22,10 @@ class UserSeeder extends Seeder
                 'level'     => 'dosen',
             ],
             [
-                'username'  => 'mhs',
+                'username'  => 'mahasiswa',
                 'password'  => password_hash('12345', PASSWORD_BCRYPT),
-                'email'     => 'mhs@example.com',
-                'level'     => 'mhs',
+                'email'     => 'mahasiswa@example.com',
+                'level'     => 'mahasiswa',
             ],
         ];
 

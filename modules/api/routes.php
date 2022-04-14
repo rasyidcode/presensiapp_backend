@@ -4,35 +4,43 @@
 $routes->group('api/v1', ['namespace' => $routes_namespace], function ($routes) {
     $routes->get('/', 'Entry\Controllers\EntryController::index', []);
 
-    /*********** mahasiswa routes */
-    // sign in
-    $routes->post('mhs/auth/login', 'Mhs\Controllers\LoginController::login', ['filter' => 'mhs-only']);
-    // need auth
-    $routes->group('mhs', ['filter' => 'mhs-only:auth'], function($routes) {
+    $routes->group('auth', ['filter' => 'level-filter:prevent-admin'], function($routes) {
+        // sign in
+        $routes->post('login', 'Shared\Controllers\AuthController::login');
         // logout
-        $routes->post('auth/logout', 'Mhs\Controllers\LoginController::logout');
+        $routes->post('logout', 'Shared\Controllers\AuthController::logout');
         // renew access_token
-        $routes->post('auth/renew-token', 'Mhs\Controllers\LoginController::renewToken');
+        $routes->post('renew-token', 'Shared\Controllers\AuthController::renewToken');
         // forgot password
-        $routes->post('auth/forgot-password', 'Mhs\Controllers\LoginController::forgotPassword');
+        $routes->post('forgot-password', 'Shared\Controllers\AuthController::forgotPassword');
+    });
+
+    /*********** mahasiswa routes */
+    // need auth
+    $routes->group('mahasiswa', ['filter' => 'level-auth-filter:only-mahasiswa'], function($routes) {
         // list perkuliahan hari ini
         $routes->get('perkuliahan', 'Mhs\Controllers\PerkuliahanController::list');
         // list presensi
-        $routes->get('perkuliahan/{matkul}/presensi', 'Mhs\Controllers\PerkuliahanController::listPresensi/$1');
+        // $routes->get('perkuliahan/{matkul}/presensi', 'Mhs\Controllers\PerkuliahanController::listPresensi/$1');
         // do presensi
-        $routes->post('perkuliahan/{matkul}/presensi', 'Mhs\Controllers\PerkuliahanController::doPresensi/$1');
+        // $routes->post('perkuliahan/{matkul}/presensi', 'Mhs\Controllers\PerkuliahanController::doPresensi/$1');
         // list matkul
-        $routes->get('matkul', 'Mhs\Controllers\MatkulController::index');
+        // $routes->get('matkul', 'Mhs\Controllers\MatkulController::index');
         // detail matkul
-        $routes->get('matkul/{name_slug}', 'Mhs\Controllers\MatkulController::get/$1');
+        // $routes->get('matkul/{name_slug}', 'Mhs\Controllers\MatkulController::get/$1');
         // profile
-        $routes->get('profile', 'Mhs\Controllers\ProfileController::index');
+        // $routes->get('profile', 'Mhs\Controllers\ProfileController::index');
         // list jadwal matkul
-        $routes->get('jadwal', 'Mhs\Controllers\JadwalController::index');
+        // $routes->get('jadwal', 'Mhs\Controllers\JadwalController::index');
     });
 
     /********** dosen routes */
-    $routes->group('dosen', ['filter' => 'dosen_only'], function($routes) {
+    $routes->group('dosen', ['filter' => 'auth-dosen-filter'], function($routes) {
+
+    });
+
+    /********** admin routes */
+    $routes->group('dosen', ['filter' => 'auth-admin-filter'], function($routes) {
 
     });
 });

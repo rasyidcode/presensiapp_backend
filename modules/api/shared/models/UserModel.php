@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Api\User\Models;
+namespace Modules\Api\Shared\Models;
 
 use CodeIgniter\Model;
 
@@ -81,4 +81,60 @@ class UserModel extends Model
 
         return $result['count'] > 0;
     }
+
+    /**
+     * Check if the user is mhs level
+     * 
+     * @param string $username
+     * 
+     * @return bool
+     */
+    public function isMahasiswa(string $username) : bool
+    {
+        $result = $this->builder('users')
+            ->selectCount('*', 'count')
+            ->where('username', $username)
+            ->where('level', 'mahasiswa')
+            ->get()
+            ->getRowArray();
+    
+        return !is_null($result) ? ($result['count'] > 0) : false;
+    }
+
+    /**
+     * Check if user is dosen level
+     * 
+     * @param string $username
+     * 
+     * @return bool
+     */
+    public function isDosen(string $username) : bool
+    {
+        $result = $this->builder('users')
+            ->selectCount('*', 'count')
+            ->where('username', $username)
+            ->where('level', 'dosen')
+            ->get()
+            ->getRowArray();
+        return !is_null($result) ? ($result['count'] > 0) : false;
+    }
+
+    /**
+     * Check if user is admin level
+     * 
+     * @param string $username
+     * 
+     * @return bool
+     */
+    public function isAdmin(string $username) : bool
+    {
+        $result = $this->builder('users')
+            ->selectCount('*', 'count')
+            ->where('username', $username)
+            ->where('level', 'admin')
+            ->get()
+            ->getRowArray();
+        return !is_null($result) ? ($result['count'] > 0) : false;
+    }
+
 }
