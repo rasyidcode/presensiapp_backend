@@ -7,10 +7,10 @@ use CodeIgniter\Model;
 class UserModel extends Model
 {
 
-    private $tbl_name = 'users';
+    private $tblName = 'users';
 
-    private $columns_order   = [null, 'username', 'email', 'level', 'last_login', 'created_at', null];
-    private $columns_search  = ['username', 'email', 'level'];
+    private $columnOrder   = [null, 'username', 'email', 'level', 'last_login', 'created_at', null];
+    private $columnSearch  = ['username', 'email', 'level'];
 
     public function __construct()
     {
@@ -20,102 +20,100 @@ class UserModel extends Model
     /**
      * Get user list with datatable params
      * 
-     * @param array $dt_params
+     * @param array $dtParams
      * 
      * @return array|null
      */
-    public function getData(array $dt_params) : ?array
+    public function getData(array $dtParams) : ?array
     {
-        foreach($this->columns_search as $idx => $column_search) {
-            if (isset($dt_params['search']) && !empty($dt_params['search'])) {
+        $user = $this->builder($this->tblName);
+        foreach($this->columnSearch as $idx => $columnSearch) {
+            if (isset($dtParams['search']) && !empty($dtParams['search'])) {
                 if ($idx == 0) {
-                    $this->builder($this->tbl_name)
-                         ->groupStart();
-                    $this->builder($this->tbl_name)
-                         ->like($column_search, $dt_params['search']['value']);
+                    $user->groupStart();
+                    $user->like($columnSearch, $dtParams['search']['value']);
                 } else {
-                    $this->builder($this->tbl_name)
-                         ->orLike($column_search, $dt_params['search']['value']);
+                    $user->orLike($columnSearch, $dtParams['search']['value']);
                 }
 
-                if (count($this->columns_search) - 1 === $idx) {
-                    $this->builder($this->tbl_name)
-                         ->groupEnd();
+                if (count($this->columnSearch) - 1 === $idx) {
+                    $user->groupEnd();
                 }
             }
         }
 
-        if (isset($dt_params['order'])) {
-            $this->builder($this->tbl_name)
-                 ->orderBy($this->columns_order[$dt_params['order']['0']['column']], $dt_params['order']['0']['dir']);
+        if (isset($dtParams['order'])) {
+            $user->orderBy($this->columnOrder[$dtParams['order']['0']['column']], $dtParams['order']['0']['dir']);
         }
 
-        if (isset($dt_params['length']) && isset($dt_params['start'])) {
-            if ($dt_params['length'] !== -1) {
-                $this->builder($this->tbl_name)
-                     ->limit($dt_params['length'], $dt_params['start']);
+        if (isset($dtParams['length']) && isset($dtParams['start'])) {
+            if ($dtParams['length'] !== -1) {
+                $user->limit($dtParams['length'], $dtParams['start']);
             }
         }
 
-        $this->builder($this->tbl_name)->where('deleted_at', null);
+        $user->where('deleted_at', null);
 
-        $result = $this->builder($this->tbl_name)
-                       ->get();
-        return $result->getResultArray();
-    }
-
-    /**
-     * count datatable data
-     * 
-     * @param array $dt_params
-     * 
-     * @return int|null
-     */
-    public function countData(array $dt_params) : ?int
-    {
-        foreach($this->columns_search as $idx => $column_search) {
-            if (isset($dt_params['search']) && !empty($dt_params['search'])) {
-                if ($idx == 0) {
-                    $this->builder($this->tbl_name)
-                         ->groupStart();
-                    $this->builder($this->tbl_name)
-                         ->like($column_search, $dt_params['search']['value']);
-                } else {
-                    $this->builder($this->tbl_name)
-                         ->orLike($column_search, $dt_params['search']['value']);
-                }
-
-                if (count($this->columns_search) - 1 === $idx) {
-                    $this->builder($this->tbl_name)
-                         ->groupEnd();
-                }
-            }
-        }
-
-        if (isset($dt_params['length']) && isset($dt_params['start'])) {
-            if ($dt_params['length'] !== -1) {
-                $this->builder($this->tbl_name)
-                     ->limit($dt_params['length'], $dt_params['start']);
-            }
-        }
-
-        $this->builder($this->tbl_name)
-             ->where('deleted_at', null);
-
-        return $this->builder($this->tbl_name)
-                    ->countAllResults();
+        return $user->get()->getResultObject();
     }
 
     /**
      * count filtered data
      * 
+     * @param array $dtParams
+     * 
+     * @return int|null
+     */
+    public function countFilteredData(array $dtParams) : int
+    {
+        $user = $this->builder($this->tblName);
+        foreach($this->columnSearch as $idx => $columnSearch) {
+            if (isset($dtParams['search']) && !empty($dtParams['search'])) {
+                if ($idx == 0) {
+                    $user->groupStart();
+                    $user->like($columnSearch, $dtParams['search']['value']);
+                } else {
+                    $user->orLike($columnSearch, $dtParams['search']['value']);
+                }
+
+                if (count($this->columnSearch) - 1 === $idx) {
+                    $user->groupEnd();
+                }
+            }
+        }
+
+        if (isset($dtParams['length']) && isset($dtParams['start'])) {
+            if ($dtParams['length'] !== -1) {
+                $user->limit($dtParams['length'], $dtParams['start']);
+            }
+        }
+
+        $user->where('deleted_at', null);
+
+        return $user->countAllResults();
+    }
+
+    /**
+     * count total data
+     * 
      * @param array $dt_params
      * 
      * @return int
      */
-    public function countFilteredData() : ?int
+    public function countData() : int
     {
-        return $this->builder($this->tbl_name)
+        return $this->builder($this->tblName)
                     ->countAllResults();
+    }
+
+    /**
+     * Create new user
+     * 
+     * @param array $data
+     */
+    public function create(array $data)
+    {
+        $this->db->table('users')
+            ->insert($data);
     }
 }

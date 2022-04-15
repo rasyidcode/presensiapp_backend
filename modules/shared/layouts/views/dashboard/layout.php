@@ -16,6 +16,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="<?= site_url('adminlte3/plugins/fontawesome-free/css/all.min.css') ?>">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?= site_url('adminlte3/dist/css/adminlte.min.css') ?>">
+    <!-- DataTables -->
+    <link rel="stylesheet" href="<?=site_url('adminlte3/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')?>">
+    <link rel="stylesheet" href="<?=site_url('adminlte3/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')?>">
+    <link rel="stylesheet" href="<?=site_url('adminlte3/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')?>">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -55,7 +59,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item active">Home</li>
+                                <?php foreach($pageLinks as $pageKey => $pageVal): ?>
+                                    <?php
+                                        $pagesKey = explode('-', $pageKey);
+                                        $pageKey = count($pagesKey) > 1 ? implode(' ', $pagesKey) : $pageKey;
+                                    ?>
+                                    <li class="breadcrumb-item <?=$pageVal['active'] ? 'active' : ''?>">
+                                        <?php if (!$pageVal['active']): ?>
+                                            <a href="<?=$pageVal['url']?>"><?=ucwords($pageKey)?></a>
+                                        <?php else: ?>
+                                            <?=ucwords($pageKey)?>
+                                        <?php endif; ?>
+                                    </li>
+                                <?php endforeach; ?>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->

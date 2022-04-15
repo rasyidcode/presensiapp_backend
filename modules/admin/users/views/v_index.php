@@ -7,7 +7,7 @@
             <div class="col-lg-12">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
-                        <a href="#" class="btn btn-primary btn-sm mr-2">
+                        <a href="<?=route_to('user.add')?>" class="btn btn-primary btn-xs mr-2">
                             <i class="fas fa-plus"></i>&nbsp;&nbsp;Tambah User
                         </a>
                     </div>
@@ -53,9 +53,10 @@ $(function() {
             }
             $.ajax({
                 type: 'post' ,
-                url: '<?=route_to('user.datatable')?>',
+                url: '<?=route_to('user.get-data')?>',
                 data: data,
                 success: function(res) {
+                    console.log(res);
                     callback(res);
                 },
                 error: function(err) {

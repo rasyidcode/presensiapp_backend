@@ -90,5 +90,6 @@ class Autoload extends AutoloadConfig
      */
     public $files = [
         // APPPATH.'../modules/*.php'
+        APPPATH . '/Helpers/myview_helper.php',
     ];
 }
