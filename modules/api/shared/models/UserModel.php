@@ -68,7 +68,7 @@ class UserModel extends Model
      * 
      * @return bool
      */
-    public function checkUserByRt(string $refreshToken): bool
+    public function checkUserByRefreshToken(string $refreshToken): bool
     {
         $result = $this->builder('users')
             ->selectCount('*', 'count')
@@ -137,4 +137,20 @@ class UserModel extends Model
         return !is_null($result) ? ($result['count'] > 0) : false;
     }
 
+    /**
+     * Get level by username
+     * 
+     * @param string $username
+     * 
+     * @return string
+     */
+    public function getRole(string $username) : ?string
+    {
+        $user = $this->builder('users')
+            ->select('level')
+            ->where('username', $username)
+            ->get()
+            ->getRowObject();
+        return !is_null($user) ? $user->level : null;
+    }
 }

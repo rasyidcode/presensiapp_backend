@@ -5,8 +5,9 @@ namespace Modules\Api\Shared\Controllers;
 use App\Exceptions\ApiAccessErrorException;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
-use Modules\Api\Mhs\Models\AuthModel;
+use Modules\Api\Shared\Models\AuthModel;
 use Modules\Api\Shared\Models\BlacklistTokenModel;
+use Modules\Api\Shared\Models\UserModel;
 
 class AuthController extends BaseController
 {
@@ -46,37 +47,45 @@ class AuthController extends BaseController
         $username   = $this->request->getVar('username');
         $password   = $this->request->getVar('password');
 
-        // check mhs exist
-        $mhsData = $this->authModel->getMahasiswa($username);
-        if (is_null($mhsData))
+        // check user exist
+        $userdata = $this->authModel->getUser($username);
+        if (is_null($userdata))
             throw new ApiAccessErrorException(
                 message: 'Username atau password salah!',
                 statusCode: ResponseInterface::HTTP_UNAUTHORIZED
             );
 
         // check user password
-        if (!password_verify($password, $mhsData->password))
+        if (!password_verify($password, $userdata->password))
             throw new ApiAccessErrorException(
                 message: 'Username atau password salah!',
                 statusCode: ResponseInterface::HTTP_UNAUTHORIZED
             );
 
-        unset($userdata['password']);
+        unset($userdata->password);
+
+        $additionalData = null;
+        if ($userdata->level == 'mahasiswa') {
+            $additionalData = $this->authModel->getDataMahasiswa($userdata->id);
+        } else if ($userdata->level == 'dosen') {
+            $additionalData = $this->authModel->getDataDosen($userdata->id);
+        }
 
         $accessToken = createAccessToken([
-            'username'  => $mhsData->username,
-            'name'      => $mhsData->nama_lengkap,
-            'email'     => $mhsData->email
+            'id'        => $userdata->id,
+            'username'  => $userdata->username,
+            'name'      => $additionalData->nama_lengkap,
+            'email'     => $userdata->email
         ]);
         $refreshToken = createRefreshToken([
-            'username'  => $mhsData->username
+            'username'  => $userdata->username
         ]);
 
         // update the refresh token
-        $this->authModel->updateToken($mhsData->username, $refreshToken);
+        $this->authModel->updateToken($userdata->username, $refreshToken);
 
         // update last login
-        $this->authModel->updateLastLogin($mhsData->username);
+        $this->authModel->updateLastLogin($userdata->username);
 
         return $this->response
             ->setJSON([
@@ -88,8 +97,18 @@ class AuthController extends BaseController
 
     public function logout()
     {
-        $accessToken = $this->request->header('AccessToken')->getValue();
-        $refreshToken = $this->request->header('RefreshToken')->getValue();
+        $accessToken = $this->request->header('Access-Token')->getValue();
+        $refreshToken = $this->request->header('Refresh-Token');
+        if (is_null($refreshToken))
+            throw new ApiAccessErrorException('Please provide your refresh token', ResponseInterface::HTTP_BAD_REQUEST);
+
+        $refreshToken = $refreshToken->getValue();
+        if (empty($refreshToken))
+            throw new ApiAccessErrorException('Please provide your refresh token', ResponseInterface::HTTP_BAD_REQUEST);
+
+        $userModel = new UserModel();
+        if (!$userModel->checkUserByRefreshToken($refreshToken))
+            throw new ApiAccessErrorException('Refresh token not found', ResponseInterface::HTTP_BAD_REQUEST);
 
         // add token to the blacklisted
         $this->blacklistTokenModel->addToken($accessToken);

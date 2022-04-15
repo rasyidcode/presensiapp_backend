@@ -45,18 +45,24 @@ class LevelFilter implements FilterInterface
             );
         }
         
-        $username = $request->getVar()->username ?? null;
-        if (is_null($username)) {
-            throw new ApiAccessErrorException(
-                message: 'Request tidak valid!',
-                statusCode: ResponseInterface::HTTP_BAD_REQUEST
-            );
+        // todo: check route if login or not
+        if ($request->getUri()->getSegments()[3] == 'login') {
+            $username = $request->getVar()->username ?? null;
+            if (is_null($username)) {
+                throw new ApiAccessErrorException(
+                    message: 'Request tidak valid!',
+                    statusCode: ResponseInterface::HTTP_BAD_REQUEST
+                );
+            }
         }
+        
 
         $levelRule = end($arguments);
+        $userModel = new UserModel();
+        $username = $request->getVar()->username;
         switch($levelRule) {
             case 'only-admin':
-                if (!(new UserModel())->isAdmin($request->getVar()->username)) {
+                if (!$userModel->isAdmin($username)) {
                     throw new ApiAccessErrorException(
                         message: 'Hanya Admin yang dapat mengakses request ini!',
                         statusCode: ResponseInterface::HTTP_FORBIDDEN
@@ -64,7 +70,7 @@ class LevelFilter implements FilterInterface
                 }
                 break;
             case 'only-mahasiswa':
-                if (!(new UserModel())->isMahasiswa($request->getVar()->username)) {
+                if (!$userModel->isMahasiswa($username)) {
                     throw new ApiAccessErrorException(
                         message: 'Hanya Mahasiswa yang dapat mengakses request ini!',
                         statusCode: ResponseInterface::HTTP_FORBIDDEN
@@ -72,7 +78,7 @@ class LevelFilter implements FilterInterface
                 }
                 break;
             case 'only-dosen':
-                if (!(new UserModel())->isDosen($request->getVar()->username)) {
+                if (!$userModel->isDosen($username)) {
                     throw new ApiAccessErrorException(
                         message: 'Hanya Dosen yang dapat mengakses request ini!',
                         statusCode: ResponseInterface::HTTP_FORBIDDEN
@@ -80,25 +86,25 @@ class LevelFilter implements FilterInterface
                 }
                 break;
             case 'prevent-admin':
-                if ((new UserModel())->isAdmin($request->getVar()->username)) {
+                if ($userModel->isAdmin($username)) {
                     throw new ApiAccessErrorException(
-                        message: 'Admin dapat mengakses request ini!',
+                        message: 'Admin tidak dapat mengakses request ini!',
                         statusCode: ResponseInterface::HTTP_FORBIDDEN
                     );
                 }
                 break;
             case 'prevent-mahasiswa':
-                if ((new UserModel())->isMahasiswa($request->getVar()->username)) {
+                if ($userModel->isMahasiswa($username)) {
                     throw new ApiAccessErrorException(
-                        message: 'Mahasiswa dapat mengakses request ini!',
+                        message: 'Mahasiswa tidak dapat mengakses request ini!',
                         statusCode: ResponseInterface::HTTP_FORBIDDEN
                     );
                 }
                 break;
             case 'prevent-dosen':
-                if ((new UserModel())->isDosen($request->getVar()->username)) {
+                if ($userModel->isDosen($username)) {
                     throw new ApiAccessErrorException(
-                        message: 'Dosen dapat mengakses request ini!',
+                        message: 'Dosen tidak dapat mengakses request ini!',
                         statusCode: ResponseInterface::HTTP_FORBIDDEN
                     );
                 }
@@ -110,6 +116,9 @@ class LevelFilter implements FilterInterface
                 );
                 break;
         }
+
+        $role = $userModel->getRole($username);
+        $request->setHeader('User-Role', $role);
 
         return $request;
     }

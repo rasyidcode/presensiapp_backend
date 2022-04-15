@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Api\Mhs\Models;
+namespace Modules\Api\Shared\Models;
 
 use CodeIgniter\Model;
 
@@ -17,17 +17,17 @@ class AuthModel extends Model
      * 
      * @param string username
      * 
-     * @return array|null
+     * @return object|null
      */
-    public function getUser(string $username) : ?array
+    public function getUser(string $username) : ?object
     {
         $result = $this->builder('users')
-            ->select('id, username, password, email, level, token')
+            ->select('id, username, password, email, level')
             ->where('username', $username)
             ->where('deleted_at', null)
             ->get()
-            ->getRowArray();
-        
+            ->getRowObject();
+
         return $result;
     }
 
@@ -40,38 +40,38 @@ class AuthModel extends Model
      */
     public function getMahasiswa(string $username) : ?object
     {
-        $this->builder('users')->select('
+        $mahasiswa = $this->builder('users');
+        $mahasiswa->select('
+            users.id,
             users.username,
             users.password,
             users.email,
             mahasiswa.nama_lengkap,
             '
         );
-        $this->builder('users')->join('mahasiswa', 'users.id = mahasiswa.id_user', 'left');
-        $this->builder('users')->where('username', $username);
-
-        $data = $this->builder('users')->get();
-        return $data->getRowObject();
+        $mahasiswa->join('mahasiswa', 'users.id = mahasiswa.id_user', 'left');
+        $mahasiswa->where('users.username', $username);
+        return $mahasiswa->get()->getRowObject();
     }
 
     /**
      * Get dosen data by username
      */
-    public function getDosen(string $username)
+    public function getDosen(string $username) : ?object
     {
-        $this->builder('users')->select('
+        $dosen = $this->builder('users');
+        $dosen->select('
             users.id,
-            users.username, 
+            users.username,
+            users.password,
             users.email,
-            users.level,
-            dosen.nama_lengkap, 
-            dosen.nip,
+            dosen.nama_lengkap,
             '
         );
-        $this->builder('users')->join('dosen', 'users.id = dosen.id_user', 'left');
-        $this->builder('users')->where('username', $username);
-        $data = $this->builder('users')->get();
-        return $data->getResultArray();
+        $dosen->join('dosen', 'users.id = dosen.id_user', 'left');
+        $dosen->where('users.username', $username);
+
+        return $dosen->get()->getRowObject();
     }
 
     /**
@@ -140,6 +140,40 @@ class AuthModel extends Model
             ->where('token', $refreshToken)
             ->update();
 
+        return $result;
+    }
+
+    /**
+     * Get mahasiswa by user_id
+     * 
+     * @param int $userId
+     * 
+     * @return object|null
+     */
+    public function getDataMahasiswa(int $userId)
+    {
+        $result = $this->builder('mahasiswa')
+            ->where('id_user', $userId)
+            ->where('deleted_at', null)
+            ->get()
+            ->getRowObject();
+        return $result;
+    }
+
+    /**
+     * Get dosen by user_id
+     * 
+     * @param int $userId
+     * 
+     * @return object|null
+     */
+    public function getDataDosen(int $userId)
+    {
+        $result = $this->builder('dosen')
+            ->where('id_user', $userId)
+            ->where('deleted_at', null)
+            ->get()
+            ->getRowObject();
         return $result;
     }
 }

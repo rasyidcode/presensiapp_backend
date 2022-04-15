@@ -6,6 +6,7 @@ use App\Exceptions\ApiAccessErrorException;
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
+use Modules\Api\Shared\Models\UserModel;
 
 class ApiAuthFilter implements FilterInterface
 {
@@ -34,16 +35,20 @@ class ApiAuthFilter implements FilterInterface
     {
         $authHandler = $request->header('Authorization');
         if (is_null($authHandler))
-            throw new ApiAccessErrorException('Unauthorized', ResponseInterface::HTTP_UNAUTHORIZED);
+            throw new ApiAccessErrorException('Bad Request', ResponseInterface::HTTP_BAD_REQUEST);
 
         $encodedToken = getJwtFromAuthHeader($authHandler->getValue());
         if (isBlacklisted($encodedToken))
             throw new ApiAccessErrorException('Token invalid', ResponseInterface::HTTP_UNAUTHORIZED);
         
-        if (!validateAccessToken($encodedToken))
-            throw new ApiAccessErrorException('User not found', ResponseInterface::HTTP_UNAUTHORIZED);
+        $decodedData = validateAccessToken($encodedToken);
+        $userModel = new UserModel();
+        if (!$userModel->checkUser($decodedData->data->username) )
+            throw new ApiAccessErrorException('User not found', ResponseInterface::HTTP_NOT_FOUND);
 
-        $request->setHeader('AccessToken', $encodedToken);
+        $request->setHeader('Access-Token', $encodedToken);
+        // print_r($decodedData->data);die();
+        $request->setHeader('User-Data', $decodedData->data);
 
         return $request;
     }

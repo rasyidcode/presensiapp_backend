@@ -28,27 +28,13 @@ class Filters extends BaseConfig
         'toolbar'                       => DebugToolbar::class,
         'honeypot'                      => Honeypot::class,
 
-        'api_auth_filter'               => ApiAuthFilter::class,
-        'api_auth_filter_no_admin'      => [
-            ApiAuthFilter::class,
-            ApiAdminNotAllowed::class,
-        ],
-        'api_logout_filter'             => [
-            ApiAuthFilter::class,
-            ApiLogoutFilter::class
-        ],
-        'api_admin_not_allowed'         => ApiAdminNotAllowed::class,
+        'api-auth-filter'               => ApiAuthFilter::class,
 
         'web_auth_filter'               => WebAuthFilter::class,
         'web_logout_filter'             => WebLogoutFilter::class,
         'web_redirect_if_auth_filter'   => WebRedirectIfAuth::class,
 
-        'mhs-only'                      => MhsOnly::class,
         'level-filter'                  => LevelFilter::class,
-        'level-auth-filter'             => [
-            LevelFilter::class,
-            ApiAuthFilter::class
-        ],
     ];
 
     /**

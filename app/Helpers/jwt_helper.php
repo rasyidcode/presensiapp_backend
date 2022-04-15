@@ -8,7 +8,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use Config\Services;
 use Firebase\JWT\ExpiredException;
 use Modules\Api\Shared\Models\BlacklistTokenModel;
-use Modules\Api\User\Models\UserModel;
+use Modules\Api\Shared\Models\UserModel;
 
 function createAccessToken(array $data): string
 {
@@ -46,12 +46,11 @@ function getJwtFromAuthHeader(string $authHeader): string
     return $authVal[1];
 }
 
-function validateAccessToken($token): bool
+function validateAccessToken($token): object
 {
-    $userModel = new UserModel();
     try {
         $decodedToken = PhpJwt::decode($token, new PhpJwtKey(Services::getAccessTokenKey(), 'HS256'));
-        return $userModel->checkUser($decodedToken->data->username);
+        return $decodedToken;
     } catch (ExpiredException $e) {
         throw new ApiAccessErrorException($e->getMessage(), ResponseInterface::HTTP_UNAUTHORIZED);
     }

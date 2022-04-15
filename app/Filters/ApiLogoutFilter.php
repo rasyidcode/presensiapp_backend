@@ -28,7 +28,7 @@ class ApiLogoutFilter implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         if ($request->getUri()->getSegments()[3] === 'signOut') {
-            $refreshTokenHandler = $request->header('RefreshToken');
+            $refreshTokenHandler = $request->header('Refresh-Token');
             if (is_null($refreshTokenHandler))
                 throw new ApiAccessErrorException('Please provide your refresh token', ResponseInterface::HTTP_BAD_REQUEST);
             
@@ -37,7 +37,7 @@ class ApiLogoutFilter implements FilterInterface
                 throw new ApiAccessErrorException('Please provide your refresh token', ResponseInterface::HTTP_BAD_REQUEST);
 
             $userModel = new UserModel();
-            if (!$userModel->checkUserByRt($refreshToken))
+            if (!$userModel->checkUserByRefreshToken($refreshToken))
                 throw new ApiAccessErrorException('Refresh token not found', ResponseInterface::HTTP_BAD_REQUEST);
 
             $request->setHeader('refreshToken', $refreshToken);
