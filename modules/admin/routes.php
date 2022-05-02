@@ -9,8 +9,8 @@ $routes->post('login', $routes_namespace . 'Login/Controllers/LoginController::l
 
 $routes->group('admin', ['namespace' => $routes_namespace, 'filter' => 'web_auth_filter'], function ($routes) {
     // welcome page
-    $routes->get('/', 'Dashboard/Controllers/DashboardController::index', ['as' => 'admin.welcome']);
-    $routes->get('error-404', 'Dashboard/Controllers/DashboardController::error404', ['as' => 'admin.error-404']);
+    $routes->get('/', 'Dashboard/Controllers/DashboardController::index',               ['as' => 'admin.welcome']);
+    $routes->get('error-404', 'Dashboard/Controllers/DashboardController::error404',    ['as' => 'admin.error-404']);
 
     // data user
     $routes->get('user',            'Users/Controllers/UserController::index',      ['as' => 'user.list']);
@@ -30,25 +30,26 @@ $routes->group('admin', ['namespace' => $routes_namespace, 'filter' => 'web_auth
     // $routes->post('user/purge',             'Users/Controllers/UserController::purge',                  ['as' => 'user.purge']);
 
     // master data
-    $routes->get('master/jurusan',          'Master/Controllers/JurusanController::index',      ['as' => 'master.jurusan-list']);
-    $routes->get('master/jurusan/get-data', 'Master/Controllers/JurusanController::getData',    ['as' => 'master.jurusan.get-data']);
-    $routes->get('master/jurusan/add',      'Master/Controllers/JurusanController::add',        ['as' => 'master.jurusan.add']);
-    $routes->post('master/jurusan',         'Master/Controllers/JurusanController::create',     ['as' => 'master.jurusan.create']);
-
-    $routes->get('master/matkul',           'Master/Controllers/MatkulController::index',       ['as' => 'master.matkul-list']);
-    $routes->get('master/matkul/get-data',  'Master/Controllers/MatkulController::getData',     ['as' => 'master.matkul.get-data']);
-    $routes->get('master/matkul/add',       'Master/Controllers/MatkulController::add',         ['as' => 'master.matkul.add']);
-    $routes->post('master/matkul',          'Master/Controllers/MatkulController::create',      ['as' => 'master.matkul.create']);
+    // jurusan
+    $routes->get('master/jurusan',              'Master/Controllers/JurusanController::index',          ['as' => 'master.jurusan.list']);
+    $routes->post('master/jurusan/get-data',    'Master/Controllers/JurusanController::getData',        ['as' => 'master.jurusan.get-data']);
+    $routes->get('master/jurusan/add',          'Master/Controllers/JurusanController::add',            ['as' => 'master.jurusan.add']);
+    $routes->post('master/jurusan',             'Master/Controllers/JurusanController::create',         ['as' => 'master.jurusan.create']);
+    // matkul
+    $routes->get('master/matkul',               'Master/Controllers/MatkulController::index',           ['as' => 'master.matkul.list']);
+    $routes->post('master/matkul/get-data',     'Master/Controllers/MatkulController::getData',         ['as' => 'master.matkul.get-data']);
+    $routes->get('master/matkul/add',           'Master/Controllers/MatkulController::add',             ['as' => 'master.matkul.add']);
+    $routes->post('master/matkul',              'Master/Controllers/MatkulController::create',          ['as' => 'master.matkul.create']);
     
     // data mahasiswa
-    $routes->get('mahasiswa',           'Mahasiswa/Controllers/MahasiswaController::index',     ['as' => 'mahasiswa.list']);
-    $routes->get('mahasiswa/get-data',  'Mahasiswa/Controllers/MahasiswaController::getData',   ['as' => 'mahasiswa.get-data']);
-    $routes->get('mahasiswa/add',       'Mahasiswa/Controllers/MahasiswaController::add',       ['as' => 'mahasiswa.add']);
-    $routes->post('mahasiswa',          'Mahasiswa/Controllers/MahasiswaController::create',    ['as' => 'mahasiswa.create']);
+    $routes->get('mahasiswa',                   'Mahasiswa/Controllers/MahasiswaController::index',     ['as' => 'mahasiswa.list']);
+    $routes->post('mahasiswa/get-data',         'Mahasiswa/Controllers/MahasiswaController::getData',   ['as' => 'mahasiswa.get-data']);
+    $routes->get('mahasiswa/add',               'Mahasiswa/Controllers/MahasiswaController::add',       ['as' => 'mahasiswa.add']);
+    $routes->post('mahasiswa',                  'Mahasiswa/Controllers/MahasiswaController::create',    ['as' => 'mahasiswa.create']);
 
     // data dosen
     $routes->get('dosen',           'Dosen/Controllers/DosenController::index',     ['as' => 'dosen.list']);
-    $routes->get('dosen/get-data',  'Dosen/Controllers/DosenController::getData',   ['as' => 'dosen.get-data']);
+    $routes->post('dosen/get-data',  'Dosen/Controllers/DosenController::getData',   ['as' => 'dosen.get-data']);
     $routes->get('dosen/add',       'Dosen/Controllers/DosenController::add',       ['as' => 'dosen.add']);
     $routes->get('dosen',           'Dosen/Controllers/DosenController::create',    ['as' => 'dosen.create']);
 
