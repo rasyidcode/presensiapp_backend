@@ -113,7 +113,7 @@ class UserModel extends Model
      */
     public function create(array $data)
     {
-        $this->db->table('users')
+        $this->db->table($this->tblName)
             ->insert($data);
     }
 }
