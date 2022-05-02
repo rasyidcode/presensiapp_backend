@@ -113,7 +113,7 @@ class JurusanModel extends Model
      */
     public function create(array $data)
     {
-        $this->db->table('jurusan')
+        $this->db->table($this->tblName)
             ->insert($data);
     }
 

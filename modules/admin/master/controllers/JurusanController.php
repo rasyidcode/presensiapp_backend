@@ -75,11 +75,11 @@ class JurusanController extends BaseController
                     'active'    => false,
                 ],
                 'data-user'     => [
-                    'url'       => route_to('master.jurusan-list'),
+                    'url'       => route_to('master.jurusan.list'),
                     'active'    => false,
                 ],
                 'tambah-data'   => [
-                    'url'       => route_to('master.jurusan-add'),
+                    'url'       => route_to('master.jurusan.add'),
                     'active'    => true,
                 ],
             ]
