@@ -22,13 +22,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="<?=route_to('master.jurusan-list')?>" class="nav-link <?=isLinkActive('jurusan', 3)?>">
+                            <a href="<?=route_to('master.jurusan.list')?>" class="nav-link <?=isLinkActive('jurusan', 3)?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Jurusan</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="<?=route_to('master.matkul-list')?>" class="nav-link <?=isLinkActive('matkul', 3)?>">
+                            <a href="<?=route_to('master.matkul.list')?>" class="nav-link <?=isLinkActive('matkul', 3)?>">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Mata Kuliah</p>
                             </a>

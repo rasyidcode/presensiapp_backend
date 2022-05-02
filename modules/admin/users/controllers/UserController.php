@@ -99,11 +99,12 @@ class UserController extends \App\Controllers\BaseController
     public function create()
     {
         $rules = [
-            'username'  => 'required',
+            'username'  => 'required|is_unique[users.username]',
             'password'  => 'required',
             'email'     => 'required',
             'level'     => 'required'
         ];
+        // todo: add custom error messages
         if (!$this->validate($rules)) {
             session()->setFlashdata('error', $this->validator->getErrors());
             return redirect()->back();

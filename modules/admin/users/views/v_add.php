@@ -7,7 +7,7 @@
             <div class="col-lg-12">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
-                        <a id="btn-back" href="javascript:void(0)" class="btn btn-primary btn-sm mr-2">
+                        <a id="btn-back" href="<?=route_to('user.list')?>" class="btn btn-primary btn-sm mr-2">
                             <i class="fas fa-arrow-alt-circle-left"></i>&nbsp;&nbsp;Back
                         </a>
                     </div>
