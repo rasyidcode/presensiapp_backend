@@ -8,18 +8,21 @@
             <div class="col-12">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
-                        <a href="<?=route_to('master.jurusan.add')?>" class="btn btn-primary btn-xs mr-2">
-                            <i class="fas fa-plus"></i>&nbsp;&nbsp;Tambah Jurusan
+                        <a href="<?=route_to('mahasiswa.add')?>" class="btn btn-primary btn-xs mr-2">
+                            <i class="fas fa-plus"></i>&nbsp;&nbsp;Tambah Mahasiswa
                         </a>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table id="data-jurusan" class="table table-bordered table-hover table-sm" width="100%">
+                        <table id="data-mahasiswa" class="table table-bordered table-hover table-sm" width="100%">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Kode</th>
-                                    <th>Nama</th>
+                                    <th>NIM</th>
+                                    <th>Nama Lengkap</th>
+                                    <th>Jurusan</th>
+                                    <th>Tahun Masuk</th>
+                                    <th>Jenis Kelamin</th>
                                     <th>Created At</th>
                                     <th>Actions</th>
                                 </tr>
@@ -43,7 +46,7 @@
 <?=$this->section('custom-js')?>
 <script>
 $(function() {
-    var table = $('#data-jurusan').DataTable({
+    var table = $('#data-mahasiswa').DataTable({
         dom: 'lrtip',
         searching: true,
         responsive: true,
@@ -58,7 +61,7 @@ $(function() {
             }
             $.ajax({
                 type: 'post' ,
-                url: '<?=route_to('master.jurusan.get-data')?>',
+                url: '<?=route_to('mahasiswa.get-data')?>',
                 data: data,
                 success: function(res) {
                     console.log(res);
@@ -74,8 +77,11 @@ $(function() {
             { targets: 0, orderable: false, searchable: false },
             { targets: 1, orderable: true,  searchable: true },
             { targets: 2, orderable: true,  searchable: true },
-            { targets: 3, orderable: true,  searchable: false },
-            { targets: 4, orderable: false, searchable: false }
+            { targets: 3, orderable: true,  searchable: true },
+            { targets: 4, orderable: true,  searchable: true },
+            { targets: 5, orderable: true,  searchable: true },
+            { targets: 6, orderable: true,  searchable: false },
+            { targets: 7, orderable: false, searchable: false }
         ],
         drawCallback: function(settings) {}
     });

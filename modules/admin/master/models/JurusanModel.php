@@ -117,4 +117,18 @@ class JurusanModel extends Model
             ->insert($data);
     }
 
+    /**
+     * Get list of active jurusan
+     * 
+     * @return array
+     */
+    public function getList()
+    {
+        return $this->builder($this->tblName)
+            ->select('id, kode_jurusan, nama_jurusan')
+            ->where('deleted_at', null)
+            ->get()
+            ->getResultObject();
+    }
+
 }

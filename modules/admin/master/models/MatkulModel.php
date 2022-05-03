@@ -26,35 +26,35 @@ class MatkulModel extends Model
      */
     public function getData(array $dtParams) : ?array
     {
-        $jurusan = $this->builder($this->tblName);
+        $matkul = $this->builder($this->tblName);
         foreach($this->columnSearch as $idx => $columnSearch) {
             if (isset($dtParams['search']) && !empty($dtParams['search'])) {
                 if ($idx == 0) {
-                    $jurusan->groupStart();
-                    $jurusan->like($columnSearch, $dtParams['search']['value']);
+                    $matkul->groupStart();
+                    $matkul->like($columnSearch, $dtParams['search']['value']);
                 } else {
-                    $jurusan->orLike($columnSearch, $dtParams['search']['value']);
+                    $matkul->orLike($columnSearch, $dtParams['search']['value']);
                 }
 
                 if (count($this->columnSearch) - 1 === $idx) {
-                    $jurusan->groupEnd();
+                    $matkul->groupEnd();
                 }
             }
         }
 
         if (isset($dtParams['order'])) {
-            $jurusan->orderBy($this->columnOrder[$dtParams['order']['0']['column']], $dtParams['order']['0']['dir']);
+            $matkul->orderBy($this->columnOrder[$dtParams['order']['0']['column']], $dtParams['order']['0']['dir']);
         }
 
         if (isset($dtParams['length']) && isset($dtParams['start'])) {
             if ($dtParams['length'] !== -1) {
-                $jurusan->limit($dtParams['length'], $dtParams['start']);
+                $matkul->limit($dtParams['length'], $dtParams['start']);
             }
         }
 
-        $jurusan->where('deleted_at', null);
+        $matkul->where('deleted_at', null);
 
-        return $jurusan->get()->getResultObject();
+        return $matkul->get()->getResultObject();
     }
 
     /**
@@ -66,31 +66,31 @@ class MatkulModel extends Model
      */
     public function countFilteredData(array $dtParams) : int
     {
-        $jurusan = $this->builder($this->tblName);
+        $matkul = $this->builder($this->tblName);
         foreach($this->columnSearch as $idx => $columnSearch) {
             if (isset($dtParams['search']) && !empty($dtParams['search'])) {
                 if ($idx == 0) {
-                    $jurusan->groupStart();
-                    $jurusan->like($columnSearch, $dtParams['search']['value']);
+                    $matkul->groupStart();
+                    $matkul->like($columnSearch, $dtParams['search']['value']);
                 } else {
-                    $jurusan->orLike($columnSearch, $dtParams['search']['value']);
+                    $matkul->orLike($columnSearch, $dtParams['search']['value']);
                 }
 
                 if (count($this->columnSearch) - 1 === $idx) {
-                    $jurusan->groupEnd();
+                    $matkul->groupEnd();
                 }
             }
         }
 
         if (isset($dtParams['length']) && isset($dtParams['start'])) {
             if ($dtParams['length'] !== -1) {
-                $jurusan->limit($dtParams['length'], $dtParams['start']);
+                $matkul->limit($dtParams['length'], $dtParams['start']);
             }
         }
 
-        $jurusan->where('deleted_at', null);
+        $matkul->where('deleted_at', null);
 
-        return $jurusan->countAllResults();
+        return $matkul->countAllResults();
     }
 
     /**

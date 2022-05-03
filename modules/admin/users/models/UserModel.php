@@ -116,4 +116,14 @@ class UserModel extends Model
         $this->db->table($this->tblName)
             ->insert($data);
     }
+
+    /**
+     * Get last ID
+     * 
+     * @return int|null
+     */
+    public function getLastID()
+    {
+        return $this->db->insertID();
+    }
 }

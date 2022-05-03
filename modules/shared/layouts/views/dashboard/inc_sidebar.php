@@ -42,7 +42,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= route_to('mahasiswa.list') ?>" class="nav-link">
+                    <a href="<?= route_to('mahasiswa.list') ?>" class="nav-link <?= isLinkActive('mahasiswa', 2) ?>">
                         <i class="nav-icon fas fa-user" style="color: <?= isLinkActiveColor('mahasiswa', 2, 'yellow') ?>"></i>
                         <p>Data Mahasiswa</p>
                     </a>
