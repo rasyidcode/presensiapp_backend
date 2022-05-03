@@ -48,10 +48,10 @@ $routes->group('admin', ['namespace' => $routes_namespace, 'filter' => 'web_auth
     $routes->post('mahasiswa',                  'Mahasiswa/Controllers/MahasiswaController::create',    ['as' => 'mahasiswa.create']);
 
     // data dosen
-    $routes->get('dosen',           'Dosen/Controllers/DosenController::index',     ['as' => 'dosen.list']);
-    $routes->post('dosen/get-data',  'Dosen/Controllers/DosenController::getData',   ['as' => 'dosen.get-data']);
-    $routes->get('dosen/add',       'Dosen/Controllers/DosenController::add',       ['as' => 'dosen.add']);
-    $routes->get('dosen',           'Dosen/Controllers/DosenController::create',    ['as' => 'dosen.create']);
+    $routes->get('dosen',               'Dosen/Controllers/DosenController::index',     ['as' => 'dosen.list']);
+    $routes->post('dosen/get-data',     'Dosen/Controllers/DosenController::getData',   ['as' => 'dosen.get-data']);
+    $routes->get('dosen/add',           'Dosen/Controllers/DosenController::add',       ['as' => 'dosen.add']);
+    $routes->post('dosen',              'Dosen/Controllers/DosenController::create',    ['as' => 'dosen.create']);
 
     // data kelas
     $routes->get('kelas', 'Kelas/Controllers/KelasController::index', ['as' => 'kelas.list']);

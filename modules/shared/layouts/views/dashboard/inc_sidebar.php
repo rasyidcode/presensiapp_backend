@@ -48,7 +48,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="<?= route_to('dosen.list') ?>" class="nav-link <?= isLinkActive('dosen', 2) ?>">
                         <i class="nav-icon fas fa-user" style="color: <?= isLinkActiveColor('dosen', 2, 'blue') ?>"></i>
                         <p>Data Dosen</p>
                     </a>
