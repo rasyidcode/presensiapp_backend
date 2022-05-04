@@ -162,10 +162,13 @@ if (!isset($_SERVER['SERVER_NAME'])) {
     if ($isSecured) {
         $envFile .= $subdomain . '.env';
     } else {
-        $envFile .= 'local-' . $subdomain . '.env';
+        if (count(explode('.', $_SERVER['SERVER_NAME'])) < 3 && $subdomain !== 'www') {
+            $envFile .= '.env';
+        } else {
+            $envFile .= 'local-' . $subdomain . '.env';
+        }
     }
 }
-
 
 $env = new DotEnv($envPath, $envFile);
 # end jamil - hack envs

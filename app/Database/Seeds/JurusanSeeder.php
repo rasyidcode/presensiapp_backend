@@ -19,8 +19,8 @@ class JurusanSeeder extends Seeder
         $data = [];
         foreach($jurusan as $key => $val) {
             $now = date('Y-m-d H:i:s');
-            $newData['kode_jurusan'] = $key;
-            $newData['nama_jurusan'] = $val;
+            $newData['kode'] = $key;
+            $newData['nama'] = $val;
             $newData['created_at'] = $now;
             $newData['updated_at'] = $now;
             $data[] = $newData;
