@@ -45,8 +45,8 @@ class JurusanController extends BaseController
 
             $row    = [];
             $row[]  = "<input type=\"hidden\" value=\"".$item->id."\">{$num}.";
-            $row[]  = $item->kode_jurusan ?? '-';
-            $row[]  = $item->nama_jurusan ?? '-';
+            $row[]  = $item->kode ?? '-';
+            $row[]  = $item->nama ?? '-';
             $row[]  = $item->created_at ?? '-';
             $row[]  = "<div class=\"text-center\">
                             <a href=\"".route_to('admin.error-404')."\" class=\"btn btn-info btn-xs mr-2\">Edit</a>
@@ -89,8 +89,8 @@ class JurusanController extends BaseController
     public function create()
     {
         $rules = [
-            'kode_jurusan'  => 'required|is_unique[jurusan.kode_jurusan]',
-            'nama_jurusan'  => 'required|is_unique[jurusan.nama_jurusan]',
+            'kode'  => 'required|is_unique[jurusan.kode]',
+            'nama'  => 'required|is_unique[jurusan.nama]',
         ];
         // todo: add custom error messages
         if (!$this->validate($rules)) {

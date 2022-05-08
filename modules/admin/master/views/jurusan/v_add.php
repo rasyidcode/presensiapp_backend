@@ -7,7 +7,7 @@
             <div class="col-lg-12">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
-                        <a id="btn-back" href="<?=route_to('master.jurusan.list')?>)" class="btn btn-primary btn-sm mr-2">
+                        <a id="btn-back" href="<?=route_to('master.jurusan.list')?>" class="btn btn-primary btn-sm mr-2">
                             <i class="fas fa-arrow-alt-circle-left"></i>&nbsp;&nbsp;Back
                         </a>
                     </div>
@@ -29,12 +29,12 @@
                         <form action="<?= route_to('master.jurusan.create') ?>" method="post">
                             <?= csrf_field() ?>
                             <div class="form-group">
-                                <label for="kode_jurusan">Kode Jurusan</label>
-                                <input type="text" name="kode_jurusan" class="form-control" required>
+                                <label for="kode">Kode Jurusan</label>
+                                <input type="text" name="kode" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label for="nama_jurusan">Nama Jurusan</label>
-                                <input type="text" name="nama_jurusan" class="form-control" required>
+                                <label for="nama">Nama Jurusan</label>
+                                <input type="text" name="nama" class="form-control" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>

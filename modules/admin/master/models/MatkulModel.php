@@ -9,8 +9,8 @@ class MatkulModel extends Model
 
     private $tblName = 'matkul';
 
-    private $columnOrder   = [null, 'kode_matkul', 'nama_matkul', 'created_at', null];
-    private $columnSearch  = ['kode_matkul', 'nama_matkul'];
+    private $columnOrder   = [null, 'kode', 'nama', 'created_at', null];
+    private $columnSearch  = ['kode', 'nama'];
 
     public function __construct()
     {
@@ -52,8 +52,6 @@ class MatkulModel extends Model
             }
         }
 
-        $matkul->where('deleted_at', null);
-
         return $matkul->get()->getResultObject();
     }
 
@@ -87,8 +85,6 @@ class MatkulModel extends Model
                 $matkul->limit($dtParams['length'], $dtParams['start']);
             }
         }
-
-        $matkul->where('deleted_at', null);
 
         return $matkul->countAllResults();
     }

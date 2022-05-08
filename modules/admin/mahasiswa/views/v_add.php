@@ -41,7 +41,7 @@
                                 <select name="id_jurusan" class="form-control">
                                     <option value="">-- Pilih Jurusan --</option>
                                     <?php foreach($jurusanList as $jurusanListItem): ?>
-                                        <option value="<?=$jurusanListItem->id?>"><strong><?=$jurusanListItem->kode_jurusan?></strong> - <?=$jurusanListItem->nama_jurusan?></option>
+                                        <option value="<?=$jurusanListItem->id?>"><strong><?=$jurusanListItem->kode?></strong> - <?=$jurusanListItem->nama?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>

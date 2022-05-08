@@ -9,8 +9,8 @@ class JurusanModel extends Model
 
     private $tblName = 'jurusan';
 
-    private $columnOrder   = [null, 'kode_jurusan', 'nama_jurusan', 'created_at', null];
-    private $columnSearch  = ['kode_jurusan', 'nama_jurusan'];
+    private $columnOrder   = [null, 'kode', 'nama', 'created_at', null];
+    private $columnSearch  = ['kode', 'nama'];
 
     public function __construct()
     {
@@ -52,8 +52,6 @@ class JurusanModel extends Model
             }
         }
 
-        $jurusan->where('deleted_at', null);
-
         return $jurusan->get()->getResultObject();
     }
 
@@ -87,8 +85,6 @@ class JurusanModel extends Model
                 $jurusan->limit($dtParams['length'], $dtParams['start']);
             }
         }
-
-        $jurusan->where('deleted_at', null);
 
         return $jurusan->countAllResults();
     }
@@ -125,8 +121,7 @@ class JurusanModel extends Model
     public function getList()
     {
         return $this->builder($this->tblName)
-            ->select('id, kode_jurusan, nama_jurusan')
-            ->where('deleted_at', null)
+            ->select('id, kode, nama')
             ->get()
             ->getResultObject();
     }

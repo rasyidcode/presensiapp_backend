@@ -45,8 +45,8 @@ class MatkulController extends BaseController
 
             $row    = [];
             $row[]  = "<input type=\"hidden\" value=\"".$item->id."\">{$num}.";
-            $row[]  = $item->kode_matkul ?? '-';
-            $row[]  = $item->nama_matkul ?? '-';
+            $row[]  = $item->kode ?? '-';
+            $row[]  = $item->nama ?? '-';
             $row[]  = $item->created_at ?? '-';
             $row[]  = "<div class=\"text-center\">
                             <a href=\"".route_to('admin.error-404')."\" class=\"btn btn-info btn-xs mr-2\">Edit</a>
@@ -89,8 +89,8 @@ class MatkulController extends BaseController
     public function create()
     {
         $rules = [
-            'kode_matkul'  => 'required|is_unique[matkul.kode_matkul]',
-            'nama_matkul'  => 'required|is_unique[matkul.nama_matkul]',
+            'kode'  => 'required|is_unique[matkul.kode]',
+            'nama'  => 'required|is_unique[matkul.nama]',
         ];
         // todo: add custom error messages
         if (!$this->validate($rules)) {

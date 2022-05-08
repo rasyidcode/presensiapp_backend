@@ -29,12 +29,12 @@
                         <form action="<?= route_to('master.matkul.create') ?>" method="post">
                             <?= csrf_field() ?>
                             <div class="form-group">
-                                <label for="kode_matkul">Kode Matkul</label>
-                                <input type="text" name="kode_matkul" class="form-control" required>
+                                <label for="kode">Kode Matkul</label>
+                                <input type="text" name="kode" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label for="nama_matkul">Nama Matkul</label>
-                                <input type="text" name="nama_matkul" class="form-control" required>
+                                <label for="nama">Nama Matkul</label>
+                                <input type="text" name="nama" class="form-control" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>

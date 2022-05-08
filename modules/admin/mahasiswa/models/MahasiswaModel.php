@@ -32,7 +32,7 @@ class MahasiswaModel extends Model
             mahasiswa.id,
             mahasiswa.nim,
             mahasiswa.nama_lengkap,
-            jurusan.nama_jurusan,
+            jurusan.nama as nama_jurusan,
             mahasiswa.tahun_masuk,
             mahasiswa.jenis_kelamin,
             mahasiswa.created_at
@@ -47,7 +47,7 @@ class MahasiswaModel extends Model
                     $mahasiswa->like($columnSearch, $dtParams['search']['value']);
                 } else {
                     if ($columnSearch == 'jurusan') {
-                        $mahasiswa->orlike('jurusan.nama_jurusan', $dtParams['search']['value']);
+                        $mahasiswa->orlike('jurusan.nama', $dtParams['search']['value']);
                     } else {
                         $mahasiswa->orLike($columnSearch, $dtParams['search']['value']);   
                     }
@@ -89,7 +89,7 @@ class MahasiswaModel extends Model
             mahasiswa.id,
             mahasiswa.nim,
             mahasiswa.nama_lengkap,
-            jurusan.nama_jurusan,
+            jurusan.nama as nama_jurusan,
             mahasiswa.tahun_masuk,
             mahasiswa.jenis_kelamin,
             mahasiswa.created_at
@@ -104,7 +104,7 @@ class MahasiswaModel extends Model
                     $mahasiswa->like($columnSearch, $dtParams['search']['value']);
                 } else {
                     if ($columnSearch == 'jurusan') {
-                        $mahasiswa->orlike('jurusan.nama_jurusan', $dtParams['search']['value']);
+                        $mahasiswa->orlike('jurusan.nama', $dtParams['search']['value']);
                     } else {
                         $mahasiswa->orLike($columnSearch, $dtParams['search']['value']);   
                     }
