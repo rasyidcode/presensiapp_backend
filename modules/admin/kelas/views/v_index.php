@@ -44,7 +44,7 @@
 <?=$this->section('custom-js')?>
 <script>
 $(function() {
-    var table = $('#data-mahasiswa').DataTable({
+    var table = $('#data-kelas').DataTable({
         dom: 'lrtip',
         searching: true,
         responsive: true,
@@ -59,7 +59,7 @@ $(function() {
             }
             $.ajax({
                 type: 'post' ,
-                url: '<?=route_to('mahasiswa.get-data')?>',
+                url: '<?=route_to('kelas.get-data')?>',
                 data: data,
                 success: function(res) {
                     console.log(res);

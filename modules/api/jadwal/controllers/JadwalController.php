@@ -3,6 +3,7 @@
 namespace Modules\Api\Jadwal\Controllers;
 
 use App\Controllers\BaseController;
+use App\Exceptions\ApiAccessErrorException;
 use CodeIgniter\HTTP\ResponseInterface;
 use Modules\Api\Jadwal\Models\JadwalModel;
 
@@ -21,6 +22,7 @@ class JadwalController extends BaseController
         $userdata = (object) $this->request->header('User-Data')->getValue();
         $mhsId = $this->jadwalModel->getMahasiswaID($userdata->id);
         $jadwal = $this->jadwalModel->getJadwal($mhsId);
+        
         if (is_null($jadwal)) {
             throw new ApiAccessErrorException(
                 message: 'Jadwal tidak ditemukan!',

@@ -120,4 +120,18 @@ class DosenModel extends Model
             ->insert($data);
     }
 
+    /**
+     * Get list of dosen
+     * 
+     * @return array
+     */
+    public function getList()
+    {
+        return $this->builder($this->tblName)
+            ->select('id, nama_lengkap')
+            ->where('deleted_at', null)
+            ->get()
+            ->getResultObject();
+    }
+
 }

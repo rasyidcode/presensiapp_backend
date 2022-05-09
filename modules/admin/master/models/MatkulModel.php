@@ -2,6 +2,7 @@
 
 namespace Modules\Admin\Master\Models;
 
+use CodeIgniter\Database\BaseBuilder;
 use CodeIgniter\Model;
 
 class MatkulModel extends Model
@@ -18,7 +19,7 @@ class MatkulModel extends Model
     }
 
     /**
-     * Get jurusan list with datatable params
+     * Get matkul list with datatable params
      * 
      * @param array $dtParams
      * 
@@ -111,6 +112,28 @@ class MatkulModel extends Model
     {
         $this->db->table($this->tblName)
             ->insert($data);
+    }
+
+    /**
+     * Get list of available matkul
+     * 
+     * @return array
+     */
+    public function getAvailableMatkul()
+    {
+        $matkul = $this->builder($this->tblName);
+        $matkul->select('
+            matkul.id,
+            matkul.kode,
+            matkul.nama
+        ');
+        $matkul->join('kelas', 'kelas.id_matkul = matkul.id', 'left');
+        $matkul->whereNotIn('matkul.id', function(BaseBuilder $baseBuilder) {
+            return $baseBuilder->select('id_matkul')->from('kelas')->where('deleted_at', null);
+        });
+
+        return $matkul->get()
+            ->getResultObject();
     }
 
 }

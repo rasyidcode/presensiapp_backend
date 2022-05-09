@@ -54,7 +54,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="<?= route_to('kelas.list') ?>" class="nav-link <?= isLinkActive('kelas', 2) ?>"">
                         <i class="nav-icon fas fa-door-closed" style="color: <?= isLinkActiveColor('kelas', 2, 'orange') ?>"></i>
                         <p>Data Kelas</p>
                     </a>

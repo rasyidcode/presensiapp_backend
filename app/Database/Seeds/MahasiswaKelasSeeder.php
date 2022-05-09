@@ -18,10 +18,10 @@ class MahasiswaKelasSeeder extends Seeder
 
         foreach($kelas as $kls) {
             foreach($mahasiswa as $mhs) {
-                $this->db->table('kelas_mhs')
+                $this->db->table('kelas_mahasiswa')
                     ->insert([
                         'id_kelas'  => $kls->id,
-                        'id_mhs'    => $mhs->id
+                        'id_mahasiswa'    => $mhs->id
                     ]);
             }
         }

@@ -7,7 +7,7 @@
             <div class="col-lg-12">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
-                        <a id="btn-back" href="<?=route_to('mahasiswa.list')?>" class="btn btn-primary btn-sm mr-2">
+                        <a id="btn-back" href="<?=route_to('kelas.list')?>" class="btn btn-primary btn-sm mr-2">
                             <i class="fas fa-arrow-alt-circle-left"></i>&nbsp;&nbsp;Back
                         </a>
                     </div>
@@ -26,48 +26,25 @@
                                 <?= session()->getFlashdata('success') ?>
                             </div>
                         <?php endif; ?>
-                        <form action="<?= route_to('mahasiswa.create') ?>" method="post">
+                        <form action="<?= route_to('kelas.create') ?>" method="post">
                             <?= csrf_field() ?>
                             <div class="form-group">
-                                <label for="nim">NIM</label>
-                                <input type="text" name="nim" class="form-control" placeholder="Masukkan NIM" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="nama_lengkap">Nama Lengkap</label>
-                                <input type="text" name="nama_lengkap" class="form-control" placeholder="Masukkan Nama Lengkap" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="id_jurusan">Jurusan</label>
-                                <select name="id_jurusan" class="form-control">
-                                    <option value="">-- Pilih Jurusan --</option>
-                                    <?php foreach($jurusanList as $jurusanListItem): ?>
-                                        <option value="<?=$jurusanListItem->id?>"><strong><?=$jurusanListItem->kode_jurusan?></strong> - <?=$jurusanListItem->nama_jurusan?></option>
+                                <label for="matkul">Mata Kuliah</label>
+                                <select name="matkul" class="form-control">
+                                    <option value="">-- Pilih Mata Kuliah --</option>
+                                    <?php foreach($matkulList as $matkulListItem): ?>
+                                        <option value="<?=$matkulListItem->id?>"><?=$matkulListItem->kode?> - <?=$matkulListItem->nama?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="tahun_masuk">Tahun Masuk</label>
-                                <select name="tahun_masuk" class="form-control">
-                                    <option value="">-- Pilih Tahun Masuk --</option>
-                                    <?php for($year = date('Y'); $year > 2010; $year--): ?>
-                                        <option value="<?=$year?>"><?=$year?></option>
-                                    <?php endfor; ?>
+                                <label for="dosen">Dosen Pengajar</label>
+                                <select name="dosen" class="form-control">
+                                    <option value="">-- Pilih Dosen Pengajar --</option>
+                                    <?php foreach($dosenList as $dosenListItem): ?>
+                                        <option value="<?=$dosenListItem->id?>"><?=$dosenListItem->nama_lengkap?></option>
+                                    <?php endforeach; ?>
                                 </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="alamat">Jenis Kelamin</label>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="jenis_kelamin" value="L" checked>
-                                    <label class="form-check-label">Laki-laki</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="jenis_kelamin" value="P">
-                                    <label class="form-check-label">Perempuan</label>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="alamat">Alamat</label>
-                                <textarea name="alamat" class="form-control" rows="3" placeholder="Masukkan Alamat..."></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>

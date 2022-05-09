@@ -17,24 +17,13 @@ $routes->group('admin', ['namespace' => $routes_namespace, 'filter' => 'web_auth
     $routes->post('user/get-data',  'Users/Controllers/UserController::getData',    ['as' => 'user.get-data']);
     $routes->get('user/add',        'Users/Controllers/UserController::add',        ['as' => 'user.add']);
     $routes->post('user',           'Users/Controllers/UserController::create',     ['as' => 'user.create']);
-    // $routes->get('user/change-pass',        'Users/Controllers/UserController::view_change_pass/$1',    ['as' => 'user.view_change_pass']);
-    // $routes->post('user/change-pass',       'Users/Controllers/UserController::change_pass',            ['as' => 'user.change_pass']);
-    // $routes->get('user/edit',               'Users/Controllers/UserController::view_edit/$1',           ['as' => 'user.view_edit']);
-    // $routes->post('user/edit',              'Users/Controllers/UserController::edit',                   ['as' => 'user.edit']);
-    // $routes->get('user/delete',             'Users/Controllers/UserController::view_delete/$1',         ['as' => 'user.view_delete']);
-    // $routes->post('user/delete',            'Users/Controllers/UserController::delete',                 ['as' => 'user.delete']);
-    // $routes->post('user/get-data-history',  'Users/Controllers/UserController::get_data_history',       ['as' => 'user.get_data_history']);
-    // $routes->get('user/restore',            'Users/Controllers/UserController::view_restore',           ['as' => 'user.view_restore']);
-    // $routes->post('user/restore',           'Users/Controllers/UserController::restore',                ['as' => 'user.restore']);
-    // $routes->get('user/purge',              'Users/Controllers/UserController::view_purge',             ['as' => 'user.view_purge']);
-    // $routes->post('user/purge',             'Users/Controllers/UserController::purge',                  ['as' => 'user.purge']);
 
-    // master data
     // jurusan
     $routes->get('master/jurusan',              'Master/Controllers/JurusanController::index',          ['as' => 'master.jurusan.list']);
     $routes->post('master/jurusan/get-data',    'Master/Controllers/JurusanController::getData',        ['as' => 'master.jurusan.get-data']);
     $routes->get('master/jurusan/add',          'Master/Controllers/JurusanController::add',            ['as' => 'master.jurusan.add']);
     $routes->post('master/jurusan',             'Master/Controllers/JurusanController::create',         ['as' => 'master.jurusan.create']);
+
     // matkul
     $routes->get('master/matkul',               'Master/Controllers/MatkulController::index',           ['as' => 'master.matkul.list']);
     $routes->post('master/matkul/get-data',     'Master/Controllers/MatkulController::getData',         ['as' => 'master.matkul.get-data']);
@@ -54,8 +43,14 @@ $routes->group('admin', ['namespace' => $routes_namespace, 'filter' => 'web_auth
     $routes->post('dosen',              'Dosen/Controllers/DosenController::create',    ['as' => 'dosen.create']);
 
     // data kelas
-    $routes->get('kelas', 'Kelas/Controllers/KelasController::index', ['as' => 'kelas.list']);
-    $routes->get('kelas/get-data', 'Kelas/Controllers/KelasController::getData', ['as' => 'kelas.get-data']);
+    $routes->get('kelas',                       'Kelas/Controllers/KelasController::index',             ['as' => 'kelas.list']);
+    $routes->post('kelas/get-data',             'Kelas/Controllers/KelasController::getData',           ['as' => 'kelas.get-data']);
+    $routes->get('kelas/add',                   'Kelas/Controllers/KelasController::add',               ['as' => 'kelas.add']);
+    $routes->post('kelas',                      'Kelas/Controllers/KelasController::create',            ['as' => 'kelas.create']);
+
+    $routes->get('kelas/(:segment)/mahasiswa',             'Kelas\Controllers\KelasController::mahasiswa/$1',         ['as' => 'kelas.mahasiswa']);
+    $routes->post('kelas/(:segment)/mahasiswa/get-data',   'Kelas\Controllers\KelasController::mahasiswaGetData/$1',  ['as' => 'kelas.mahasiswa.get-data']);
+    // $routes->get('kelas/mahasiswa/add',         'Kelas/Controllers/KelasController::mahasiswaAdd',      ['as' => 'kelas.mahasiswa.add']);
 
     // jadwal
     $routes->get('jadwal', 'Jadwal/Controllers/JadwalController::index', ['as' => 'jadwal.list']);

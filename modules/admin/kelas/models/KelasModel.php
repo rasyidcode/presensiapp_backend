@@ -9,8 +9,8 @@ class KelasModel extends Model
 
     private $tblName = 'kelas';
 
-    private $columnOrder   = [null, 'nama_kelas', 'dosen_pengajar', 'created_at', null];
-    private $columnSearch  = ['nama_kelas', 'dosen_pengajar'];
+    private $columnOrder   = [null, 'kelas', 'matkul', 'dosen', 'created_at', null];
+    private $columnMahasiswaOrder   = [null, 'nim', 'nama_lengkap', null, 'jenis_kelamin', null];
 
     public function __construct()
     {
@@ -24,34 +24,30 @@ class KelasModel extends Model
      * 
      * @return array|null
      */
-    public function getData(array $dtParams) : ?array
+    public function getData(array $dtParams): ?array
     {
         $kelas = $this->builder($this->tblName);
 
         $kelas->select('
             kelas.id,
             kelas.created_at,
-            dosen.nama_lengkap as dosen_pengajar,
-            matkul.kode_matkul as nama_kelas,
-            matkul.nama_matkul as nama_matkul
+            dosen.nama_lengkap as dosen,
+            matkul.kode as kelas,
+            matkul.nama as matkul
         ');
 
         $kelas->join('dosen', 'kelas.id_dosen = dosen.id', 'left');
         $kelas->join('matkul', 'kelas.id_matkul = matkul.id', 'left');
 
         if (isset($dtParams['search']) && !empty($dtParams['search'])) {
-            foreach($this->columnSearch as $idx => $columnSearch) {
-                if ($idx == 0) {
-                    $kelas->groupStart();
-                    $kelas->like($columnSearch, $dtParams['search']['value']);
-                } else {
-                    $kelas->orLike($columnSearch, $dtParams['search']['value']);   
-                }
-    
-                if (count($this->columnSearch) - 1 === $idx) {
-                    $kelas->groupEnd();
-                }
-            }       
+            $kelas->groupStart();
+            // nama kelas
+            $kelas->like('matkul.kode', $dtParams['search']['value']);
+            // nama matkul
+            $kelas->orLike('matkul.nama', $dtParams['search']['value']);
+            // nama dosen
+            $kelas->orLike('dosen.nama_lengkap', $dtParams['search']['value']);
+            $kelas->groupEnd();
         }
 
         if (isset($dtParams['order'])) {
@@ -64,7 +60,7 @@ class KelasModel extends Model
             }
         }
 
-        $kelas->where('deleted_at', null);
+        $kelas->where('kelas.deleted_at', null);
 
         return $kelas->get()->getResultObject();
     }
@@ -76,34 +72,22 @@ class KelasModel extends Model
      * 
      * @return int|null
      */
-    public function countFilteredData(array $dtParams) : int
+    public function countFilteredData(array $dtParams): int
     {
         $kelas = $this->builder($this->tblName);
-
-        $kelas->select('
-            kelas.id,
-            kelas.created_at,
-            dosen.nama_lengkap as dosen_pengajar,
-            matkul.kode_matkul as nama_kelas,
-            matkul.nama_matkul as nama_matkul
-        ');
 
         $kelas->join('dosen', 'kelas.id_dosen = dosen.id', 'left');
         $kelas->join('matkul', 'kelas.id_matkul = matkul.id', 'left');
 
         if (isset($dtParams['search']) && !empty($dtParams['search'])) {
-            foreach($this->columnSearch as $idx => $columnSearch) {
-                if ($idx == 0) {
-                    $kelas->groupStart();
-                    $kelas->like($columnSearch, $dtParams['search']['value']);
-                } else {
-                    $kelas->orLike($columnSearch, $dtParams['search']['value']);
-                }
-    
-                if (count($this->columnSearch) - 1 === $idx) {
-                    $kelas->groupEnd();
-                }
-            }
+            $kelas->groupStart();
+            // nama kelas
+            $kelas->like('matkul.kode', $dtParams['search']['value']);
+            // nama matkul
+            $kelas->orLike('matkul.nama', $dtParams['search']['value']);
+            // nama dosen
+            $kelas->orLike('dosen.nama_lengkap', $dtParams['search']['value']);
+            $kelas->groupEnd();
         }
 
         if (isset($dtParams['length']) && isset($dtParams['start'])) {
@@ -112,7 +96,7 @@ class KelasModel extends Model
             }
         }
 
-        $kelas->where('deleted_at', null);
+        $kelas->where('kelas.deleted_at', null);
 
         return $kelas->countAllResults();
     }
@@ -124,10 +108,10 @@ class KelasModel extends Model
      * 
      * @return int
      */
-    public function countData() : int
+    public function countData(): int
     {
         return $this->builder($this->tblName)
-                    ->countAllResults();
+            ->countAllResults();
     }
 
     /**
@@ -141,4 +125,157 @@ class KelasModel extends Model
             ->insert($data);
     }
 
+    /**
+     * Check kelas exist
+     * 
+     * @param int $matkulId
+     * @param int $dosenId
+     * 
+     * @return bool
+     */
+    public function checkKelas(int $matkulId, int $dosenId): bool
+    {
+        $result = $this->db->table($this->tblName)
+            ->selectCount('id', 'count')
+            ->where('id_matkul', $matkulId)
+            ->where('id_dosen', $dosenId)
+            ->get()
+            ->getRowObject();
+        return is_null($result) ? false : (isset($result->count) ? $result->count > 0 : false);
+    }
+
+    /**
+     * Get kelas by ID
+     * 
+     * @param int $id
+     * 
+     * @return object|null
+     */
+    public function get(int $id): ?object
+    {
+        $kelas = $this->db->table($this->tblName);
+        $kelas->select('
+            kelas.id,
+            dosen.nama_lengkap as dosen_pengajar,
+            matkul.kode as nama_kelas,
+            matkul.nama as nama_matkul,
+            kelas.created_at,
+        ');
+        $kelas->join('matkul', 'matkul.id = kelas.id_matkul', 'left');
+        $kelas->join('dosen', 'dosen.id = kelas.id_dosen', 'left');
+        $kelas->where('kelas.id', $id);
+        $kelas->where('kelas.deleted_at', null);
+
+        return $kelas->get()->getRowObject();
+    }
+
+    /**
+     * Get mahasiswa data by kelas id
+     * 
+     * @param int $kelasId
+     * @param array $dtParams
+     * 
+     * @return object|null
+     */
+    public function getMahasiswaData(int $kelasId, array $dtParams)
+    {
+        $kelasMahasiswa = $this->builder('kelas_mahasiswa');
+
+        $kelasMahasiswa->select('
+            kelas.id as id_kelas,
+            mahasiswa.nim,
+            mahasiswa.nama_lengkap,
+            jurusan.nama as jurusan,
+            mahasiswa.jenis_kelamin,
+            kelas.created_at
+        ');
+
+        $kelasMahasiswa->join('mahasiswa', 'kelas_mahasiswa.id_mahasiswa = mahasiswa.id', 'left');
+        $kelasMahasiswa->join('jurusan', 'mahasiswa.id_jurusan = jurusan.id', 'left');
+        $kelasMahasiswa->join('kelas', 'kelas_mahasiswa.id_kelas = kelas.id', 'left');
+
+        if (isset($dtParams['search']) && !empty($dtParams['search'])) {
+            $kelasMahasiswa->groupStart();
+            $kelasMahasiswa->like('mahasiswa.nim', $dtParams['search']['value']);
+            $kelasMahasiswa->orLike('mahasiswa.nama_lengkap', $dtParams['search']['value']);
+            $kelasMahasiswa->orLike('jurusan.nama', $dtParams['search']['value']);
+            $kelasMahasiswa->orLike('mahasiswa.jenis_kelamin', $dtParams['search']['value']);
+            $kelasMahasiswa->groupEnd();
+        }
+
+        if (isset($dtParams['order'])) {
+            $kelasMahasiswa->orderBy(
+                $this->columnMahasiswaOrder[$dtParams['order']['0']['column']],
+                $dtParams['order']['0']['dir']
+            );
+        }
+
+        if (isset($dtParams['length']) && isset($dtParams['start'])) {
+            if ($dtParams['length'] !== -1) {
+                $kelasMahasiswa->limit($dtParams['length'], $dtParams['start']);
+            }
+        }
+
+        $kelasMahasiswa->where('kelas_mahasiswa.id_kelas', $kelasId);
+
+        return $kelasMahasiswa->get()->getResultObject();
+    }
+
+    /**
+     * count filtered data
+     * 
+     * @param int $kelasId
+     * @param array $dtParams
+     * 
+     * @return int|null
+     */
+    public function mahasiswaCountFilteredData(int $kelasId, array $dtParams): int
+    {
+        $kelasMahasiswa = $this->builder('kelas_mahasiswa');
+
+        $kelasMahasiswa->join('mahasiswa', 'kelas_mahasiswa.id_mahasiswa = mahasiswa.id', 'left');
+        $kelasMahasiswa->join('jurusan', 'mahasiswa.id_jurusan = jurusan.id', 'left');
+        $kelasMahasiswa->join('kelas', 'kelas_mahasiswa.id_kelas = kelas.id', 'left');
+
+        if (isset($dtParams['search']) && !empty($dtParams['search'])) {
+            $kelasMahasiswa->groupStart();
+            $kelasMahasiswa->like('mahasiswa.nim', $dtParams['search']['value']);
+            $kelasMahasiswa->orLike('mahasiswa.nama_lengkap', $dtParams['search']['value']);
+            $kelasMahasiswa->orLike('jurusan.nama', $dtParams['search']['value']);
+            $kelasMahasiswa->orLike('mahasiswa.jenis_kelamin', $dtParams['search']['value']);
+            $kelasMahasiswa->groupEnd();
+        }
+
+        if (isset($dtParams['order'])) {
+            $kelasMahasiswa->orderBy(
+                $this->columnMahasiswaOrder[$dtParams['order']['0']['column']],
+                $dtParams['order']['0']['dir']
+            );
+        }
+
+        if (isset($dtParams['length']) && isset($dtParams['start'])) {
+            if ($dtParams['length'] !== -1) {
+                $kelasMahasiswa->limit($dtParams['length'], $dtParams['start']);
+            }
+        }
+
+        $kelasMahasiswa->where('kelas_mahasiswa.id_kelas', $kelasId);
+
+        return $kelasMahasiswa->countAllResults();
+    }
+
+    /**
+     * count total data
+     * 
+     * @param int $kelasId
+     * @param array $dt_params
+     * 
+     * @return int
+     */
+    public function mahasiswaCountData(int $kelasId): int
+    {
+        return $this->builder('kelas_mahasiswa')
+            ->where('kelas_mahasiswa.id_kelas', $kelasId)
+            ->countAllResults();
+    }
 }
