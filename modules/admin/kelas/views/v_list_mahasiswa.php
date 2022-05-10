@@ -21,8 +21,8 @@
             <div class="col-12">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
-                        <a href="<?= route_to('kelas.mahasiswa.add') ?>" class="btn btn-primary btn-xs mr-2">
-                            <i class="fas fa-plus"></i>&nbsp;&nbsp;Daftarkan Mahasiswa
+                        <a href="<?= route_to('kelas.mahasiswa.add', $kelasInfo->id) ?>" class="btn btn-primary btn-xs mr-2">
+                            <i class="fas fa-plus"></i>&nbsp;&nbsp;Tambah Mahasiswa
                         </a>
                     </div>
                     <!-- /.card-header -->

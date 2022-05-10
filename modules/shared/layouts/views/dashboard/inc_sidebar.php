@@ -54,13 +54,13 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="<?= route_to('kelas.list') ?>" class="nav-link <?= isLinkActive('kelas', 2) ?>"">
+                    <a href="<?= route_to('kelas.list') ?>" class="nav-link <?= isLinkActive('kelas', 2) ?>">
                         <i class="nav-icon fas fa-door-closed" style="color: <?= isLinkActiveColor('kelas', 2, 'orange') ?>"></i>
                         <p>Data Kelas</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="<?= route_to('jadwal.list') ?>" class="nav-link <?= isLinkActive('jadwal', 2) ?>">
                         <i class="nav-icon fas fa-calendar-alt" style="color: <?= isLinkActiveColor('jadwal', 2, 'cyan') ?>"></i>
                         <p>Jadwal Perkuliahan</p>
                     </a>

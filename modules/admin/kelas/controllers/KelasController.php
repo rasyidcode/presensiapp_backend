@@ -183,4 +183,64 @@ class KelasController extends BaseController
             ])
             ->setStatusCode(ResponseInterface::HTTP_OK);
     }
+
+    public function mahasiswaAdd($id)
+    {
+        $mahasiswaList = $this->kelasModel->getMahasiswaNotInClass($id);
+        $kelasInfo = $this->kelasModel->get($id);
+        return view('\Modules\Admin\Kelas\Views\v_mahasiswa_add', [
+            'page_title'    => 'Tambah Mahasiswa',
+            'pageLinks'    => [
+                'home'      => [
+                    'url'       => route_to('admin.welcome'),
+                    'active'    => false,
+                ],
+                'data-kelas'     => [
+                    'url'       => route_to('kelas.list'),
+                    'active'    => false,
+                ],
+                'data-mahasiswa'   => [
+                    'url'       => route_to('kelas.mahasiswa', $id),
+                    'active'    => false,
+                ],
+                'tambah-mahasiswa'   => [
+                    'url'       => route_to('kelas.mahasiswa.add', $id),
+                    'active'    => true,
+                ],
+            ],
+            'mahasiswaList' => $mahasiswaList,
+            'kelasId'       => $id,
+            'kelasInfo'     => $kelasInfo
+        ]);
+    }
+
+    public function mahasiswaCreate($id)
+    {
+        if (is_null($id) || empty($id)) {
+            session()->setFlashdata('error', 'ID Kelas tidak boleh kosong!');
+            return redirect()->back();
+        }
+
+        $rules = [
+            'mahasiswa'    => 'required',
+        ];
+        $messages = [
+            'mahasiswa'    => [
+                'required'  => 'Silahkan pilih mahasiswa!',
+            ],
+        ];
+        if (!$this->validate($rules, $messages)) {
+            session()->setFlashdata('error', $this->validator->getErrors());
+            return redirect()->back();
+        }
+
+        $dataPost = $this->request->getPost();
+
+        $this->kelasModel->addMahasiswa((int)$dataPost['mahasiswa'], (int)$id);
+        $kelasInfo = $this->kelasModel->get((int)$id);
+
+        session()->setFlashdata('success', 'Mahasiswa telah ditambahkan dikelas '.$kelasInfo->nama_kelas.'!');
+        return redirect()->back();
+    }
+
 }

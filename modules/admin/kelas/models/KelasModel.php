@@ -2,6 +2,7 @@
 
 namespace Modules\Admin\Kelas\Models;
 
+use CodeIgniter\Database\BaseBuilder;
 use CodeIgniter\Model;
 
 class KelasModel extends Model
@@ -277,5 +278,48 @@ class KelasModel extends Model
         return $this->builder('kelas_mahasiswa')
             ->where('kelas_mahasiswa.id_kelas', $kelasId)
             ->countAllResults();
+    }
+
+    /**
+     * Get mahasiswa where not in selected kelas
+     * 
+     * @param int $kelasId
+     * 
+     * @return array
+     */
+    public function getMahasiswaNotInClass(int $kelasId): array
+    {
+        $mahasiswa = $this->builder('mahasiswa');
+        $mahasiswa->select('
+            id,
+            nim,
+            nama_lengkap
+        ');
+        $mahasiswa->whereNotIn('id', function(BaseBuilder $baseBuilder) use($kelasId) {
+            return $baseBuilder->select('id_mahasiswa')
+                ->from('kelas_mahasiswa')
+                ->where('id_kelas', $kelasId);
+        });
+        $result = $mahasiswa->get()
+            ->getResultObject();
+
+        return $result;
+    }
+
+    /**
+     * Register mahasiswa to a class
+     * 
+     * @param int $mahasiswaId
+     * @param int $kelasId
+     * 
+     * @return void
+     */
+    public function addMahasiswa(int $mahasiswaId, int $kelasId)
+    {
+        $this->db->table('kelas_mahasiswa')
+            ->insert([
+                'id_kelas'      => $kelasId,
+                'id_mahasiswa'  => $mahasiswaId
+            ]);
     }
 }

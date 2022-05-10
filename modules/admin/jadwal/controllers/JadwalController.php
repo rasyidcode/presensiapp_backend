@@ -4,32 +4,25 @@ namespace Modules\Admin\Jadwal\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
-use Modules\Admin\Dosen\Models\DosenModel;
-use Modules\Admin\Users\Models\UserModel;
 
 class JadwalController extends BaseController
 {
 
-    private $dosenModel;
-    private $userModel;
-
     public function __construct()
     {
-        $this->dosenModel = new DosenModel();
-        $this->userModel = new UserModel();
     }
 
     public function index()
     {
-        return view('\Modules\Admin\Dosen\Views\v_index', [
-            'page_title'    => 'Data Dosen',
+        return view('\Modules\Admin\Jadwal\Views\v_index', [
+            'page_title'    => 'Data Jadwal',
             'pageLinks'    => [
                 'home'      => [
                     'url'       => route_to('admin.welcome'),
                     'active'    => false,
                 ],
-                'data-dosen'     => [
-                    'url'       => route_to('dosen.list'),
+                'data-jadwal'     => [
+                    'url'       => route_to('jadwal.list'),
                     'active'    => true,
                 ]
             ]

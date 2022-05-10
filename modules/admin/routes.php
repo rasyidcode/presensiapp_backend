@@ -43,14 +43,14 @@ $routes->group('admin', ['namespace' => $routes_namespace, 'filter' => 'web_auth
     $routes->post('dosen',              'Dosen/Controllers/DosenController::create',    ['as' => 'dosen.create']);
 
     // data kelas
-    $routes->get('kelas',                       'Kelas/Controllers/KelasController::index',             ['as' => 'kelas.list']);
-    $routes->post('kelas/get-data',             'Kelas/Controllers/KelasController::getData',           ['as' => 'kelas.get-data']);
-    $routes->get('kelas/add',                   'Kelas/Controllers/KelasController::add',               ['as' => 'kelas.add']);
-    $routes->post('kelas',                      'Kelas/Controllers/KelasController::create',            ['as' => 'kelas.create']);
-
-    $routes->get('kelas/(:segment)/mahasiswa',             'Kelas\Controllers\KelasController::mahasiswa/$1',         ['as' => 'kelas.mahasiswa']);
-    $routes->post('kelas/(:segment)/mahasiswa/get-data',   'Kelas\Controllers\KelasController::mahasiswaGetData/$1',  ['as' => 'kelas.mahasiswa.get-data']);
-    // $routes->get('kelas/mahasiswa/add',         'Kelas/Controllers/KelasController::mahasiswaAdd',      ['as' => 'kelas.mahasiswa.add']);
+    $routes->get('kelas',                                   'Kelas/Controllers/KelasController::index',                 ['as' => 'kelas.list']);
+    $routes->post('kelas/get-data',                         'Kelas/Controllers/KelasController::getData',               ['as' => 'kelas.get-data']);
+    $routes->get('kelas/add',                               'Kelas/Controllers/KelasController::add',                   ['as' => 'kelas.add']);
+    $routes->post('kelas',                                  'Kelas/Controllers/KelasController::create',                ['as' => 'kelas.create']);
+    $routes->get('kelas/(:segment)/mahasiswa',              'Kelas\Controllers\KelasController::mahasiswa/$1',          ['as' => 'kelas.mahasiswa']);
+    $routes->post('kelas/(:segment)/mahasiswa/get-data',    'Kelas\Controllers\KelasController::mahasiswaGetData/$1',   ['as' => 'kelas.mahasiswa.get-data']);
+    $routes->get('kelas/(:segment)/mahasiswa/add',          'Kelas\Controllers\KelasController::mahasiswaAdd/$1',       ['as' => 'kelas.mahasiswa.add']);
+    $routes->post('kelas/(:segment)/mahasiswa',             'Kelas\Controllers\KelasController::mahasiswaCreate/$1',    ['as' => 'kelas.mahasiswa.create']);
 
     // jadwal
     $routes->get('jadwal', 'Jadwal/Controllers/JadwalController::index', ['as' => 'jadwal.list']);

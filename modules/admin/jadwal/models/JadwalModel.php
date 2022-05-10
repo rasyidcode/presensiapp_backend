@@ -9,9 +9,6 @@ class JadwalModel extends Model
 
     private $tblName = 'jadwal';
 
-    private $columnOrder   = [null, 'nip', 'nama_lengkap', 'tahun_masuk', 'jenis_kelamin', 'created_at', null];
-    private $columnSearch  = ['nip', 'nama_lengkap'];
-
     public function __construct()
     {
         parent::__construct();
@@ -110,7 +107,7 @@ class JadwalModel extends Model
     }
 
     /**
-     * Create new mahasiswa
+     * Create new jadwal
      * 
      * @param array $data
      */
@@ -118,20 +115,6 @@ class JadwalModel extends Model
     {
         $this->db->table($this->tblName)
             ->insert($data);
-    }
-
-    /**
-     * Get list of dosen
-     * 
-     * @return array
-     */
-    public function getList()
-    {
-        return $this->builder($this->tblName)
-            ->select('id, nama_lengkap')
-            ->where('deleted_at', null)
-            ->get()
-            ->getResultObject();
     }
 
 }
