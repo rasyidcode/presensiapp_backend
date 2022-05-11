@@ -66,7 +66,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="<?= route_to('presensi.list') ?>" class="nav-link <?= isLinkActive('presensi', 2) ?>">
                         <i class="nav-icon fas fa-qrcode" style="color: <?= isLinkActiveColor('presensi', 2, 'darkkhaki') ?>"></i>
                         <p>Data Presensi</p>
                     </a>

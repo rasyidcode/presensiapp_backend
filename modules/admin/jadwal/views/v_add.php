@@ -86,16 +86,16 @@
         $('#tanggal').datetimepicker({
             format: 'YYYY-MM-DD'
         });
-    });
-    $('.clockpicker-begin-time').clockpicker({
-        placement: 'top',
-        align: 'left',
-        donetext: 'Pilih'
-    });
-    $('.clockpicker-end-time').clockpicker({
-        placement: 'top',
-        align: 'left',
-        donetext: 'Pilih'
+        $('.clockpicker-begin-time').clockpicker({
+            placement: 'top',
+            align: 'left',
+            donetext: 'Pilih'
+        });
+        $('.clockpicker-end-time').clockpicker({
+            placement: 'top',
+            align: 'left',
+            donetext: 'Pilih'
+        });
     });
 </script>
 <?= $this->endSection() ?>

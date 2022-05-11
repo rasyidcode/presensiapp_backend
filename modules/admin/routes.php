@@ -59,7 +59,7 @@ $routes->group('admin', ['namespace' => $routes_namespace, 'filter' => 'web_auth
     $routes->post('jadwal',             'Jadwal/Controllers/JadwalController::create',      ['as' => 'jadwal.create']);
 
     // presensi
-    $routes->get('presensi',            'Presensi/Controllers/PresensiController::index', ['as' => 'presensi.list']);
+    $routes->get('presensi',            'Presensi/Controllers/PresensiController::index',   ['as' => 'presensi.list']);
     $routes->post('presensi/get-data',  'Presensi/Controllers/PresensiController::getData', ['as' => 'presensi.get-data']);
 
     // settings
