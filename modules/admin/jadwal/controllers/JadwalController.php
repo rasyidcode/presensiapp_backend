@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use Modules\Admin\Dosen\Models\DosenModel;
 use Modules\Admin\Jadwal\Models\JadwalModel;
+use Modules\Admin\Kelas\Models\KelasModel;
 use Modules\Admin\Master\Models\MatkulModel;
 
 class JadwalController extends BaseController
@@ -14,12 +15,14 @@ class JadwalController extends BaseController
     private $jadwalModel;
     private $matkulModel;
     private $dosenModel;
+    private $kelasModel;
 
     public function __construct()
     {
-        $this->jadwalModel = new JadwalModel();
-        $this->matkulModel = new MatkulModel();
-        $this->dosenModel = new DosenModel();
+        $this->jadwalModel  = new JadwalModel();
+        $this->matkulModel  = new MatkulModel();
+        $this->dosenModel   = new DosenModel();
+        $this->kelasModel   = new KelasModel();
     }
 
     public function index()
@@ -81,7 +84,7 @@ class JadwalController extends BaseController
 
     public function add()
     {
-        $kelasList = [];
+        $kelasList = $this->kelasModel->getList();
         return view('\Modules\Admin\Jadwal\Views\v_add', [
             'page_title'    => 'Tambah Jadwal',
             'pageLinks'    => [
@@ -133,19 +136,14 @@ class JadwalController extends BaseController
 
         $dataPost = $this->request->getPost();
 
-        $this->userModel->create([
-            'username'  => $dataPost['nip'],
-            'password'  => password_hash('12345', PASSWORD_BCRYPT),
-            'level'     => 'dosen',
-            'email'     => 'dummy#' . $dataPost['nip']
+        $this->jadwalModel->create([
+            'id_kelas'      => $dataPost['kelas'],
+            'date'          => $dataPost['tanggal'],
+            'begin_time'    => $dataPost['beginTime'],
+            'end_time'      => $dataPost['endTime']
         ]);
 
-        $lastID = $this->userModel->getLastID();
-        $dataPost['id_user'] = $lastID;
-
-        $this->dosenModel->create($dataPost);
-
-        session()->setFlashdata('success', 'Dosen telah ditambahkan!');
+        session()->setFlashdata('success', 'Jadwal telah ditambahkan!');
         return redirect()->back();
     }
 }

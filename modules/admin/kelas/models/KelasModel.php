@@ -322,4 +322,26 @@ class KelasModel extends Model
                 'id_mahasiswa'  => $mahasiswaId
             ]);
     }
+
+    /**
+     * Get all kelas
+     * 
+     * @return array
+     */
+    public function getList()
+    {
+        return $this->builder('kelas')
+            ->select('
+                kelas.id,
+                dosen.nama_lengkap as dosen,
+                matkul.kode as kelas,
+                matkul.nama as matkul,
+                kelas.created_at
+            ')
+            ->join('dosen', 'kelas.id_dosen = dosen.id', 'left')
+            ->join('matkul', 'kelas.id_matkul = matkul.id', 'left')
+            ->where('kelas.deleted_at', null)
+            ->get()
+            ->getResultObject();
+    }
 }
