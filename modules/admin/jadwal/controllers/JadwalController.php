@@ -60,7 +60,7 @@ class JadwalController extends BaseController
             $row[]  = $item->end_time ?? '-';
             $row[]  = $item->matkul ?? '-';
             $row[]  = $item->dosen ?? '-';
-            $row[]  = '0';
+            $row[]  = $item->mahasiswa_total ?? '0';
             $row[]  = $item->created_at ?? '-';
             $row[]  = "<div class=\"text-center\">
                             <a href=\"" . route_to('admin.error-404') . "\" class=\"btn btn-info btn-xs mr-2\">Edit</a>
