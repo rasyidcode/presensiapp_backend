@@ -53,12 +53,14 @@ $routes->group('admin', ['namespace' => $routes_namespace, 'filter' => 'web_auth
     $routes->post('kelas/(:segment)/mahasiswa',             'Kelas\Controllers\KelasController::mahasiswaCreate/$1',    ['as' => 'kelas.mahasiswa.create']);
 
     // jadwal
-    $routes->get('jadwal', 'Jadwal/Controllers/JadwalController::index', ['as' => 'jadwal.list']);
-    $routes->post('jadwal/get-data', 'Jadwal/Controllers/JadwalController::getData', ['as' => 'jadwal.get-data']);
+    $routes->get('jadwal',              'Jadwal/Controllers/JadwalController::index',       ['as' => 'jadwal.list']);
+    $routes->post('jadwal/get-data',    'Jadwal/Controllers/JadwalController::getData',     ['as' => 'jadwal.get-data']);
+    $routes->get('jadwal/add',          'Jadwal/Controllers/JadwalController::add',         ['as' => 'jadwal.add']);
+    $routes->post('jadwal',             'Jadwal/Controllers/JadwalController::create',      ['as' => 'jadwal.create']);
 
     // presensi
-    $routes->get('presensi', 'Presensi/Controllers/PresensiController::index', ['as' => 'presensi.list']);
-    $routes->get('presensi/get-data', 'Presensi/Controllers/PresensiController::getData', ['as' => 'presensi.get-data']);
+    $routes->get('presensi',            'Presensi/Controllers/PresensiController::index', ['as' => 'presensi.list']);
+    $routes->post('presensi/get-data',  'Presensi/Controllers/PresensiController::getData', ['as' => 'presensi.get-data']);
 
     // settings
     $routes->get('setting', 'Setting/Controllers/SettingController::index', ['as' => 'setting']);

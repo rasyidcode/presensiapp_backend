@@ -81,36 +81,52 @@ class JadwalController extends BaseController
 
     public function add()
     {
-        return view('\Modules\Admin\Dosen\Views\v_add', [
-            'page_title'    => 'Tambah Dosen',
+        $kelasList = [];
+        return view('\Modules\Admin\Jadwal\Views\v_add', [
+            'page_title'    => 'Tambah Jadwal',
             'pageLinks'    => [
                 'home'      => [
                     'url'       => route_to('admin.welcome'),
                     'active'    => false,
                 ],
-                'data-dosen'     => [
-                    'url'       => route_to('dosen.list'),
+                'data-jadwal'     => [
+                    'url'       => route_to('jadwal.list'),
                     'active'    => false,
                 ],
-                'tambah-dosen'   => [
-                    'url'       => route_to('dosen.add'),
+                'tambah-jadwal'   => [
+                    'url'       => route_to('jadwal.add'),
                     'active'    => true,
                 ],
-            ]
+            ],
+            'kelasList' => $kelasList
         ]);
     }
 
     public function create()
     {
+        // todo: endTime cannot be smaller than beginTime
         $rules = [
-            'nip'               => 'required|is_unique[dosen.nip]',
-            'nama_lengkap'      => 'required|is_unique[dosen.nama_lengkap]',
-            'tahun_masuk'       => 'required',
-            'jenis_kelamin'     => 'required',
-            'alamat'            => 'required',
+            'kelas'         => 'required',
+            'tanggal'       => 'required',
+            'beginTime'     => 'required',
+            'endTime'       => 'required',
         ];
-        // todo: add custom error messages
-        if (!$this->validate($rules)) {
+
+        $messages = [
+            'kelas' => [
+                'required'  => 'Kelas tidak boleh kosong!'
+            ],
+            'tanggal' => [
+                'required'  => 'Tanggal tidak boleh kosong!'
+            ],
+            'beginTime' => [
+                'required'  => 'Jam Mulai tidak boleh kosong!'
+            ],
+            'endTime' => [
+                'required'  => 'Jam Selesai tidak boleh kosong!'
+            ],
+        ];
+        if (!$this->validate($rules, $messages)) {
             session()->setFlashdata('error', $this->validator->getErrors());
             return redirect()->back();
         }

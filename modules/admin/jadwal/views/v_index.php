@@ -10,7 +10,7 @@
                 <div class="card card-outline card-primary">
                     <div class="card-header d-flex p-0">
                         <div class="card-title p-3">
-                            <a href="<?= route_to('kelas.add') ?>" class="btn btn-primary btn-xs mr-2 ">
+                            <a href="<?= route_to('jadwal.add') ?>" class="btn btn-primary btn-xs mr-2 ">
                                 <i class="fas fa-plus"></i>&nbsp;&nbsp;Tambah Jadwal
                             </a>
                         </div>

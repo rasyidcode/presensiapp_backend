@@ -20,6 +20,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="<?=site_url('adminlte3/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')?>">
     <link rel="stylesheet" href="<?=site_url('adminlte3/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')?>">
     <link rel="stylesheet" href="<?=site_url('adminlte3/plugins/datatables-buttons/css/buttons.bootstrap4.min.css')?>">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="<?=site_url('adminlte3/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')?>">
+    <!-- Jquery Clock Picker -->
+    <link rel="stylesheet" href="http://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
