@@ -27,7 +27,13 @@ class JadwalModel extends Model
     public function getData(array $dtParams): ?array
     {
         $keyword = $dtParams['search']['value'];
-        $dayofweek = is_null($keyword) || empty($keyword) ? 1 : $keyword;
+        $dayofweek = null;
+        if ($keyword == 0) {
+            $dayofweek = $keyword;
+        } else {
+            $dayofweek = is_null($keyword) || empty($keyword) ? 1 : $keyword;
+        }
+        
         $jadwal = $this->builder($this->tblName);
 
         $jadwal->select('
@@ -71,7 +77,13 @@ class JadwalModel extends Model
     public function countFilteredData(array $dtParams): int
     {
         $keyword = $dtParams['search']['value'];
-        $dayofweek = is_null($keyword) || empty($keyword) ? 1 : $keyword;
+        $dayofweek = null;
+        if ($keyword == 0) {
+            $dayofweek = $keyword;
+        } else {
+            $dayofweek = is_null($keyword) || empty($keyword) ? 1 : $keyword;
+        }
+
         $jadwal = $this->builder($this->tblName);
 
         $jadwal->select('
@@ -113,7 +125,13 @@ class JadwalModel extends Model
     public function countData($dtParams): int
     {
         $keyword = $dtParams['search']['value'];
-        $dayofweek = is_null($keyword) || empty($keyword) ? 1 : $keyword;
+        $dayofweek = null;
+        if ($keyword == 0) {
+            $dayofweek = $keyword;
+        } else {
+            $dayofweek = is_null($keyword) || empty($keyword) ? 1 : $keyword;
+        }
+
         $jadwal = $this->builder($this->tblName);
 
         $jadwal->select('
