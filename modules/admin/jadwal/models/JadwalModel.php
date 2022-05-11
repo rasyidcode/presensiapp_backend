@@ -1,8 +1,11 @@
 <?php
 
-namespace Modules\Admin\Dosen\Models;
+namespace Modules\Admin\Jadwal\Models;
 
 use CodeIgniter\Model;
+use DateInterval;
+use DatePeriod;
+use DateTime;
 
 class JadwalModel extends Model
 {
@@ -15,45 +18,78 @@ class JadwalModel extends Model
     }
 
     /**
-     * Get dosen list with datatable params
+     * Get jadwal list by given day with datatable params
      * 
      * @param array $dtParams
      * 
      * @return array|null
      */
-    public function getData(array $dtParams) : ?array
+    public function getData(array $dtParams): ?array
     {
-        $dosen = $this->builder($this->tblName);
+        $keyword = $dtParams['search']['value'];
+        $dayofweek = is_null($keyword) || empty($keyword) ? 1 : $keyword;
+        $jadwal = $this->builder($this->tblName);
 
-        if (isset($dtParams['search']) && !empty($dtParams['search'])) {
-            foreach($this->columnSearch as $idx => $columnSearch) {
-                if ($idx == 0) {
-                    $dosen->groupStart();
-                    $dosen->like($columnSearch, $dtParams['search']['value']);
-                } else {
-                    $dosen->orLike($columnSearch, $dtParams['search']['value']);   
-                }
-    
-                if (count($this->columnSearch) - 1 === $idx) {
-                    $dosen->groupEnd();
-                }
-            }       
-        }
-
-        if (isset($dtParams['order'])) {
-            $dosen->orderBy($this->columnOrder[$dtParams['order']['0']['column']], $dtParams['order']['0']['dir']);
-        }
+        $jadwal->select('
+            jadwal.date,
+            jadwal.begin_time,
+            jadwal.end_time,
+            matkul.nama as matkul,
+            dosen.nama_lengkap as dosen,
+            jadwal.created_at
+        ');
+        
+        $jadwal->join('kelas', 'jadwal.id_kelas = kelas.id', 'left');
+        $jadwal->join('matkul', 'kelas.id_matkul = matkul.id', 'left');
+        $jadwal->join('dosen', 'kelas.id_dosen = dosen.id', 'left');
 
         if (isset($dtParams['length']) && isset($dtParams['start'])) {
             if ($dtParams['length'] !== -1) {
-                $dosen->limit($dtParams['length'], $dtParams['start']);
+                $jadwal->limit($dtParams['length'], $dtParams['start']);
             }
         }
 
-        $dosen->where('deleted_at', null);
+        $dates = $this->getDatesByDOW($dayofweek);
+        $jadwal->whereIn('jadwal.date', $dates);
+        $jadwal->where('jadwal.deleted_at', null);
 
-        return $dosen->get()
+        return $jadwal->get()
             ->getResultObject();
+    }
+
+    /**
+     * Get dates of given dayofweek for the next 6 months
+     * 
+     * @param int $dayofweek
+     * 
+     * @return array|null
+     */
+    private function getDatesByDOW(int $dow): array
+    {
+        $dates = [];
+
+        $firstDate = $this->builder($this->tblName)
+            ->select('date')
+            ->orderBy('date', 'asc')
+            ->get(1)
+            ->getRowObject()
+            ->date;
+        $sixMonthsDays = round(365 / 2);
+        $endDate = date('Y-m-d', strtotime($firstDate . '+' . $sixMonthsDays . ' day'));
+        $first = new DateTime($firstDate);
+        $end = new DateTime($endDate);
+        $interval = DateInterval::createFromDateString('1 day');
+        $period = new DatePeriod($first, $interval, $end);
+
+        foreach ($period as $pd) {
+            $date = $pd->format("Y-m-d");
+            $dayofweek = date('w', strtotime($date));
+            if ($dayofweek == $dow) {
+                $dates[] = $date;
+            }
+        }
+
+        return $dates;
     }
 
     /**
@@ -63,34 +99,23 @@ class JadwalModel extends Model
      * 
      * @return int|null
      */
-    public function countFilteredData(array $dtParams) : int
+    public function countFilteredData(array $dtParams): int
     {
-        $dosen = $this->builder($this->tblName);
-
-        if (isset($dtParams['search']) && !empty($dtParams['search'])) {
-            foreach($this->columnSearch as $idx => $columnSearch) {
-                if ($idx == 0) {
-                    $dosen->groupStart();
-                    $dosen->like($columnSearch, $dtParams['search']['value']);
-                } else {
-                    $dosen->orLike($columnSearch, $dtParams['search']['value']);
-                }
-    
-                if (count($this->columnSearch) - 1 === $idx) {
-                    $dosen->groupEnd();
-                }
-            }
-        }
+        $keyword = $dtParams['search']['value'];
+        $dayofweek = is_null($keyword) || empty($keyword) ? 1 : $keyword;
+        $jadwal = $this->builder($this->tblName);
 
         if (isset($dtParams['length']) && isset($dtParams['start'])) {
             if ($dtParams['length'] !== -1) {
-                $dosen->limit($dtParams['length'], $dtParams['start']);
+                $jadwal->limit($dtParams['length'], $dtParams['start']);
             }
         }
 
-        $dosen->where('deleted_at', null);
+        $dates = $this->getDatesByDOW($dayofweek);
+        $jadwal->whereIn('date', $dates);
+        $jadwal->where('deleted_at', null);
 
-        return $dosen->countAllResults();
+        return $jadwal->countAllResults();
     }
 
     /**
@@ -100,10 +125,23 @@ class JadwalModel extends Model
      * 
      * @return int
      */
-    public function countData() : int
+    public function countData($dtParams): int
     {
-        return $this->builder($this->tblName)
-                    ->countAllResults();
+        $keyword = $dtParams['search']['value'];
+        $dayofweek = is_null($keyword) || empty($keyword) ? 1 : $keyword;
+        $jadwal = $this->builder($this->tblName);
+
+        if (isset($dtParams['length']) && isset($dtParams['start'])) {
+            if ($dtParams['length'] !== -1) {
+                $jadwal->limit($dtParams['length'], $dtParams['start']);
+            }
+        }
+
+        $dates = $this->getDatesByDOW($dayofweek);
+        $jadwal->whereIn('date', $dates);
+        $jadwal->where('deleted_at', null);
+
+        return $jadwal->countAllResults();
     }
 
     /**
@@ -116,5 +154,4 @@ class JadwalModel extends Model
         $this->db->table($this->tblName)
             ->insert($data);
     }
-
 }

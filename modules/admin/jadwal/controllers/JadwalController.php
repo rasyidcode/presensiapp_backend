@@ -4,16 +4,28 @@ namespace Modules\Admin\Jadwal\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use Modules\Admin\Dosen\Models\DosenModel;
+use Modules\Admin\Jadwal\Models\JadwalModel;
+use Modules\Admin\Master\Models\MatkulModel;
 
 class JadwalController extends BaseController
 {
 
+    private $jadwalModel;
+    private $matkulModel;
+    private $dosenModel;
+
     public function __construct()
     {
+        $this->jadwalModel = new JadwalModel();
+        $this->matkulModel = new MatkulModel();
+        $this->dosenModel = new DosenModel();
     }
 
     public function index()
     {
+        $matkulList = $this->matkulModel->getAll();
+        $dosenList = $this->dosenModel->getList();
         return view('\Modules\Admin\Jadwal\Views\v_index', [
             'page_title'    => 'Data Jadwal',
             'pageLinks'    => [
@@ -25,30 +37,34 @@ class JadwalController extends BaseController
                     'url'       => route_to('jadwal.list'),
                     'active'    => true,
                 ]
-            ]
+            ],
+            'matkulList'    => $matkulList,
+            'dosenList'    => $dosenList,
         ]);
     }
 
     public function getData()
     {
         $postData   = $this->request->getPost();
-        $data       = $this->dosenModel->getData($postData);
+        $data       = $this->jadwalModel->getData($postData);
         $num        = $postData['start'];
 
         $resData = [];
-        foreach($data as $item) {
+        foreach ($data as $item) {
             $num++;
 
             $row    = [];
-            $row[]  = "<input type=\"hidden\" value=\"".$item->id."\">{$num}.";
-            $row[]  = $item->nip ?? '-';
-            $row[]  = $item->nama_lengkap ?? '-';
-            $row[]  = $item->tahun_masuk ?? '-';
-            $row[]  = $item->jenis_kelamin ?? '-';
+            $row[]  = $num . '.';
+            $row[]  = $item->date ?? '-';
+            $row[]  = $item->begin_time ?? '-';
+            $row[]  = $item->end_time ?? '-';
+            $row[]  = $item->matkul ?? '-';
+            $row[]  = $item->dosen ?? '-';
+            $row[]  = '0';
             $row[]  = $item->created_at ?? '-';
             $row[]  = "<div class=\"text-center\">
-                            <a href=\"".route_to('admin.error-404')."\" class=\"btn btn-info btn-xs mr-2\">Edit</a>
-                            <a href=\"".route_to('admin.error-404')."\" class=\"btn btn-danger btn-xs\">Hapus</a>
+                            <a href=\"" . route_to('admin.error-404') . "\" class=\"btn btn-info btn-xs mr-2\">Edit</a>
+                            <a href=\"" . route_to('admin.error-404') . "\" class=\"btn btn-danger btn-xs\">Hapus</a>
                         </div>";
             $resData[] = $row;
         }
@@ -56,8 +72,8 @@ class JadwalController extends BaseController
         return $this->response
             ->setJSON([
                 'draw'              => $postData['draw'],
-                'recordsTotal'      => $this->dosenModel->countData(),
-                'recordsFiltered'   => $this->dosenModel->countFilteredData($postData),
+                'recordsTotal'      => $this->jadwalModel->countData($postData),
+                'recordsFiltered'   => $this->jadwalModel->countFilteredData($postData),
                 'data'              => $resData
             ])
             ->setStatusCode(ResponseInterface::HTTP_OK);
@@ -105,7 +121,7 @@ class JadwalController extends BaseController
             'username'  => $dataPost['nip'],
             'password'  => password_hash('12345', PASSWORD_BCRYPT),
             'level'     => 'dosen',
-            'email'     => 'dummy#'.$dataPost['nip']
+            'email'     => 'dummy#' . $dataPost['nip']
         ]);
 
         $lastID = $this->userModel->getLastID();

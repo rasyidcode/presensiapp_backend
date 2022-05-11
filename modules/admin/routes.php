@@ -54,7 +54,7 @@ $routes->group('admin', ['namespace' => $routes_namespace, 'filter' => 'web_auth
 
     // jadwal
     $routes->get('jadwal', 'Jadwal/Controllers/JadwalController::index', ['as' => 'jadwal.list']);
-    $routes->get('jadwal/get-data', 'Kelas/Controllers/JadwalController::getData', ['as' => 'jadwal.get-data']);
+    $routes->post('jadwal/get-data', 'Jadwal/Controllers/JadwalController::getData', ['as' => 'jadwal.get-data']);
 
     // presensi
     $routes->get('presensi', 'Presensi/Controllers/PresensiController::index', ['as' => 'presensi.list']);

@@ -136,4 +136,16 @@ class MatkulModel extends Model
             ->getResultObject();
     }
 
+    /**
+     * Get all matkul
+     * 
+     * @return array
+     */
+    public function getAll()
+    {
+        return $this->builder($this->tblName)
+            ->get()
+            ->getResultObject();
+    }
+
 }
