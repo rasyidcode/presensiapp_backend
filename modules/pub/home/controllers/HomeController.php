@@ -2,10 +2,15 @@
 
 namespace Modules\Pub\Home\Controllers;
 
-class HomeController extends \App\Controllers\BaseController
+use Modules\Shared\Core\Controllers\BaseWebController;
+
+class HomeController extends BaseWebController
 {
+
+    protected $viewPath = __DIR__;
+
     public function index()
     {
-        return view('\Modules\Pub\Home\Views\v_home');
+        return $this->renderView('v_home');
     }
 }
