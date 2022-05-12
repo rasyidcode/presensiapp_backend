@@ -82,4 +82,6 @@ class Paths
      * @var string
      */
     public $viewDirectory = __DIR__ . '/../Views';
+
+    public $modulesDirectory = __DIR__ . '/../../modules';
 }

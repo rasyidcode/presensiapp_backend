@@ -62,6 +62,14 @@ if (! defined('TESTPATH')) {
     define('TESTPATH', realpath(rtrim($paths->testsDirectory, '\\/ ')) . DIRECTORY_SEPARATOR);
 }
 
+// The path to the tests directory
+if (! defined('MODULESPATH')) {
+    /**
+     * @var Paths $paths
+     */
+    define('MODULESPATH', realpath(rtrim($paths->modulesDirectory, '\\/ ')) . DIRECTORY_SEPARATOR);
+}
+
 /*
  * ---------------------------------------------------------------
  * GRAB OUR CONSTANTS & COMMON
@@ -160,7 +168,7 @@ if (!isset($_SERVER['SERVER_NAME'])) {
     }
 
     if ($isSecured) {
-        $envFile .= $subdomain . '.env';
+        $envFile = '.env';
     } else {
         if (count(explode('.', $_SERVER['SERVER_NAME'])) < 3 && $subdomain !== 'www') {
             $envFile .= '.env';
