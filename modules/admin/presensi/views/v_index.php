@@ -8,7 +8,7 @@
             <div class="col-12">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
-                        <form id="filter_data" class="form-horizontal">
+                        <form id="filterData" class="form-horizontal">
                             <div class="form-group row">
                                 <label for="tanggal" class="col-sm-2 offset-sm-2 col-form-label">Tanggal:</label>
                                 <div class="input-group date col-sm-8" id="tanggal" data-target-input="nearest">
@@ -19,10 +19,13 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="searchQuery" class="col-sm-2 offset-sm-2 col-form-label">Kelas : </label>
+                                <label for="kelas" class="col-sm-2 offset-sm-2 col-form-label">Kelas : </label>
                                 <div class="col-sm-8">
-                                    <select name="dosen" class="form-control">
+                                    <select name="kelas" class="form-control">
                                         <option value="">-- Pilih Kelas --</option>
+                                        <?php foreach ($kelasList as $kelasListItem) : ?>
+                                        <option value="<?= $kelasListItem->id ?>"><?= $kelasListItem->kelas ?> - <?= $kelasListItem->matkul ?> - <?= $kelasListItem->dosen ?></option>
+                                    <?php endforeach; ?>
                                     </select>
                                 </div>
                             </div>
@@ -84,7 +87,7 @@
                 }
                 $.ajax({
                     type: 'post',
-                    url: '<?= route_to('kelas.get-data') ?>',
+                    url: '<?= route_to('presensi.get-data') ?>',
                     data: data,
                     success: function(res) {
                         console.log(res);
@@ -103,34 +106,39 @@
                 },
                 {
                     targets: 1,
-                    orderable: true,
-                    searchable: true
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     targets: 2,
-                    orderable: true,
-                    searchable: true
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     targets: 3,
-                    orderable: true,
-                    searchable: true
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     targets: 4,
-                    orderable: true,
-                    searchable: false
-                },
-                {
-                    targets: 5,
                     orderable: false,
                     searchable: false
-                }
+                },
             ],
             drawCallback: function(settings) {}
         });
         $('#tanggal').datetimepicker({
             format: 'YYYY-MM-DD'
+        });
+        var currDate = new Date();
+        var tanggal = currDate.getFullYear()+'-'+((currDate.getMonth()+1).toString().length < 2 ? "0"+(currDate.getMonth()+1):(currDate.getMonth()+1))+'-'+(currDate.getDate().toString().length < 2 ? "0"+currDate.getDate() : currDate.getDate());
+        $('#tanggal').find('input').val(tanggal);
+        $('#filterData').submit(function(e) {
+            e.preventDefault();
+            var data = $(this).serialize().split('&');
+            var date = data[0].split('=')[1];
+            var kelas = data[1].split('=')[1];
+            table.search(date + '|' + kelas).draw();
         });
     });
 </script>

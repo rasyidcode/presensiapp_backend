@@ -72,7 +72,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="<?= route_to('setting') ?>" class="nav-link <?= isLinkActive('setting', 2) ?>">
                         <i class="nav-icon fas fa-cog" style="color: <?= isLinkActiveColor('setting', 2, 'gray') ?>"></i>
                         <p>Setting</p>
                     </a>
