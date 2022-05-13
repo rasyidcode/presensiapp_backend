@@ -2,23 +2,27 @@
 
 namespace Modules\Admin\Master\Controllers;
 
-use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use Modules\Admin\Master\Models\JurusanModel;
+use Modules\Shared\Core\Controllers\BaseWebController;
 
-class JurusanController extends BaseController
+class JurusanController extends BaseWebController
 {
+
+    protected $viewPath = __DIR__;
 
     private $jurusanModel;
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->jurusanModel = new JurusanModel();
     }
 
     public function index()
     {
-        return view('\Modules\Admin\Master\Views\Jurusan\v_index', [
+        return $this->renderView('jurusan/v_index', [
             'page_title'    => 'Data Jurusan',
             'pageLinks'    => [
                 'home'      => [
@@ -67,7 +71,7 @@ class JurusanController extends BaseController
 
     public function add()
     {
-        return view('\Modules\Admin\Master\Views\Jurusan\v_add', [
+        return $this->renderView('jurusan/v_add', [
             'page_title'    => 'Tambah Data',
             'pageLinks'    => [
                 'home'      => [

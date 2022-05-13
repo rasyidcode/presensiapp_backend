@@ -3,20 +3,25 @@
 namespace Modules\Admin\Login\Controllers;
 
 use Modules\Admin\Login\Models\LoginModel;
+use Modules\Shared\Core\Controllers\BaseWebController;
 
-class LoginController extends \App\Controllers\BaseController
+class LoginController extends BaseWebController
 {
 
-    private $login_model;
+    protected $viewPath = __DIR__;
+
+    private $loginModel;
 
     public function __construct()
     {
-        $this->login_model = new LoginModel();
+        parent::__construct();
+        
+        $this->loginModel = new LoginModel();
     }
 
     public function index()
     {
-        return view('\Modules\Admin\Login\Views\v_login');
+        return $this->renderView('v_login');
     }
 
     public function login()
@@ -27,14 +32,14 @@ class LoginController extends \App\Controllers\BaseController
             return redirect()->back();
         }
 
-        $data_post = $this->request->getPost();
-        $userdata = $this->login_model->getUser($data_post['username']);
+        $dataPost = $this->request->getPost();
+        $userdata = $this->loginModel->getUser($dataPost['username']);
         if (is_null($userdata)) {
             session()->setFlashdata('error', 'Username atau password salah!');
             return redirect()->back();
         }
 
-        if (!password_verify($data_post['password'], $userdata['password'])) {
+        if (!password_verify($dataPost['password'], $userdata['password'])) {
             session()->setFlashdata('error', 'Username atau password salah!');
             return redirect()->back();
         }

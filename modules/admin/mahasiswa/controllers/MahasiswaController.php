@@ -2,14 +2,16 @@
 
 namespace Modules\Admin\Mahasiswa\Controllers;
 
-use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use Modules\Admin\Mahasiswa\Models\MahasiswaModel;
 use Modules\Admin\Master\Models\JurusanModel;
 use Modules\Admin\Users\Models\UserModel;
+use Modules\Shared\Core\Controllers\BaseWebController;
 
-class MahasiswaController extends BaseController
+class MahasiswaController extends BaseWebController
 {
+
+    protected $viewPath = __DIR__;
 
     private $mahasiswaModel;
     private $userModel;
@@ -17,6 +19,8 @@ class MahasiswaController extends BaseController
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->mahasiswaModel = new MahasiswaModel();
         $this->userModel = new UserModel();
         $this->jurusanModel = new JurusanModel();
@@ -24,7 +28,7 @@ class MahasiswaController extends BaseController
 
     public function index()
     {
-        return view('\Modules\Admin\Mahasiswa\Views\v_index', [
+        return $this->renderView('v_index', [
             'page_title'    => 'Data Mahasiswa',
             'pageLinks'    => [
                 'home'      => [
@@ -77,7 +81,7 @@ class MahasiswaController extends BaseController
     public function add()
     {
         $jurusanList = $this->jurusanModel->getList();
-        return view('\Modules\Admin\Mahasiswa\Views\v_add', [
+        return $this->renderView('v_add', [
             'page_title'    => 'Tambah Mahasiswa',
             'pageLinks'    => [
                 'home'      => [

@@ -2,23 +2,27 @@
 
 namespace Modules\Admin\Master\Controllers;
 
-use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use Modules\Admin\Master\Models\MatkulModel;
+use Modules\Shared\Core\Controllers\BaseWebController;
 
-class MatkulController extends BaseController
+class MatkulController extends BaseWebController
 {
+
+    protected $viewPath = __DIR__;
 
     private $matkulModel;
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->matkulModel = new MatkulModel();
     }
 
     public function index()
     {
-        return view('\Modules\Admin\Master\Views\Matkul\v_index', [
+        return $this->renderView('matkul/v_index', [
             'page_title'    => 'Data Matkul',
             'pageLinks'    => [
                 'home'      => [
@@ -67,7 +71,7 @@ class MatkulController extends BaseController
 
     public function add()
     {
-        return view('\Modules\Admin\Master\Views\Matkul\v_add', [
+        return $this->renderView('matkul/v_add', [
             'page_title'    => 'Tambah Data',
             'pageLinks'    => [
                 'home'      => [

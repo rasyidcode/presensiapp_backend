@@ -2,19 +2,21 @@
 
 namespace Modules\Admin\Setting\Controllers;
 
-use App\Controllers\BaseController;
+use Modules\Shared\Core\Controllers\BaseWebController;
 
-class SettingController extends BaseController
+class SettingController extends BaseWebController
 {
+
+    protected $viewPath = __DIR__;
 
     public function __construct()
     {
-        
+        parent::__construct();
     }
 
     public function index()
     {
-        return view('\Modules\Admin\Setting\Views\v_index', [
+        return $this->renderView('v_index', [
             'page_title'    => 'Data Presensi',
             'pageLinks'    => [
                 'home'      => [

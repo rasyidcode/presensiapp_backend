@@ -1,6 +1,6 @@
-<?= $this->extend('\Modules\Shared\Layouts\Views\dashboard\layout') ?>
+<?= $renderer->extend('modules/shared/layouts/views/dashboard/layout') ?>
 
-<?= $this->section('content') ?>
+<?= $renderer->section('content') ?>
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
@@ -8,7 +8,7 @@
             <div class="col-12">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
-                        <a href="<?=route_to('master.matkul.add')?>" class="btn btn-primary btn-xs mr-2">
+                        <a href="<?= route_to('master.matkul.add') ?>" class="btn btn-primary btn-xs mr-2">
                             <i class="fas fa-plus"></i>&nbsp;&nbsp;Tambah Matkul
                         </a>
                     </div>
@@ -38,47 +38,66 @@
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
-<?= $this->endSection() ?>
+<?= $renderer->endSection() ?>
 
-<?=$this->section('custom-js')?>
+<?= $renderer->section('custom-js') ?>
 <script>
-$(function() {
-    var table = $('#data-matkul').DataTable({
-        dom: 'lrtip',
-        searching: true,
-        responsive: true,
-        pageLength: 10,
-        processing: true,
-        serverSide: true,
-        order: [],
-        ajax: function(data, callback, settings) {
-            var data = {
-                ...data,
-                ['<?= csrf_token() ?>']: '<?= csrf_hash() ?>'
-            }
-            $.ajax({
-                type: 'post' ,
-                url: '<?=route_to('master.matkul.get-data')?>',
-                data: data,
-                success: function(res) {
-                    console.log(res);
-                    callback(res);
-                },
-                error: function(err) {
-                    console.log(err);
-                    callback([]);
+    $(function() {
+        var table = $('#data-matkul').DataTable({
+            dom: 'lrtip',
+            searching: true,
+            responsive: true,
+            pageLength: 10,
+            processing: true,
+            serverSide: true,
+            order: [],
+            ajax: function(data, callback, settings) {
+                var data = {
+                    ...data,
+                    ['<?= csrf_token() ?>']: '<?= csrf_hash() ?>'
                 }
-            });
-        },
-        columns: [
-            { targets: 0, orderable: false, searchable: false },
-            { targets: 1, orderable: true,  searchable: true },
-            { targets: 2, orderable: true,  searchable: true },
-            { targets: 3, orderable: true,  searchable: false },
-            { targets: 4, orderable: false, searchable: false }
-        ],
-        drawCallback: function(settings) {}
+                $.ajax({
+                    type: 'post',
+                    url: '<?= route_to('master.matkul.get-data') ?>',
+                    data: data,
+                    success: function(res) {
+                        console.log(res);
+                        callback(res);
+                    },
+                    error: function(err) {
+                        console.log(err);
+                        callback([]);
+                    }
+                });
+            },
+            columns: [{
+                    targets: 0,
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    targets: 1,
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    targets: 2,
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    targets: 3,
+                    orderable: true,
+                    searchable: false
+                },
+                {
+                    targets: 4,
+                    orderable: false,
+                    searchable: false
+                }
+            ],
+            drawCallback: function(settings) {}
+        });
     });
-});
 </script>
-<?=$this->endSection() ?>
+<?= $renderer->endSection() ?>

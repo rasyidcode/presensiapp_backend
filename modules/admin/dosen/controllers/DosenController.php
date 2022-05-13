@@ -2,26 +2,30 @@
 
 namespace Modules\Admin\Dosen\Controllers;
 
-use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use Modules\Admin\Dosen\Models\DosenModel;
 use Modules\Admin\Users\Models\UserModel;
+use Modules\Shared\Core\Controllers\BaseWebController;
 
-class DosenController extends BaseController
+class DosenController extends BaseWebController
 {
+
+    protected $viewPath = __DIR__;
 
     private $dosenModel;
     private $userModel;
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->dosenModel = new DosenModel();
         $this->userModel = new UserModel();
     }
 
     public function index()
     {
-        return view('\Modules\Admin\Dosen\Views\v_index', [
+        return $this->renderView('v_index', [
             'page_title'    => 'Data Dosen',
             'pageLinks'    => [
                 'home'      => [
@@ -72,7 +76,7 @@ class DosenController extends BaseController
 
     public function add()
     {
-        return view('\Modules\Admin\Dosen\Views\v_add', [
+        return $this->renderView('v_add', [
             'page_title'    => 'Tambah Dosen',
             'pageLinks'    => [
                 'home'      => [

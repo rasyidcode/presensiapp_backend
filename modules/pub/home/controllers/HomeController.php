@@ -9,6 +9,11 @@ class HomeController extends BaseWebController
 
     protected $viewPath = __DIR__;
 
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index()
     {
         return $this->renderView('v_home');

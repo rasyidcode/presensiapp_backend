@@ -1,6 +1,6 @@
-<?= $this->extend('\Modules\Shared\Layouts\Views\dashboard\layout') ?>
+<?= $renderer->extend('modules/shared/layouts/views/dashboard/layout') ?>
 
-<?= $this->section('content') ?>
+<?= $renderer->section('content') ?>
 <div class="content">
     <div class="container-fluid">
         <div class="row">
@@ -72,9 +72,9 @@
         </div>
     </div><!-- /.container-fluid -->
 </div>
-<?= $this->endSection() ?>
+<?= $renderer->endSection() ?>
 
-<?= $this->section('custom-js') ?>
+<?= $renderer->section('custom-js') ?>
 <!-- Moment JS -->
 <script src="<?= site_url('adminlte3/plugins/moment/moment.min.js') ?>"></script>
 <!-- Temposdominus Bootstrap 4 -->
@@ -98,4 +98,4 @@
         });
     });
 </script>
-<?= $this->endSection() ?>
+<?= $renderer->endSection() ?>

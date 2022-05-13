@@ -4,20 +4,25 @@ namespace Modules\Admin\Users\Controllers;
 
 use CodeIgniter\HTTP\ResponseInterface;
 use Modules\Admin\Users\Models\UserModel;
+use Modules\Shared\Core\Controllers\BaseWebController;
 
-class UserController extends \App\Controllers\BaseController
+class UserController extends BaseWebController
 {
+
+    protected $viewPath = __DIR__;
 
     private $userModel;
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->userModel = new UserModel();
     }
 
     public function index()
     {
-        return view('\Modules\Admin\Users\Views\v_index', [
+        return $this->renderView('v_index', [
             'page_title'    => 'Data User',
             'pageLinks'    => [
                 'home'      => [
@@ -77,7 +82,7 @@ class UserController extends \App\Controllers\BaseController
 
     public function add()
     {
-        return view('\Modules\Admin\Users\Views\v_add', [
+        return $this->renderView('v_add', [
             'page_title'    => 'Tambah User',
             'pageLinks'    => [
                 'home'      => [

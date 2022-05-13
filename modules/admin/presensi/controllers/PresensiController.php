@@ -2,19 +2,23 @@
 
 namespace Modules\Admin\Presensi\Controllers;
 
-use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use Modules\Admin\Kelas\Models\KelasModel;
 use Modules\Admin\Presensi\Models\PresensiModel;
+use Modules\Shared\Core\Controllers\BaseWebController;
 
-class PresensiController extends BaseController
+class PresensiController extends BaseWebController
 {
+
+    protected $viewPath = __DIR__;
 
     private $presensiModel;
     private $kelasModel;
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->presensiModel = new PresensiModel();
         $this->kelasModel = new KelasModel();
     }
@@ -22,7 +26,7 @@ class PresensiController extends BaseController
     public function index()
     {
         $kelasList = $this->kelasModel->getList();
-        return view('\Modules\Admin\Presensi\Views\v_index', [
+        return $this->renderView('v_index', [
             'page_title'    => 'Data Presensi',
             'pageLinks'    => [
                 'home'      => [

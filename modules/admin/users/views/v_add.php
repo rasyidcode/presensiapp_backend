@@ -1,13 +1,13 @@
-<?= $this->extend('\Modules\Shared\Layouts\Views\dashboard\layout') ?>
+<?= $renderer->extend('modules/shared/layouts/views/dashboard/layout') ?>
 
-<?= $this->section('content') ?>
+<?= $renderer->section('content') ?>
 <div class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
-                        <a id="btn-back" href="<?=route_to('user.list')?>" class="btn btn-primary btn-sm mr-2">
+                        <a id="btn-back" href="<?= route_to('user.list') ?>" class="btn btn-primary btn-sm mr-2">
                             <i class="fas fa-arrow-alt-circle-left"></i>&nbsp;&nbsp;Back
                         </a>
                     </div>
@@ -57,8 +57,8 @@
         </div>
     </div><!-- /.container-fluid -->
 </div>
-<?= $this->endSection() ?>
+<?= $renderer->endSection() ?>
 
-<?= $this->section('custom-js') ?>
+<?= $renderer->section('custom-js') ?>
 <script></script>
-<?= $this->endSection() ?>
+<?= $renderer->endSection() ?>

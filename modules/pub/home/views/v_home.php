@@ -1,6 +1,6 @@
-<?= $this->extend('\Modules\Shared\Layouts\Views\v_landing_layout') ?>
+<?= $renderer->extend('modules/shared/layouts/views/v_landing_layout') ?>
 
-<?= $this->section('content') ?>
+<?= $renderer->section('content') ?>
 <!-- Mashead header-->
 <header class="masthead">
     <div class="container px-5">
@@ -62,4 +62,4 @@
         </div>
     </div>
 </aside>
-<?= $this->endSection() ?>
+<?= $renderer->endSection() ?>

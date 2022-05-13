@@ -2,14 +2,16 @@
 
 namespace Modules\Admin\Kelas\Controllers;
 
-use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use Modules\Admin\Dosen\Models\DosenModel;
 use Modules\Admin\Kelas\Models\KelasModel;
 use Modules\Admin\Master\Models\MatkulModel;
+use Modules\Shared\Core\Controllers\BaseWebController;
 
-class KelasController extends BaseController
+class KelasController extends BaseWebController
 {
+
+    protected $viewPath = __DIR__;
 
     private $kelasModel;
     private $matkulModel;
@@ -17,6 +19,8 @@ class KelasController extends BaseController
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->kelasModel = new KelasModel();
         $this->matkulModel = new MatkulModel();
         $this->dosenModel = new DosenModel();
@@ -24,7 +28,7 @@ class KelasController extends BaseController
 
     public function index()
     {
-        return view('\Modules\Admin\Kelas\Views\v_index', [
+        return $this->renderView('v_index', [
             'page_title'    => 'Data Kelas',
             'pageLinks'    => [
                 'home'      => [
@@ -78,7 +82,7 @@ class KelasController extends BaseController
         $matkulList = $this->matkulModel->getAvailableMatkul();
         $dosenList = $this->dosenModel->getList();
 
-        return view('\Modules\Admin\Kelas\Views\v_add', [
+        return $this->renderView('v_add', [
             'page_title'    => 'Tambah Kelas',
             'pageLinks'    => [
                 'home'      => [
@@ -132,7 +136,7 @@ class KelasController extends BaseController
     public function mahasiswa($id)
     {
         $kelas = $this->kelasModel->get((int)$id);
-        return view('\Modules\Admin\Kelas\Views\v_list_mahasiswa', [
+        return $this->renderView('v_list_mahasiswa', [
             'page_title'    => 'Data Kelas',
             'pageLinks'    => [
                 'home'      => [
@@ -188,7 +192,7 @@ class KelasController extends BaseController
     {
         $mahasiswaList = $this->kelasModel->getMahasiswaNotInClass($id);
         $kelasInfo = $this->kelasModel->get($id);
-        return view('\Modules\Admin\Kelas\Views\v_mahasiswa_add', [
+        return $this->renderView('v_mahasiswa_add', [
             'page_title'    => 'Tambah Mahasiswa',
             'pageLinks'    => [
                 'home'      => [

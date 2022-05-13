@@ -1,14 +1,14 @@
-<?= $this->extend('\Modules\Shared\Layouts\Views\dashboard\layout') ?>
+<?= $renderer->extend('modules/shared/layouts/views/dashboard/layout') ?>
 
-<?= $this->section('content') ?>
+<?= $renderer->section('content') ?>
 <div class="content">
     <div class="container-fluid">
-        
+
     </div><!-- /.container-fluid -->
 </div>
-<?= $this->endSection() ?>
+<?= $renderer->endSection() ?>
 
-<?=$this->section('custom-js')?>
+<?= $renderer->section('custom-js') ?>
 <script></script>
 </script>
-<?=$this->endSection() ?>
+<?= $renderer->endSection() ?>

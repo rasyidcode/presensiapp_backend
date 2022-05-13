@@ -2,15 +2,17 @@
 
 namespace Modules\Admin\Jadwal\Controllers;
 
-use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use Modules\Admin\Dosen\Models\DosenModel;
 use Modules\Admin\Jadwal\Models\JadwalModel;
 use Modules\Admin\Kelas\Models\KelasModel;
 use Modules\Admin\Master\Models\MatkulModel;
+use Modules\Shared\Core\Controllers\BaseWebController;
 
-class JadwalController extends BaseController
+class JadwalController extends BaseWebController
 {
+
+    protected $viewPath = __DIR__;
 
     private $jadwalModel;
     private $matkulModel;
@@ -19,6 +21,8 @@ class JadwalController extends BaseController
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->jadwalModel  = new JadwalModel();
         $this->matkulModel  = new MatkulModel();
         $this->dosenModel   = new DosenModel();
@@ -29,7 +33,7 @@ class JadwalController extends BaseController
     {
         $matkulList = $this->matkulModel->getAll();
         $dosenList = $this->dosenModel->getList();
-        return view('\Modules\Admin\Jadwal\Views\v_index', [
+        return $this->renderView('v_index', [
             'page_title'    => 'Data Jadwal',
             'pageLinks'    => [
                 'home'      => [
@@ -85,7 +89,7 @@ class JadwalController extends BaseController
     public function add()
     {
         $kelasList = $this->kelasModel->getList();
-        return view('\Modules\Admin\Jadwal\Views\v_add', [
+        return $this->renderView('v_add', [
             'page_title'    => 'Tambah Jadwal',
             'pageLinks'    => [
                 'home'      => [

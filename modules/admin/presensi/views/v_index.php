@@ -1,6 +1,6 @@
-<?= $this->extend('\Modules\Shared\Layouts\Views\dashboard\layout') ?>
+<?= $renderer->extend('modules/shared/layouts/views/dashboard/layout') ?>
 
-<?= $this->section('content') ?>
+<?= $renderer->section('content') ?>
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
@@ -24,8 +24,8 @@
                                     <select name="kelas" class="form-control">
                                         <option value="">-- Pilih Kelas --</option>
                                         <?php foreach ($kelasList as $kelasListItem) : ?>
-                                        <option value="<?= $kelasListItem->id ?>"><?= $kelasListItem->kelas ?> - <?= $kelasListItem->matkul ?> - <?= $kelasListItem->dosen ?></option>
-                                    <?php endforeach; ?>
+                                            <option value="<?= $kelasListItem->id ?>"><?= $kelasListItem->kelas ?> - <?= $kelasListItem->matkul ?> - <?= $kelasListItem->dosen ?></option>
+                                        <?php endforeach; ?>
                                     </select>
                                 </div>
                             </div>
@@ -63,9 +63,9 @@
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
-<?= $this->endSection() ?>
+<?= $renderer->endSection() ?>
 
-<?= $this->section('custom-js') ?>
+<?= $renderer->section('custom-js') ?>
 <!-- Moment JS -->
 <script src="<?= site_url('adminlte3/plugins/moment/moment.min.js') ?>"></script>
 <!-- Temposdominus Bootstrap 4 -->
@@ -131,7 +131,7 @@
             format: 'YYYY-MM-DD'
         });
         var currDate = new Date();
-        var tanggal = currDate.getFullYear()+'-'+((currDate.getMonth()+1).toString().length < 2 ? "0"+(currDate.getMonth()+1):(currDate.getMonth()+1))+'-'+(currDate.getDate().toString().length < 2 ? "0"+currDate.getDate() : currDate.getDate());
+        var tanggal = currDate.getFullYear() + '-' + ((currDate.getMonth() + 1).toString().length < 2 ? "0" + (currDate.getMonth() + 1) : (currDate.getMonth() + 1)) + '-' + (currDate.getDate().toString().length < 2 ? "0" + currDate.getDate() : currDate.getDate());
         $('#tanggal').find('input').val(tanggal);
         $('#filterData').submit(function(e) {
             e.preventDefault();
@@ -142,4 +142,4 @@
         });
     });
 </script>
-<?= $this->endSection() ?>
+<?= $renderer->endSection() ?>

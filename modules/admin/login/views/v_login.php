@@ -1,6 +1,6 @@
-<?= $this->extend('\Modules\Shared\Layouts\Views\v_login_layout') ?>
+<?= $renderer->extend('modules/shared/layouts/views/v_login_layout') ?>
 
-<?= $this->section('content') ?>
+<?= $renderer->section('content') ?>
 <div class="card card-outline card-primary">
     <div class="card-header text-center">
         <a href="#" class="h2"><b>PresensiApp</b><br>Admin Panel</a>
@@ -54,4 +54,4 @@
         <?php endif; ?>
     </div>
 </div>
-<?= $this->endSection() ?>
+<?= $renderer->endSection() ?>

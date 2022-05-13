@@ -2,11 +2,21 @@
 
 namespace Modules\Admin\Dashboard\Controllers;
 
-class DashboardController extends \App\Controllers\BaseController
+use Modules\Shared\Core\Controllers\BaseWebController;
+
+class DashboardController extends BaseWebController
 {
+
+    protected $viewPath = __DIR__;
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function index()
     {
-        return view('\Modules\Admin\Dashboard\Views\v_welcome', [
+        return $this->renderView('v_welcome', [
             'page_title'    => 'Welcome',
             'pageLinks'    => [
                 'home'      => [
@@ -19,7 +29,7 @@ class DashboardController extends \App\Controllers\BaseController
 
     public function error404()
     {
-        return view('\Modules\Shared\Errors\Views\404', [
+        return $this->renderView('modules/shared/errors/views/404', [
             'page_title'    => 'Not Found',
             'pageLinks'    => [
                 'home'      => [

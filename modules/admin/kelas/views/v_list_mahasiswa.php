@@ -1,6 +1,6 @@
-<?= $this->extend('\Modules\Shared\Layouts\Views\dashboard\layout') ?>
+<?= $renderer->extend('modules/shared/layouts/views/dashboard/layout') ?>
 
-<?= $this->section('content') ?>
+<?= $renderer->section('content') ?>
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
@@ -52,9 +52,9 @@
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
-<?= $this->endSection() ?>
+<?= $renderer->endSection() ?>
 
-<?= $this->section('custom-js') ?>
+<?= $renderer->section('custom-js') ?>
 <script>
     $(function() {
         var table = $('#data-kelas-mahasiswa').DataTable({
@@ -119,4 +119,4 @@
         });
     });
 </script>
-<?= $this->endSection() ?>
+<?= $renderer->endSection() ?>
