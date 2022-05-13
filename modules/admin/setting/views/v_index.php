@@ -1,6 +1,6 @@
-<?= $this->extend('\Modules\Shared\Layouts\Views\dashboard\layout') ?>
+<?= $renderer->extend('modules/shared/layouts/views/dashboard/layout') ?>
 
-<?= $this->section('content') ?>
+<?= $renderer->section('content') ?>
 <div class="content">
     <div class="container-fluid">
         <div class="row">
@@ -15,4 +15,4 @@
         <!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
-<?= $this->endSection() ?>
+<?= $renderer->endSection() ?>

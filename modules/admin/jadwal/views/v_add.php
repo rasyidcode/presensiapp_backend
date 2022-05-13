@@ -80,7 +80,7 @@
 <!-- Temposdominus Bootstrap 4 -->
 <script src="<?= site_url('adminlte3/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') ?>"></script>
 <!-- Jquery Clock Picker -->
-<script src="http://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.js"></script>
+<script src="https://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.js"></script>
 <script>
     $(function() {
         $('#tanggal').datetimepicker({

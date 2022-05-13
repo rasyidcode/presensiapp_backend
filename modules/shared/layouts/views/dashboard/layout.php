@@ -23,7 +23,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Tempusdominus Bootstrap 4 -->
     <link rel="stylesheet" href="<?=site_url('adminlte3/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')?>">
     <!-- Jquery Clock Picker -->
-    <link rel="stylesheet" href="http://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.css">
+    <link rel="stylesheet" href="https://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -50,7 +50,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <?= $this->include('\Modules\Shared\Layouts\Views\Dashboard\inc_sidebar') ?>
+        <?= $renderer->include('modules/shared/layouts/views/dashboard/inc_sidebar') ?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -119,7 +119,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- AdminLTE App -->
     <script src="<?= site_url('adminlte3/dist/js/adminlte.min.js') ?>"></script>
     <!-- Datatable -->
-    <?=$this->include('\Modules\Shared\Layouts\Views\Dashboard\inc_datatables_js')?>
+    <?= $renderer->include('modules/shared/layouts/views/dashboard/inc_datatables_js') ?>
     <!-- Handle logout -->
     <script>
         $(function() {
