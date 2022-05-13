@@ -116,6 +116,7 @@ class UserController extends BaseWebController
         }
 
         $dataPost = $this->request->getPost();
+        $dataPost['password'] = password_hash($dataPost['password'], PASSWORD_BCRYPT);
         $this->userModel->create($dataPost);
 
         session()->setFlashdata('success', 'User created successfully!');

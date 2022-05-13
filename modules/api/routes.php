@@ -4,14 +4,16 @@
 $routes->group('api/v1', ['namespace' => $routes_namespace], function ($routes) use ($routes_namespace) {
     $routes->get('/', 'Entry\Controllers\EntryController::index', []);
 
-    $routes->post('auth/login', 'Shared\Controllers\AuthController::login'); // done
+    $routes->post('auth/login', 'Auth\Controllers\AuthController::login'); // done
     $routes->group('', ['namespace' => $routes_namespace, 'filter' => 'api-auth-filter'], function ($routes) {
         // logout
-        $routes->post('auth/logout', 'Shared\Controllers\AuthController::logout'); // done
+        $routes->post('auth/logout', 'Auth\Controllers\AuthController::logout'); // done
+        
         // renew access_token
-        $routes->post('auth/renew-token', 'Shared\Controllers\AuthController::renewToken');
+        // $routes->post('auth/renew-token', 'Auth\Controllers\AuthController::renewToken');
         // forgot password
-        $routes->post('auth/forgot-password', 'Shared\Controllers\AuthController::forgotPassword');
+        // $routes->post('auth/forgot-password', 'Shared\Controllers\AuthController::forgotPassword');
+
         // list jadwal hari ini
         $routes->get('jadwal', 'Jadwal\Controllers\JadwalController::index');
     });
