@@ -44,6 +44,8 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Mahasiswa</th>
+                                    <th>Jam Mulai</th>
+                                    <th>Jam Selesai</th>
                                     <th>Status Presensi</th>
                                     <th>Created At</th>
                                     <th>Actions</th>
@@ -121,6 +123,16 @@
                 },
                 {
                     targets: 4,
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    targets: 5,
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    targets: 6,
                     orderable: false,
                     searchable: false
                 },

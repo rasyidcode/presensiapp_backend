@@ -63,14 +63,14 @@ class AuthController extends BaseController
             );
 
         unset($userdata->password);
-        // print_r($userdata);die();
+        
         $additionalData = null;
         if ($userdata->level == 'mahasiswa') {
             $additionalData = $this->authModel->getDataMahasiswa($userdata->id);
         } else if ($userdata->level == 'dosen') {
             $additionalData = $this->authModel->getDataDosen($userdata->id);
         }
-        // print_r($additionalData);die();
+        
         $accessToken = createAccessToken([
             'id'        => $userdata->id,
             'username'  => $userdata->username,
@@ -127,7 +127,40 @@ class AuthController extends BaseController
      */
     public function renewToken()
     {
+        $refreshToken = $this->request->header('Refresh-Token');
+        if (is_null($refreshToken))
+            throw new ApiAccessErrorException('Please provide your refresh token', ResponseInterface::HTTP_BAD_REQUEST);
 
+        $refreshToken = $refreshToken->getValue();
+        if (empty($refreshToken))
+            throw new ApiAccessErrorException('Please provide your refresh token', ResponseInterface::HTTP_BAD_REQUEST);
+
+        $userdata = $this->authModel->getUserByRf($refreshToken);
+        if(is_null($userdata)) {
+            throw new ApiAccessErrorException('User not found with provided refresh token', ResponseInterface::HTTP_NOT_FOUND);
+        }
+
+        unset($userdata->password);
+
+        $additionalData = null;
+        if ($userdata->level == 'mahasiswa') {
+            $additionalData = $this->authModel->getDataMahasiswa($userdata->id);
+        } else if ($userdata->level == 'dosen') {
+            $additionalData = $this->authModel->getDataDosen($userdata->id);
+        }
+
+        $accessToken = createAccessToken([
+            'id'        => $userdata->id,
+            'username'  => $userdata->username,
+            'name'      => $additionalData->nama_lengkap,
+            'email'     => $userdata->email
+        ]);
+
+        return $this->response
+            ->setJSON([
+                'access_token'  => $accessToken
+            ])
+            ->setStatusCode(ResponseInterface::HTTP_OK);
     }
 
     /**

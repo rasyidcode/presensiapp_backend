@@ -33,6 +33,8 @@ class PresensiModel extends Model
         $presensi->select('
             mahasiswa.nama_lengkap,
             presensi.status_presensi,
+            jadwal.begin_time,
+            jadwal.end_time,
             presensi.created_at
         ');
         
@@ -134,5 +136,4 @@ class PresensiModel extends Model
 
         return $presensi->countAllResults();
     }
-
 }

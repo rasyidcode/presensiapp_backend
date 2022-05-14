@@ -63,6 +63,8 @@ class PresensiController extends BaseWebController
             } else if ($item->status_presensi == 2) {
                 $statusPresensi = '<span class="badge badge-warning">Terlambat</span>';
             }
+            $row[]  = $item->begin_time;
+            $row[]  = $item->end_time;
             $row[]  = $statusPresensi;
             $row[]  = $item->created_at ?? '-';
             $row[]  = "<div class=\"text-center\">

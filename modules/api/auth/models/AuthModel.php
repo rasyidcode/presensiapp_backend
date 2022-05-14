@@ -32,6 +32,23 @@ class AuthModel extends Model
     }
 
     /**
+     * Get user by it's refresh token
+     * 
+     * @param string $refreshToken
+     * 
+     * return object|null
+     */
+    public function getUserByRf(string $refreshToken) : ?object
+    {
+        $result = $this->builder('users')
+            ->where('token', $refreshToken)
+            ->where('deleted_at', null)
+            ->get()
+            ->getRowObject();
+        return $result;
+    }
+
+    /**
      * Get mahasiswa data by username
      * 
      * @param string $username

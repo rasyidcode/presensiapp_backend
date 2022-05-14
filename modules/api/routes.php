@@ -2,20 +2,26 @@
 
 // protected route
 $routes->group('api/v1', ['namespace' => $routes_namespace], function ($routes) use ($routes_namespace) {
+    // entry
     $routes->get('/', 'Entry\Controllers\EntryController::index', []);
-
+    // login
     $routes->post('auth/login', 'Auth\Controllers\AuthController::login'); // done
+    // renew access_token
+    $routes->post('auth/renew-token', 'Auth\Controllers\AuthController::renewToken');
+    
+    // need auth
     $routes->group('', ['namespace' => $routes_namespace, 'filter' => 'api-auth-filter'], function ($routes) {
         // logout
         $routes->post('auth/logout', 'Auth\Controllers\AuthController::logout'); // done
-        
-        // renew access_token
-        // $routes->post('auth/renew-token', 'Auth\Controllers\AuthController::renewToken');
+        // list perkuliahan hari ini
+        $routes->get('perkuliahan', 'Perkuliahan\Controllers\PerkuliahanController::index');        
+        // get perkuliahan by id
+        $routes->get('perkuliahan/(:segment)', 'Perkuliahan\Controllers\PerkuliahanController::get/$1');
+        // do presensi
+        $routes->post('perkuliahan/do-presensi', 'Perkuliahan\Controllers\PerkuliahanController::doPresensi');
         // forgot password
         // $routes->post('auth/forgot-password', 'Shared\Controllers\AuthController::forgotPassword');
 
-        // list jadwal hari ini
-        $routes->get('jadwal', 'Jadwal\Controllers\JadwalController::index');
     });
 
     // need auth
