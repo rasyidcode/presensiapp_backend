@@ -23,13 +23,13 @@ class PerkuliahanController extends BaseController
         $mhsId = $this->perkuliahanModel->getMahasiswaID($userdata->id);
         if (is_null($mhsId)) {
             throw new ApiAccessErrorException(
-                message: 'User tidak ditemukan!',
-                statusCode: ResponseInterface::HTTP_NOT_FOUND
+                message: 'Mahasiswa tidak ditemukan!',
+                statusCode: ResponseInterface::HTTP_BAD_REQUEST
             );
         }
 
         $perkuliahan = $this->perkuliahanModel->getList($mhsId);
-        if (is_null($perkuliahan)) {
+        if (empty($perkuliahan)) {
             throw new ApiAccessErrorException(
                 message: 'Perkuliahan hari ini tidak ada!',
                 statusCode: ResponseInterface::HTTP_NOT_FOUND

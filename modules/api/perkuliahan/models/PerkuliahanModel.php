@@ -89,7 +89,8 @@ class PerkuliahanModel extends Model
         $jadwal->orderBy('jadwal.begin_time', 'asc');
         $jadwal->orderBy('jadwal.end_time', 'asc');
 
-        return $jadwal->get()->getResultObject();
+        return $jadwal->get()
+            ->getResultObject();
     }
 
     /**

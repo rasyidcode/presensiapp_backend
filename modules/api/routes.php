@@ -8,6 +8,8 @@ $routes->group('api/v1', ['namespace' => $routes_namespace], function ($routes) 
     $routes->post('auth/login', 'Auth\Controllers\AuthController::login'); // done
     // renew access_token
     $routes->post('auth/renew-token', 'Auth\Controllers\AuthController::renewToken');
+    // forgot password
+    // $routes->post('auth/forgot-password', 'Shared\Controllers\AuthController::forgotPassword');
     
     // need auth
     $routes->group('', ['namespace' => $routes_namespace, 'filter' => 'api-auth-filter'], function ($routes) {
@@ -19,9 +21,8 @@ $routes->group('api/v1', ['namespace' => $routes_namespace], function ($routes) 
         $routes->get('perkuliahan/(:segment)', 'Perkuliahan\Controllers\PerkuliahanController::get/$1');
         // do presensi
         $routes->post('perkuliahan/do-presensi', 'Perkuliahan\Controllers\PerkuliahanController::doPresensi');
-        // forgot password
-        // $routes->post('auth/forgot-password', 'Shared\Controllers\AuthController::forgotPassword');
-
+        // list jadwal matkul
+        // profile
     });
 
     // need auth
