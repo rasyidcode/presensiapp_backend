@@ -8,8 +8,8 @@ class PresensiSeeder extends Seeder
 {
     public function run()
     {
-        $kelasId = 7;
-        $dosenQrId = 1;
+        $kelasId = 5;
+        $dosenQrId = 2;
         $mahasiswaList = $this->db->table('kelas_mahasiswa')
             ->select('id_mahasiswa')
             ->where('id_kelas', $kelasId)

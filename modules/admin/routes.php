@@ -1,61 +1,54 @@
 <?php
 
-$routes->get(
-    'login',
-    $routes_namespace . 'Login/Controllers/LoginController::index',
-    [
-        'filter'    => 'web_redirect_if_auth_filter',
-        'as'        => 'login'
-    ]
-);
-$routes->post('login', $routes_namespace . 'Login/Controllers/LoginController::login');
-
-$routes->group('admin', ['namespace' => $routes_namespace, 'filter' => 'web_auth_filter'], function ($routes) use ($routes_namespace) {
+$routes->group('', ['namespace' => $routes_namespace, 'filter' => 'web-auth-filter'], function ($routes) use ($routes_namespace) {
     // welcome page
     $routes->get('/', 'Dashboard/Controllers/DashboardController::index',               ['as' => 'admin.welcome']);
+    // error page
     $routes->get('error-404', 'Dashboard/Controllers/DashboardController::error404',    ['as' => 'admin.error-404']);
+    // logout
+    $routes->post('logout', 'Dashboard/Controllers/DashboardController::logout',        ['as' => 'logout']);
 
     // data user
-    $routes->get('user',            'Users/Controllers/UserController::index',      ['as' => 'user.list']);
-    $routes->post('user/get-data',  'Users/Controllers/UserController::getData',    ['as' => 'user.get-data']);
-    $routes->get('user/add',        'Users/Controllers/UserController::add',        ['as' => 'user.add']);
-    $routes->post('user',           'Users/Controllers/UserController::create',     ['as' => 'user.create']);
+    $routes->group('user', ['namespace' => $routes_namespace . 'Users\Controllers\\'], function($routes) {
+        $routes->get('/',            'UserController::index',      ['as' => 'user.list']);
+        $routes->post('get-data',   'UserController::getData',    ['as' => 'user.get-data']);
+        $routes->get('add',         'UserController::add',        ['as' => 'user.add']);
+        $routes->post('delete',     'UserController::create',     ['as' => 'user.create']);
+    });
 
-    // jurusan
-    $routes->get('master/jurusan',              'Master/Controllers/JurusanController::index',          ['as' => 'master.jurusan.list']);
-    $routes->post('master/jurusan/get-data',    'Master/Controllers/JurusanController::getData',        ['as' => 'master.jurusan.get-data']);
-    $routes->get('master/jurusan/add',          'Master/Controllers/JurusanController::add',            ['as' => 'master.jurusan.add']);
-    $routes->post('master/jurusan',             'Master/Controllers/JurusanController::create',         ['as' => 'master.jurusan.create']);
+    // data master
+    $routes->group('master', ['namespace' => $routes_namespace . 'Master\Controllers\\'], function($routes) {
+        // jurusan
+        $routes->get('jurusan',             'JurusanController::index',     ['as' => 'master.jurusan.list']);
+        $routes->post('jurusan/get-data',   'JurusanController::getData',   ['as' => 'master.jurusan.get-data']);
+        $routes->get('jurusan/add',         'JurusanController::add',       ['as' => 'master.jurusan.add']);
+        $routes->post('jurusan',            'JurusanController::create',    ['as' => 'master.jurusan.create']);
 
-    // matkul
-    $routes->get('master/matkul',               'Master/Controllers/MatkulController::index',           ['as' => 'master.matkul.list']);
-    $routes->post('master/matkul/get-data',     'Master/Controllers/MatkulController::getData',         ['as' => 'master.matkul.get-data']);
-    $routes->get('master/matkul/add',           'Master/Controllers/MatkulController::add',             ['as' => 'master.matkul.add']);
-    $routes->post('master/matkul',              'Master/Controllers/MatkulController::create',          ['as' => 'master.matkul.create']);
+        // matkul
+        $routes->get('matkul',               'MatkulController::index',     ['as' => 'master.matkul.list']);
+        $routes->post('matkul/get-data',     'MatkulController::getData',   ['as' => 'master.matkul.get-data']);
+        $routes->get('matkul/add',           'MatkulController::add',       ['as' => 'master.matkul.add']);
+        $routes->post('matkul',              'MatkulController::create',    ['as' => 'master.matkul.create']);
+    });
 
     // data mahasiswa
-    $routes->get('mahasiswa',                   'Mahasiswa/Controllers/MahasiswaController::index',     ['as' => 'mahasiswa.list']);
-    $routes->post('mahasiswa/get-data',         'Mahasiswa/Controllers/MahasiswaController::getData',   ['as' => 'mahasiswa.get-data']);
-    $routes->get('mahasiswa/add',               'Mahasiswa/Controllers/MahasiswaController::add',       ['as' => 'mahasiswa.add']);
-    $routes->post('mahasiswa',                  'Mahasiswa/Controllers/MahasiswaController::create',    ['as' => 'mahasiswa.create']);
+    $routes->group('mahasiswa', ['namespace' => $routes_namespace . 'Mahasiswa\Controllers\\'], function($routes) {
+        $routes->get('/',           'MahasiswaController::index',     ['as' => 'mahasiswa.list']);
+        $routes->post('get-data',   'MahasiswaController::getData',   ['as' => 'mahasiswa.get-data']);
+        $routes->get('add',         'MahasiswaController::add',       ['as' => 'mahasiswa.add']);
+        $routes->post('/',          'MahasiswaController::create',    ['as' => 'mahasiswa.create']);
+    });
 
     // data dosen
-    $routes->get('dosen',               'Dosen/Controllers/DosenController::index',     ['as' => 'dosen.list']);
-    $routes->post('dosen/get-data',     'Dosen/Controllers/DosenController::getData',   ['as' => 'dosen.get-data']);
-    $routes->get('dosen/add',           'Dosen/Controllers/DosenController::add',       ['as' => 'dosen.add']);
-    $routes->post('dosen',              'Dosen/Controllers/DosenController::create',    ['as' => 'dosen.create']);
+    $routes->group('dosen', ['namespace' => $routes_namespace . 'Dosen\Controllers\\'], function($routes) {
+        $routes->get('/',           'DosenController::index',     ['as' => 'dosen.list']);
+        $routes->post('get-data',   'DosenController::getData',   ['as' => 'dosen.get-data']);
+        $routes->get('add',         'DosenController::add',       ['as' => 'dosen.add']);
+        $routes->post('/',          'DosenController::create',    ['as' => 'dosen.create']);
+    });
 
     // data kelas
-    // $routes->get('kelas',                                   'Kelas/Controllers/KelasController::index',                 ['as' => 'kelas.list']);
-    // $routes->post('kelas/get-data',                         'Kelas/Controllers/KelasController::getData',               ['as' => 'kelas.get-data']);
-    // $routes->get('kelas/add',                               'Kelas/Controllers/KelasController::add',                   ['as' => 'kelas.add']);
-    // $routes->post('kelas',                                  'Kelas/Controllers/KelasController::create',                ['as' => 'kelas.create']);
-    // $routes->get('kelas/(:segment)/mahasiswa',              'Kelas\Controllers\KelasController::mahasiswa/$1',          ['as' => 'kelas.mahasiswa']);
-    // $routes->post('kelas/(:segment)/mahasiswa/get-data',    'Kelas\Controllers\KelasController::mahasiswaGetData/$1',   ['as' => 'kelas.mahasiswa.get-data']);
-    // $routes->get('kelas/(:segment)/mahasiswa/add',          'Kelas\Controllers\KelasController::mahasiswaAdd/$1',       ['as' => 'kelas.mahasiswa.add']);
-    // $routes->post('kelas/(:segment)/mahasiswa',             'Kelas\Controllers\KelasController::mahasiswaCreate/$1',    ['as' => 'kelas.mahasiswa.create']);
-
-    $routes->group('kelas', ['namespace' => $routes_namespace.'Kelas\Controllers'], function ($routes) {
+    $routes->group('kelas', ['namespace' => $routes_namespace . 'Kelas\Controllers'], function ($routes) {
         $routes->get('/',                               'KelasController::index',                 ['as' => 'kelas.list']);
         $routes->post('get-data',                       'KelasController::getData',               ['as' => 'kelas.get-data']);
         $routes->get('add',                             'KelasController::add',                   ['as' => 'kelas.add']);
@@ -66,19 +59,17 @@ $routes->group('admin', ['namespace' => $routes_namespace, 'filter' => 'web_auth
         $routes->post('(:segment)/mahasiswa',           'KelasController::mahasiswaCreate/$1',    ['as' => 'kelas.mahasiswa.create']);
     });
 
-    // jadwal
-    $routes->get('jadwal',              'Jadwal/Controllers/JadwalController::index',       ['as' => 'jadwal.list']);
-    $routes->post('jadwal/get-data',    'Jadwal/Controllers/JadwalController::getData',     ['as' => 'jadwal.get-data']);
-    $routes->get('jadwal/add',          'Jadwal/Controllers/JadwalController::add',         ['as' => 'jadwal.add']);
-    $routes->post('jadwal',             'Jadwal/Controllers/JadwalController::create',      ['as' => 'jadwal.create']);
+    // data jadwal
+    $routes->group('jadwal', ['namespace' => $routes_namespace . 'Jadwal\Controllers\\'], function($routes) {
+        $routes->get('/',           'JadwalController::index',       ['as' => 'jadwal.list']);
+        $routes->post('get-data',   'JadwalController::getData',     ['as' => 'jadwal.get-data']);
+        $routes->get('add',         'JadwalController::add',         ['as' => 'jadwal.add']);
+        $routes->post('/',          'JadwalController::create',      ['as' => 'jadwal.create']);
+    });
 
-    // presensi
-    $routes->get('presensi',            'Presensi/Controllers/PresensiController::index',   ['as' => 'presensi.list']);
-    $routes->post('presensi/get-data',  'Presensi/Controllers/PresensiController::getData', ['as' => 'presensi.get-data']);
-
-    // settings
-    $routes->get('setting', 'Setting/Controllers/SettingController::index', ['as' => 'setting']);
-
-    // logout
-    $routes->post('logout', 'Login/Controllers/LoginController::logout', ['as' => 'logout']);
+    // data presensi
+    $routes->group('presensi', ['namespace' => $routes_namespace . 'Presensi\Controllers\\'], function($routes) {
+        $routes->get('/',           'PresensiController::index',   ['as' => 'presensi.list']);
+        $routes->post('get-data',   'PresensiController::getData', ['as' => 'presensi.get-data']);
+    });
 });

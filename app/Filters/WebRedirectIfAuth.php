@@ -26,7 +26,7 @@ class WebRedirectIfAuth implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         if (!is_null(session()->get('logged_in')) && session()->get('logged_in')) {
-            return redirect()->to(base_url('admin'));
+            return redirect()->to(base_url());
         }
     }
 

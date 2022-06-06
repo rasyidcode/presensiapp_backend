@@ -1,6 +1,6 @@
-<?= $this->extend('\Modules\Shared\Layouts\Views\dashboard\layout') ?>
+<?= $renderer->extend('modules/shared/layouts/views/dashboard/layout') ?>
 
-<?= $this->section('content') ?>
+<?= $renderer->section('content') ?>
 <!-- Main content -->
 <section class="content">
     <div class="error-page">
@@ -11,7 +11,7 @@
 
             <p>
                 We could not find the page you were looking for.
-                Meanwhile, you may <a href="<?=route_to('admin.welcome')?>">return to dashboard</a> or try using the search form.
+                Meanwhile, you may <a href="<?= route_to('admin.welcome') ?>">return to dashboard</a> or try using the search form.
             </p>
 
             <form class="search-form">
@@ -31,4 +31,4 @@
     <!-- /.error-page -->
 </section>
 <!-- /.content -->
-<?= $this->endSection() ?>
+<?= $renderer->endSection() ?>

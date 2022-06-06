@@ -132,7 +132,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     },
                     success: function(res) {
                         console.log(res);
-                        location.reload();
+                        if (res.success) {
+                            location.reload();
+                        }
                     },
                     error: function(err) {
                         console.log(err);

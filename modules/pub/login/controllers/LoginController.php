@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Admin\Login\Controllers;
+namespace Modules\Pub\Login\Controllers;
 
-use Modules\Admin\Login\Models\LoginModel;
+use Modules\Pub\Login\Models\LoginModel;
 use Modules\Shared\Core\Controllers\BaseWebController;
 
 class LoginController extends BaseWebController
@@ -49,12 +49,6 @@ class LoginController extends BaseWebController
             'username'  => $userdata['username'],
             'level'     => $userdata['level']
         ]);
-        return redirect()->to(base_url('admin'));
-    }
-
-    public function logout()
-    {
-        session()->destroy();
-        return redirect()->route('login');
+        return redirect()->to(base_url());
     }
 }

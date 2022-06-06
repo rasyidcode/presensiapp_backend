@@ -8,7 +8,7 @@ class DosenQRCodeSeeder extends Seeder
 {
     public function run()
     {
-        $jadwalId = 128;
+        $jadwalId = 5;
         $dosenId = 4;
         $qrsecret = uniqid();
         $this->db->table('dosen_qrcode')

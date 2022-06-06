@@ -2,6 +2,7 @@
 
 namespace Modules\Admin\Dashboard\Controllers;
 
+use CodeIgniter\HTTP\ResponseInterface;
 use Modules\Shared\Core\Controllers\BaseWebController;
 
 class DashboardController extends BaseWebController
@@ -29,7 +30,7 @@ class DashboardController extends BaseWebController
 
     public function error404()
     {
-        return $this->renderView('modules/shared/errors/views/404', [
+        return $this->renderView('v_404', [
             'page_title'    => 'Not Found',
             'pageLinks'    => [
                 'home'      => [
@@ -42,5 +43,17 @@ class DashboardController extends BaseWebController
                 ],
             ]
         ]);
+    }
+
+    public function logout()
+    {
+        session()->destroy();
+        
+        return $this->response
+            ->setJSON([
+                'success' => true,
+                'message' => 'User logged out!'
+            ])
+            ->setStatusCode(ResponseInterface::HTTP_OK);
     }
 }

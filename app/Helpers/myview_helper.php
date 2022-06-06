@@ -2,12 +2,8 @@
 
 function isMenuOpen(string $module, int $segment = 0) {
     $segments = service('uri')->getSegments();
-    if (count($segments) == 1) {
-        return '';
-    }
-
     try {
-        return $segments[$segment - 1] == $module ? 'menu-open' : '';
+        return $segments[$segment] == $module ? 'menu-open' : '';
     } catch (Exception $e) {
         return '';
     }
@@ -15,12 +11,8 @@ function isMenuOpen(string $module, int $segment = 0) {
 
 function isLinkActive(string $module, int $segment = 0) {
     $segments = service('uri')->getSegments();
-    if (count($segments) == 1) {
-        return '';
-    }
-
     try {
-        return $segments[$segment - 1] == $module ? 'active' : '';
+        return $segments[$segment] == $module ? 'active' : '';
     } catch (Exception $e) {
         return '';
     }
@@ -28,12 +20,8 @@ function isLinkActive(string $module, int $segment = 0) {
 
 function isLinkActiveColor(string $module, int $segment = 0, string $color) {
     $segments = service('uri')->getSegments();
-    if (count($segments) == 1) {
-        return $color;
-    }
-
     try {
-        return $segments[$segment - 1] == $module ? 'white' : $color;
+        return $segments[$segment] == $module ? 'white' : $color;
     } catch (Exception $e) {
         return $color;
     }

@@ -30,9 +30,9 @@ class Filters extends BaseConfig
 
         'api-auth-filter'               => ApiAuthFilter::class,
 
-        'web_auth_filter'               => WebAuthFilter::class,
+        'web-auth-filter'               => WebAuthFilter::class,
         'web_logout_filter'             => WebLogoutFilter::class,
-        'web_redirect_if_auth_filter'   => WebRedirectIfAuth::class,
+        'web-redirect-if-auth-filter'   => WebRedirectIfAuth::class,
 
         'level-filter'                  => LevelFilter::class,
     ];
@@ -48,8 +48,8 @@ class Filters extends BaseConfig
             'csrf' => [
                 'except'    => [
                     'api/v1/*',
-                    'admin/*/get-data',
-                    'admin/*/*/get-data',
+                    '*/get-data',
+                    '*/*/get-data',
                 ]
             ],
             // 'honeypot',
