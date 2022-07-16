@@ -15,7 +15,7 @@
                             </a>
                         </div>
                         <ul class="nav nav-pills jadwal-days ml-auto p-2">
-                            <li class="nav-item"><a class="nav-link active" href="#jadwal" data-toggle="tab" data-dow="1">Senin</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#jadwal" data-toggle="tab" data-dow="1">Senin</a></li>
                             <li class="nav-item"><a class="nav-link" href="#jadwal" data-toggle="tab" data-dow="2">Selasa</a></li>
                             <li class="nav-item"><a class="nav-link" href="#jadwal" data-toggle="tab" data-dow="3">Rabu</a></li>
                             <li class="nav-item"><a class="nav-link" href="#jadwal" data-toggle="tab" data-dow="4">Kamis</a></li>
@@ -171,6 +171,14 @@
         $('ul.nav.nav-pills.jadwal-days').on('click', 'li.nav-item', function(e) {
             var dow = $(this).find('a').data().dow;
             table.search(dow).draw();
+        });
+
+        var dayofweek = new Date().getDay();
+        $('ul.nav.nav-pills.jadwal-days li.nav-item').each(function(index, tab) {
+            var dow = $(tab).find('a').data().dow;
+            if (dow == dayofweek) {
+                $(tab).find('a').addClass('active');
+            }
         });
     });
 </script>
