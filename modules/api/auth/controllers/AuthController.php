@@ -162,8 +162,4 @@ class AuthController extends BaseController
             ])
             ->setStatusCode(ResponseInterface::HTTP_OK);
     }
-
-    /**
-     * route -> auth/forgotPassword
-     */
 }

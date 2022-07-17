@@ -47,7 +47,6 @@ class ApiAuthFilter implements FilterInterface
             throw new ApiAccessErrorException('User not found', ResponseInterface::HTTP_NOT_FOUND);
 
         $request->setHeader('Access-Token', $encodedToken);
-        // print_r($decodedData->data);die();
         $request->setHeader('User-Data', $decodedData->data);
 
         return $request;

@@ -19,8 +19,15 @@ class PerkuliahanController extends BaseController
 
     public function index()
     {
-        $userdata = (object) $this->request->header('User-Data')->getValue();
-        $mhsId = $this->perkuliahanModel->getMahasiswaID($userdata->id);
+        $userdata = (object) $this
+            ->request
+            ->header('User-Data')
+            ->getValue();
+
+        $mhsId = $this
+            ->perkuliahanModel
+            ->getMahasiswaID($userdata->id);
+
         if (is_null($mhsId)) {
             throw new ApiAccessErrorException(
                 message: 'Mahasiswa tidak ditemukan!',
@@ -28,7 +35,10 @@ class PerkuliahanController extends BaseController
             );
         }
 
-        $perkuliahan = $this->perkuliahanModel->getList($mhsId);
+        $perkuliahan = $this
+            ->perkuliahanModel
+            ->getList($mhsId);
+
         if (empty($perkuliahan)) {
             throw new ApiAccessErrorException(
                 message: 'Perkuliahan hari ini tidak ada!',
@@ -36,7 +46,8 @@ class PerkuliahanController extends BaseController
             );
         }
 
-        return $this->response
+        return $this
+            ->response
             ->setJSON([
                 'data'  => $perkuliahan
             ])
@@ -45,7 +56,10 @@ class PerkuliahanController extends BaseController
 
     public function get($id)
     {
-        $perkuliahan = $this->perkuliahanModel->getOne($id);
+        $perkuliahan = $this
+            ->perkuliahanModel
+            ->getOne($id);
+
         if (is_null($perkuliahan)) {
             throw new ApiAccessErrorException(
                 message: 'Perkuliahan tidak ditemukan!',
@@ -53,7 +67,8 @@ class PerkuliahanController extends BaseController
             );
         }
 
-        return $this->response
+        return $this
+            ->response
             ->setJSON($perkuliahan)
             ->setStatusCode(ResponseInterface::HTTP_OK);
     }
@@ -78,17 +93,25 @@ class PerkuliahanController extends BaseController
         $dosenQr = $this->perkuliahanModel->getDosenQR($qrsecret);
         if (is_null($dosenQr)) {
             throw new ApiAccessErrorException(
-                message: 'QRCode is invalid!',
+                message: 'QR tidak valid!',
                 statusCode: ResponseInterface::HTTP_BAD_REQUEST
             );
         }
 
-        // check if user registered in this jadwal/kelas
-        $mhsId = $this->perkuliahanModel->getMahasiswaID($userdata->id);
-        $isRegistered = $this->perkuliahanModel->checkMahasiswaRegisteredToKelas($mhsId, $dosenQr->id_kelas);
+        // check if mhs registered in this jadwal/kelas
+        $mhsId          = $this
+            ->perkuliahanModel
+            ->getMahasiswaID($userdata->id);
+        $isRegistered   = $this
+            ->perkuliahanModel
+            ->checkMahasiswaRegisteredToKelas(
+                $mhsId,
+                $dosenQr->id_kelas
+            );
+
         if (!$isRegistered) {
             throw new ApiAccessErrorException(
-                message: 'This mahasiswa is not registered to this class.',
+                message: 'Anda tidak terdaftar di kelas ini!',
                 statusCode: ResponseInterface::HTTP_BAD_REQUEST
             );
         }
@@ -97,39 +120,39 @@ class PerkuliahanController extends BaseController
         $nowDate = date('Y-m-d');
         if ($nowDate > $dosenQr->date) {
             $startTimestamp = strtotime($dosenQr->date);
-            $endTimestamp = strtotime($nowDate);
-            $timeDiff = abs($endTimestamp - $startTimestamp);
-            $numberofdays = $timeDiff/(60*60*24); // 1 day in seconds
-            $numberofdays = intval($numberofdays);
+            $endTimestamp   = strtotime($nowDate);
+            $timeDiff       = abs($endTimestamp - $startTimestamp);
+            $numberofdays   = $timeDiff / (60 * 60 * 24); // 1 day in seconds
+            $numberofdays   = intval($numberofdays);
             throw new ApiAccessErrorException(
-                message: 'The jadwal is expired, it\'s ended '.$numberofdays.' days ago!',
+                message: 'Jadwal telah kadaluarsa, telah berakhir ' . $numberofdays . ' hari yang lalu!',
                 statusCode: ResponseInterface::HTTP_BAD_REQUEST
             );
         }
-        
+
         if ($nowDate < $dosenQr->date) {
             $startTimestamp = strtotime($nowDate);
             $endTimestamp = strtotime($dosenQr->date);
             $timeDiff = abs($endTimestamp - $startTimestamp);
-            $numberofdays = $timeDiff/(60*60*24); // 1 day in seconds
+            $numberofdays = $timeDiff / (60 * 60 * 24); // 1 day in seconds
             $numberofdays = intval($numberofdays);
             throw new ApiAccessErrorException(
-                message: 'It\'s not the time yet, the class will start in '.$numberofdays.' days!',
+                message: 'Jadwal belum dimulai, masih ' . $numberofdays . ' hari lagi!',
                 statusCode: ResponseInterface::HTTP_BAD_REQUEST
             );
         }
-        
+
         $nowTime = date('H:i');
         if ($nowTime < $dosenQr->begin_time) {
             throw new ApiAccessErrorException(
-                message: 'It\'s not the time yet.',
+                message: 'Perkuliahan belum dimulai!',
                 statusCode: ResponseInterface::HTTP_BAD_REQUEST
             );
         }
-        
+
         if ($nowTime > $dosenQr->end_time) {
             throw new ApiAccessErrorException(
-                message: 'Can\'t do presensi, time is up!',
+                message: 'Perkuliahan telah selesai, tidak dapat melakukan presensi!',
                 statusCode: ResponseInterface::HTTP_BAD_REQUEST
             );
         }
@@ -137,7 +160,7 @@ class PerkuliahanController extends BaseController
         $getPresensi = $this->perkuliahanModel->getPresensi($dosenQr->id, $mhsId);
         if (!is_null($getPresensi)) {
             throw new ApiAccessErrorException(
-                message: 'Presensi can only do once!',
+                message: 'Anda sudah presensi!',
                 statusCode: ResponseInterface::HTTP_BAD_REQUEST
             );
         }
@@ -154,12 +177,12 @@ class PerkuliahanController extends BaseController
             'status_presensi'   => $statusPresensi
         ]);
 
-        return $this->response
+        return $this
+            ->response
             ->setJSON([
-                'message'   => 'Success doing presensi!',
+                'message'   => 'Berhasil melakukan presensi!',
                 'status_presensi'   => $statusPresensi == 1 ? 'ontime' : ($statusPresensi == 2 ? 'late' : 'absent'),
             ])
             ->setStatusCode(ResponseInterface::HTTP_OK);
     }
-
 }

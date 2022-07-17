@@ -89,7 +89,8 @@ class PerkuliahanModel extends Model
         $jadwal->orderBy('jadwal.begin_time', 'asc');
         $jadwal->orderBy('jadwal.end_time', 'asc');
 
-        return $jadwal->get()
+        return $jadwal
+            ->get()
             ->getResultObject();
     }
 
@@ -190,7 +191,8 @@ class PerkuliahanModel extends Model
      */
     public function getMahasiswaID(int $idUser): ?int
     {
-        $data = $this->builder('mahasiswa')
+        $data = $this
+            ->builder('mahasiswa')
             ->select('id')
             ->where('id_user', $idUser)
             ->where('deleted_at', null)
@@ -209,7 +211,8 @@ class PerkuliahanModel extends Model
      */
     public function getDosenQR(string $qrsecret): ?object
     {
-        $data = $this->builder('dosen_qrcode')
+        $data = $this
+            ->builder('dosen_qrcode')
             ->select('
                 dosen_qrcode.*,
                 jadwal.id as id_jadwal,
@@ -235,7 +238,8 @@ class PerkuliahanModel extends Model
      */
     public function checkMahasiswaRegisteredToKelas(int $mahasiswaId, int $kelasId)
     {
-        $result = $this->builder('kelas_mahasiswa')
+        $result = $this
+            ->builder('kelas_mahasiswa')
             ->selectCount('*', 'count')
             ->where('id_kelas', $kelasId)
             ->where('id_mahasiswa', $mahasiswaId)
@@ -254,7 +258,8 @@ class PerkuliahanModel extends Model
      */
     public function doPresensi(array $data)
     {
-        $this->builder('presensi')
+        $this
+            ->builder('presensi')
             ->insert($data);
     }
 
@@ -268,7 +273,8 @@ class PerkuliahanModel extends Model
      */
     public function getPresensi(int $dosenQrCodeId, int $mahasiswaId) : ?object
     {
-        $result = $this->builder('presensi')
+        $result = $this
+            ->builder('presensi')
             ->where('id_dosen_qrcode', $dosenQrCodeId)
             ->where('id_mahasiswa', $mahasiswaId)
             ->get()

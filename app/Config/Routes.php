@@ -33,6 +33,10 @@ $routes->setAutoRoute(false);
 // route since we don't have to scan directories.
 // $routes->get('/', 'Home::index');
 
+// $routes->group('api/v2', function($routes) {
+//     $routes->get('/', 'API::index');
+// });
+
 /** scan only the path below modules to find routes.php */
 $dir = scandir(ROOTPATH.'modules');
 

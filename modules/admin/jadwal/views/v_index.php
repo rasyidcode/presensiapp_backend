@@ -101,6 +101,8 @@
             serverSide: true,
             order: [],
             ajax: function(data, callback, settings) {
+                var dayofweek = new Date().getDay();
+                data.search.value = dayofweek;
                 var data = {
                     ...data,
                     ['<?= csrf_token() ?>']: '<?= csrf_hash() ?>'
