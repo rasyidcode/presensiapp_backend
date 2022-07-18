@@ -49,7 +49,8 @@ class PerkuliahanController extends BaseController
         return $this
             ->response
             ->setJSON([
-                'data'  => $perkuliahan
+                'data'  => $perkuliahan,
+                'total' => count($perkuliahan)
             ])
             ->setStatusCode(ResponseInterface::HTTP_OK);
     }

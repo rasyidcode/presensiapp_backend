@@ -17,9 +17,9 @@ class PerkuliahanModel extends Model
      * 
      * @param int $id_mhs
      * 
-     * @return return|null
+     * @return array|null
      */
-    public function getList(int $id_mhs)
+    public function getList(int $id_mhs) : array
     {
         $jadwal = $this->builder('jadwal');
 
@@ -92,6 +92,11 @@ class PerkuliahanModel extends Model
         return $jadwal
             ->get()
             ->getResultObject();
+    }
+
+    public function lastQuery()
+    {
+        return $this->db->lastQuery;
     }
 
     /**
