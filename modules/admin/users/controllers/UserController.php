@@ -17,6 +17,8 @@ class UserController extends BaseWebController
     {
         parent::__construct();
 
+        // print_r($this->viewPath);die();
+
         $this->userModel = new UserModel();
     }
 

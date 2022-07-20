@@ -29,14 +29,13 @@ class BaseWebController extends BaseController
             $saveData = (bool) $options['saveData'];
             unset($options['saveData']);
         }
-
-        $modulepath = strstr($this->viewPath, 'modules');
-        $modulepath = str_replace('controllers', 'views', $modulepath);
-
+        // print_r($this->viewPath);die();
+        $modulepath = strstr($this->viewPath, 'Modules');
+        $modulepath = str_replace('Controllers', 'Views', $modulepath);
         $data['renderer'] = $this->renderer;
 
         return $this->renderer
             ->setData($data, 'raw')
-            ->render($modulepath.'/'.$name, $options, $saveData);
+            ->render($modulepath . '/' . $name, $options, $saveData);
     }
 }

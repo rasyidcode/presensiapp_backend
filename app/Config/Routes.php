@@ -38,16 +38,16 @@ $routes->setAutoRoute(false);
 // });
 
 /** scan only the path below modules to find routes.php */
-$dir = scandir(ROOTPATH.'modules');
+$dir = scandir(ROOTPATH . 'Modules');
 
-foreach($dir as $module) {
+foreach ($dir as $module) {
     if ($module == '.' || $module == '..')
         continue;
-    
-    $module_contents = scandir(ROOTPATH.'modules/'.$module);
+
+    $module_contents = scandir(ROOTPATH . 'Modules/' . $module);
     if (in_array('routes.php', $module_contents)) {
-        $routes_namespace = '\Modules\\'.ucfirst($module).'\\';
-        include ROOTPATH.'modules/'.$module.'/routes.php';
+        $routes_namespace = '\Modules\\' . ucfirst($module) . '\\';
+        include ROOTPATH . 'Modules/' . $module . '/routes.php';
     }
 }
 
