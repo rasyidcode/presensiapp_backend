@@ -1,4 +1,4 @@
-<?= $renderer->extend('modules/shared/layouts/views/v_login_layout') ?>
+<?= $renderer->extend('Modules/Shared/Layouts/Views/v_login_layout') ?>
 
 <?= $renderer->section('content') ?>
 <div class="card card-outline card-primary">

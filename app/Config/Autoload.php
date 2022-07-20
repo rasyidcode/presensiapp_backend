@@ -43,7 +43,7 @@ class Autoload extends AutoloadConfig
     public $psr4 = [
         APP_NAMESPACE   => APPPATH, // For custom app namespace
         'Config'        => APPPATH . 'Config',
-        'Modules'       => MODULESPATH
+        // 'Modules'       => MODULESPATH
     ];
 
     /**
@@ -66,9 +66,9 @@ class Autoload extends AutoloadConfig
      * @var array<string, string>
      */
     public $classmap = [
-        'Firebase\JWT\JWT'                  => APPPATH . 'ThirdParty/php-jwt/src/JWT.php',
-        'Firebase\JWT\Key'                  => APPPATH . 'ThirdParty/php-jwt/src/Key.php',
-        'Firebase\JWT\ExpiredException'     => APPPATH . 'ThirdParty/php-jwt/src/ExpiredException.php',
+        // 'Firebase\JWT\JWT'                  => APPPATH . 'ThirdParty/php-jwt/src/JWT.php',
+        // 'Firebase\JWT\Key'                  => APPPATH . 'ThirdParty/php-jwt/src/Key.php',
+        // 'Firebase\JWT\ExpiredException'     => APPPATH . 'ThirdParty/php-jwt/src/ExpiredException.php',
     ];
 
     /**
@@ -93,44 +93,44 @@ class Autoload extends AutoloadConfig
         APPPATH . '/Helpers/myview_helper.php',
     ];
 
-    public function __construct()
-    {
-        parent::__construct();
+    // public function __construct()
+    // {
+    //     parent::__construct();
 
-        // load all namespace to psr4 on modules path
-        $scannedDir = scandir(MODULESPATH);
-        foreach($scannedDir as $module) {
-            if ($module == '.' || $module == '..') {
-                continue;
-            }
+    //     // load all namespace to psr4 on modules path
+    //     $scannedDir = scandir(MODULESPATH);
+    //     foreach($scannedDir as $module) {
+    //         if ($module == '.' || $module == '..') {
+    //             continue;
+    //         }
 
-            $moduleDir = scandir(MODULESPATH . $module);
-            foreach($moduleDir as $subModule) {
-                if ($subModule == '.' || $subModule == '..' || $subModule == 'routes.php') {
-                    continue;
-                }
+    //         $moduleDir = scandir(MODULESPATH . $module);
+    //         foreach($moduleDir as $subModule) {
+    //             if ($subModule == '.' || $subModule == '..' || $subModule == 'routes.php') {
+    //                 continue;
+    //             }
 
-                $basemodulenamespace    = 'Modules\\' . ucfirst($module) . '\\' . ucfirst($subModule) . '\\';
-                $basemodulepath         = MODULESPATH . $module . DIRECTORY_SEPARATOR . $subModule . DIRECTORY_SEPARATOR;
+    //             $basemodulenamespace    = 'Modules\\' . ucfirst($module) . '\\' . ucfirst($subModule) . '\\';
+    //             $basemodulepath         = MODULESPATH . $module . DIRECTORY_SEPARATOR . $subModule . DIRECTORY_SEPARATOR;
 
-                $submodulecontrollerspath               = $basemodulepath . 'controllers';
-                if (file_exists($submodulecontrollerspath)) {
-                    $controllersNamespace               = $basemodulenamespace . 'Controllers';
-                    $this->psr4[$controllersNamespace]  = $submodulecontrollerspath;
-                }
+    //             $submodulecontrollerspath               = $basemodulepath . 'controllers';
+    //             if (file_exists($submodulecontrollerspath)) {
+    //                 $controllersNamespace               = $basemodulenamespace . 'Controllers';
+    //                 $this->psr4[$controllersNamespace]  = $submodulecontrollerspath;
+    //             }
 
-                $submodulemodelspath                = $basemodulepath . 'models';
-                if (file_exists($submodulemodelspath)) {
-                    $modelsNamespace                = $basemodulenamespace . 'Models';
-                    $this->psr4[$modelsNamespace]   = $submodulemodelspath;
-                }
+    //             $submodulemodelspath                = $basemodulepath . 'models';
+    //             if (file_exists($submodulemodelspath)) {
+    //                 $modelsNamespace                = $basemodulenamespace . 'Models';
+    //                 $this->psr4[$modelsNamespace]   = $submodulemodelspath;
+    //             }
 
-                // $submoduleviewspath                = $basemodulepath . 'views';
-                // if (file_exists($submoduleviewspath)) {
-                //     $viewsNamespace                = $basemodulenamespace . 'Views';
-                //     $this->psr4[$viewsNamespace]   = $submoduleviewspath;
-                // }
-            }
-        }
-    }
+    //             // $submoduleviewspath                = $basemodulepath . 'views';
+    //             // if (file_exists($submoduleviewspath)) {
+    //             //     $viewsNamespace                = $basemodulenamespace . 'Views';
+    //             //     $this->psr4[$viewsNamespace]   = $submoduleviewspath;
+    //             // }
+    //         }
+    //     }
+    // }
 }

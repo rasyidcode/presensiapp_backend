@@ -28,7 +28,8 @@
     },
     "autoload": {
         "psr-4": {
-            "CodeIgniter\\": "system/"
+            "CodeIgniter\\": "system/",
+            "Modules\\": "modules/"
         },
         "exclude-from-classmap": [
             "**/Database/Migrations/**"

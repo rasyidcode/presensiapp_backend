@@ -1,4 +1,4 @@
-<?= $renderer->extend('modules/shared/layouts/views/dashboard/layout') ?>
+<?= $renderer->extend('Modules/Shared/Layouts/Views/Dashboard/layout') ?>
 
 <?= $renderer->section('content') ?>
 <div class="content">

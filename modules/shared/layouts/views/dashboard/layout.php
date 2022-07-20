@@ -50,7 +50,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <!-- /.navbar -->
 
         <!-- Main Sidebar Container -->
-        <?= $renderer->include('modules/shared/layouts/views/dashboard/inc_sidebar') ?>
+        <?= $renderer->include('Modules/Shared/Layouts/Views/Dashboard/inc_sidebar') ?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
