@@ -48,7 +48,7 @@ $routes->group('', ['namespace' => $routes_namespace, 'filter' => 'web-auth-filt
     });
 
     // data kelas
-    $routes->group('kelas', ['namespace' => $routes_namespace . 'Kelas\Controllers'], function ($routes) {
+    $routes->group('kelas', ['namespace' => $routes_namespace . 'Kelas\Controllers\\'], function ($routes) {
         $routes->get('/',                               'KelasController::index',                 ['as' => 'kelas.list']);
         $routes->post('get-data',                       'KelasController::getData',               ['as' => 'kelas.get-data']);
         $routes->get('add',                             'KelasController::add',                   ['as' => 'kelas.add']);
