@@ -119,7 +119,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- AdminLTE App -->
     <script src="<?= site_url('adminlte3/dist/js/adminlte.min.js') ?>"></script>
     <!-- Datatable -->
-    <?= $renderer->include('modules/shared/layouts/views/dashboard/inc_datatables_js') ?>
+    <?= $renderer->include('Modules/Shared/Layouts/Views/Dashboard/inc_datatables_js') ?>
     <!-- Handle logout -->
     <script>
         $(function() {
