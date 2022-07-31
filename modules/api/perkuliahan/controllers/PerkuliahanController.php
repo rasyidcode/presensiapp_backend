@@ -77,10 +77,14 @@ class PerkuliahanController extends BaseController
     public function doPresensi()
     {
         if (!$this->validate([
-            'qrsecret'  => 'required'
+            'qrsecret'  => 'required',
+            'id_jadwal' => 'required'
         ], [
             'qrsecret'  => [
-                'required'  => 'QR Secret is required in this request!'
+                'required'  => 'QR Secret is required in this request!',
+            ],
+            'id_jadwal' => [
+                'required'  => 'ID Jadwal is required in this request!'
             ]
         ]))
             throw new ApiAccessErrorException(
@@ -89,9 +93,10 @@ class PerkuliahanController extends BaseController
                 extras: ['errors'    => $this->validator->getErrors()]
             );
 
-        $qrsecret = $this->request->getVar('qrsecret');
-        $userdata = (object) $this->request->header('User-Data')->getValue();
-        $dosenQr = $this->perkuliahanModel->getDosenQR($qrsecret);
+        $qrsecret   = $this->request->getVar('qrsecret');
+        $idJadwal   = $this->request->getVar('id_jadwal');
+        $userdata   = (object) $this->request->header('User-Data')->getValue();
+        $dosenQr    = $this->perkuliahanModel->getDosenQR($qrsecret, $idJadwal);
         if (is_null($dosenQr)) {
             throw new ApiAccessErrorException(
                 message: 'QR tidak valid!',

@@ -214,7 +214,7 @@ class PerkuliahanModel extends Model
      * 
      * @return object|null
      */
-    public function getDosenQR(string $qrsecret): ?object
+    public function getDosenQR(string $qrsecret, int $idJadwal): ?object
     {
         $data = $this
             ->builder('dosen_qrcode')
@@ -228,6 +228,7 @@ class PerkuliahanModel extends Model
             ')
             ->join('jadwal', 'dosen_qrcode.id_jadwal = jadwal.id', 'left')
             ->where('qr_secret', $qrsecret)
+            ->where('id_jadwal', $idJadwal)
             ->get()
             ->getRowObject();
         return $data;
