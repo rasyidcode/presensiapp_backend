@@ -85,6 +85,7 @@ class PerkuliahanModel extends Model
         $jadwal->where('jadwal.date', date('Y-m-d'));
         $jadwal->where('jadwal.deleted_at', null);
         $jadwal->where('kelas_mahasiswa.id_mahasiswa', $id_mhs);
+        $jadwal->where('presensi.id_mahasiswa', $id_mhs);
 
         $jadwal->orderBy('jadwal.begin_time', 'asc');
         $jadwal->orderBy('jadwal.end_time', 'asc');
@@ -172,7 +173,8 @@ class PerkuliahanModel extends Model
         $jadwal->where('jadwal.deleted_at', null);
         $jadwal->where('jadwal.id', $id);
 
-        return $jadwal->get()
+        return $jadwal
+            ->get()
             ->getRowObject();
     }
 

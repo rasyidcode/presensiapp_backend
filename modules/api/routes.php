@@ -22,7 +22,7 @@ $routes->group('api/v1', ['namespace' => $routes_namespace], function ($routes) 
     // perkuliahan protected
     $routes->group('perkuliahan', [
         'namespace' => $routes_namespace . 'Perkuliahan\Controllers', 
-        'filter'    => 'api-auth-filter'
+        'filter'    => 'api-auth-mhs-filter'
     ], function($routes) {
         $routes->get('/',               'PerkuliahanController::index');
         $routes->get('(:segment)',      'PerkuliahanController::get/$1');
@@ -32,12 +32,13 @@ $routes->group('api/v1', ['namespace' => $routes_namespace], function ($routes) 
     // dosen protected
     $routes->group('dosen', [
         'namespace' => $routes_namespace . 'Dosen\Controllers',
-        'filter'    => 'api-auth-filter'
+        'filter'    => 'api-auth-dsn-filter'
     ], function($routes) {
         $routes->get('perkuliahan',                         'DosenController::listPerkuliahan');
         $routes->get('perkuliahan/(:segment)',              'DosenController::perkuliahan/$1');
+        $routes->get('perkuliahan/(:segment)/list-mhs',     'DosenController::perkuliahanListMhs/$1');
         $routes->post('post-qr',                            'DosenController::postQr');
-        $routes->get('perkuliahan/(:segment)/mahasiswa',    'DosenController::perkuliahanMahasiswa/$1');
+        $routes->post('submit-perkuliahan',                 'DosenController::submitPerkuliahan');
     });
 });
  

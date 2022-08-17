@@ -75,6 +75,7 @@ class AuthController extends BaseController
             'id'        => $userdata->id,
             'username'  => $userdata->username,
             'name'      => $additionalData->nama_lengkap,
+            'level'     => $userdata->level,
             'email'     => $userdata->email
         ]);
         $refreshToken = createRefreshToken([
@@ -153,6 +154,7 @@ class AuthController extends BaseController
             'id'        => $userdata->id,
             'username'  => $userdata->username,
             'name'      => $additionalData->nama_lengkap,
+            'level'     => $userdata->level,
             'email'     => $userdata->email
         ]);
 

@@ -57,14 +57,12 @@ class PresensiController extends BaseWebController
             $row[]  = $item->nama_lengkap ?? '-';
             $statusPresensi = '';
             if ($item->status_presensi == 0) {
-                $statusPresensi = '<span class="badge badge-danger">Tidak hadir</span>';
+                $statusPresensi = '<span class="badge badge-warning">Belum Presensi</span>';
             } else if ($item->status_presensi == 1) {
                 $statusPresensi = '<span class="badge badge-success">Hadir</span>';
             } else if ($item->status_presensi == 2) {
-                $statusPresensi = '<span class="badge badge-warning">Terlambat</span>';
+                $statusPresensi = '<span class="badge badge-danger">Tidak Hadir</span>';
             }
-            $row[]  = $item->begin_time;
-            $row[]  = $item->end_time;
             $row[]  = $statusPresensi;
             $row[]  = $item->created_at ?? '-';
             $row[]  = "<div class=\"text-center\">

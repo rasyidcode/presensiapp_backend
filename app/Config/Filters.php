@@ -3,7 +3,9 @@
 namespace Config;
 
 use App\Filters\ApiAdminNotAllowed;
+use App\Filters\ApiAuthDsnFilter;
 use App\Filters\ApiAuthFilter;
+use App\Filters\ApiAuthMhsFilter;
 use App\Filters\ApiLogoutFilter;
 use App\Filters\LevelFilter;
 use App\Filters\MhsOnly;
@@ -29,12 +31,15 @@ class Filters extends BaseConfig
         'honeypot'                      => Honeypot::class,
 
         'api-auth-filter'               => ApiAuthFilter::class,
+        'api-auth-mhs-filter'           => ApiAuthMhsFilter::class,
+        'api-auth-dsn-filter'           => ApiAuthDsnFilter::class,
 
         'web-auth-filter'               => WebAuthFilter::class,
         'web_logout_filter'             => WebLogoutFilter::class,
         'web-redirect-if-auth-filter'   => WebRedirectIfAuth::class,
 
         'level-filter'                  => LevelFilter::class,
+
     ];
 
     /**

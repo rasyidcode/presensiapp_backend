@@ -43,7 +43,7 @@ class JadwalModel extends Model
             matkul.nama as matkul,
             dosen.nama_lengkap as dosen,
             jadwal.created_at,
-            count(kelas_mahasiswa.id_mahasiswa) as mahasiswa_total
+            count(kelas_mahasiswa.id_mahasiswa) as mahasiswa_total 
         ');
         
         $jadwal->join('kelas', 'jadwal.id_kelas = kelas.id', 'left');
@@ -63,7 +63,8 @@ class JadwalModel extends Model
         $jadwal->orderBy('jadwal.date', 'asc');
         $jadwal->groupBy('jadwal.id');
 
-        return $jadwal->get()
+        return $jadwal
+            ->get()
             ->getResultObject();
     }
 
@@ -92,7 +93,8 @@ class JadwalModel extends Model
             jadwal.end_time,
             matkul.nama as matkul,
             dosen.nama_lengkap as dosen,
-            jadwal.created_at
+            jadwal.created_at,
+            count(kelas_mahasiswa.id_mahasiswa) as mahasiswa_total 
         ');
 
         $jadwal->join('kelas', 'jadwal.id_kelas = kelas.id', 'left');
@@ -140,7 +142,8 @@ class JadwalModel extends Model
             jadwal.end_time,
             matkul.nama as matkul,
             dosen.nama_lengkap as dosen,
-            jadwal.created_at
+            jadwal.created_at,
+            count(kelas_mahasiswa.id_mahasiswa) as mahasiswa_total 
         ');
 
         $jadwal->join('kelas', 'jadwal.id_kelas = kelas.id', 'left');
@@ -205,7 +208,6 @@ class JadwalModel extends Model
                 $dates[] = $date;
             }
         }
-
         return $dates;
     }
 }

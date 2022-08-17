@@ -91,6 +91,7 @@
 
 <?= $renderer->section('custom-js') ?>
 <script>
+    var firstInit = true;
     $(function() {
         var table = $('#data-jadwal').DataTable({
             dom: 'lrtip',
@@ -101,8 +102,12 @@
             serverSide: true,
             order: [],
             ajax: function(data, callback, settings) {
-                var dayofweek = new Date().getDay();
-                data.search.value = dayofweek;
+                if (firstInit) {
+                    var dayofweek = new Date().getDay();
+                    data.search.value = dayofweek;
+                    firstInit = false;
+                }
+                
                 var data = {
                     ...data,
                     ['<?= csrf_token() ?>']: '<?= csrf_hash() ?>'
