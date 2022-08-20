@@ -9,7 +9,10 @@ $routes->group('', ['namespace' => $routes_namespace, 'filter' => 'web-auth-filt
     $routes->post('logout', 'Dashboard/Controllers/DashboardController::logout',        ['as' => 'logout']);
 
     // data user
-    $routes->group('user', ['namespace' => $routes_namespace . 'Users\Controllers\\'], function($routes) {
+    $routes->group('user', [
+        'namespace' => $routes_namespace . 'Users\Controllers\\',
+        'filter' => 'web-auth-filter'
+    ], function ($routes) {
         $routes->get('/',            'UserController::index',      ['as' => 'user.list']);
         $routes->post('get-data',   'UserController::getData',    ['as' => 'user.get-data']);
         $routes->get('add',         'UserController::add',        ['as' => 'user.add']);
@@ -17,7 +20,10 @@ $routes->group('', ['namespace' => $routes_namespace, 'filter' => 'web-auth-filt
     });
 
     // data master
-    $routes->group('master', ['namespace' => $routes_namespace . 'Master\Controllers\\'], function($routes) {
+    $routes->group('master', [
+        'namespace' => $routes_namespace . 'Master\Controllers\\',
+        'filter' => 'web-auth-filter'
+    ], function ($routes) {
         // jurusan
         $routes->get('jurusan',             'JurusanController::index',     ['as' => 'master.jurusan.list']);
         $routes->post('jurusan/get-data',   'JurusanController::getData',   ['as' => 'master.jurusan.get-data']);
@@ -32,7 +38,10 @@ $routes->group('', ['namespace' => $routes_namespace, 'filter' => 'web-auth-filt
     });
 
     // data mahasiswa
-    $routes->group('mahasiswa', ['namespace' => $routes_namespace . 'Mahasiswa\Controllers\\'], function($routes) {
+    $routes->group('mahasiswa', [
+        'namespace' => $routes_namespace . 'Mahasiswa\Controllers\\',
+        'filter' => 'web-auth-filter'
+    ], function ($routes) {
         $routes->get('/',           'MahasiswaController::index',     ['as' => 'mahasiswa.list']);
         $routes->post('get-data',   'MahasiswaController::getData',   ['as' => 'mahasiswa.get-data']);
         $routes->get('add',         'MahasiswaController::add',       ['as' => 'mahasiswa.add']);
@@ -40,7 +49,10 @@ $routes->group('', ['namespace' => $routes_namespace, 'filter' => 'web-auth-filt
     });
 
     // data dosen
-    $routes->group('dosen', ['namespace' => $routes_namespace . 'Dosen\Controllers\\'], function($routes) {
+    $routes->group('dosen', [
+        'namespace' => $routes_namespace . 'Dosen\Controllers\\',
+        'filter' => 'web-auth-filter'
+    ], function ($routes) {
         $routes->get('/',           'DosenController::index',     ['as' => 'dosen.list']);
         $routes->post('get-data',   'DosenController::getData',   ['as' => 'dosen.get-data']);
         $routes->get('add',         'DosenController::add',       ['as' => 'dosen.add']);
@@ -48,7 +60,10 @@ $routes->group('', ['namespace' => $routes_namespace, 'filter' => 'web-auth-filt
     });
 
     // data kelas
-    $routes->group('kelas', ['namespace' => $routes_namespace . 'Kelas\Controllers\\'], function ($routes) {
+    $routes->group('kelas', [
+        'namespace' => $routes_namespace . 'Kelas\Controllers\\',
+        'filter' => 'web-auth-filter'
+    ], function ($routes) {
         $routes->get('/',                               'KelasController::index',                 ['as' => 'kelas.list']);
         $routes->post('get-data',                       'KelasController::getData',               ['as' => 'kelas.get-data']);
         $routes->get('add',                             'KelasController::add',                   ['as' => 'kelas.add']);
@@ -60,7 +75,10 @@ $routes->group('', ['namespace' => $routes_namespace, 'filter' => 'web-auth-filt
     });
 
     // data jadwal
-    $routes->group('jadwal', ['namespace' => $routes_namespace . 'Jadwal\Controllers\\'], function($routes) {
+    $routes->group('jadwal', [
+        'namespace' => $routes_namespace . 'Jadwal\Controllers\\',
+        'filter' => 'web-auth-filter'
+    ], function ($routes) {
         $routes->get('/',           'JadwalController::index',       ['as' => 'jadwal.list']);
         $routes->post('get-data',   'JadwalController::getData',     ['as' => 'jadwal.get-data']);
         $routes->get('add',         'JadwalController::add',         ['as' => 'jadwal.add']);
@@ -68,7 +86,10 @@ $routes->group('', ['namespace' => $routes_namespace, 'filter' => 'web-auth-filt
     });
 
     // data presensi
-    $routes->group('presensi', ['namespace' => $routes_namespace . 'Presensi\Controllers\\'], function($routes) {
+    $routes->group('presensi', [
+        'namespace' => $routes_namespace . 'Presensi\Controllers\\',
+        'filter' => 'web-auth-filter'
+    ], function ($routes) {
         $routes->get('/',           'PresensiController::index',   ['as' => 'presensi.list']);
         $routes->post('get-data',   'PresensiController::getData', ['as' => 'presensi.get-data']);
     });

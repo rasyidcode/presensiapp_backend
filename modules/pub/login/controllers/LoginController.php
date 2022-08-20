@@ -33,7 +33,7 @@ class LoginController extends BaseWebController
         }
 
         $dataPost = $this->request->getPost();
-        $userdata = $this->loginModel->getUser($dataPost['username']);
+        $userdata = $this->loginModel->getAdminUser($dataPost['username']);
         if (is_null($userdata)) {
             session()->setFlashdata('error', 'Username atau password salah!');
             return redirect()->back();

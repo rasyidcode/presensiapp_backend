@@ -29,4 +29,24 @@ class LoginModel extends Model
         
         return $result;
     }
+
+    /**
+     * Get admin user by username
+     * 
+     * @param string username
+     * 
+     * @return array|null
+     */
+    public function getAdminUser(string $username) : ?array
+    {
+        $result = $this->builder('users')
+            ->select('id, username, password, email, level')
+            ->where('username', $username)
+            ->where('deleted_at', null)
+            ->where('level', 'admin')
+            ->get()
+            ->getRowArray();
+        
+        return $result;
+    }
 }
