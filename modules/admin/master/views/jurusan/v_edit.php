@@ -7,7 +7,7 @@
             <div class="col-lg-12">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
-                        <a id="btn-back" href="<?=route_to('master.matkul.list')?>" class="btn btn-primary btn-sm mr-2">
+                        <a id="btn-back" href="<?=route_to('master.jurusan.list')?>" class="btn btn-primary btn-sm mr-2">
                             <i class="fas fa-arrow-alt-circle-left"></i>&nbsp;&nbsp;Back
                         </a>
                     </div>
@@ -26,15 +26,15 @@
                                 <?= session()->getFlashdata('success') ?>
                             </div>
                         <?php endif; ?>
-                        <form action="<?= route_to('master.matkul.create') ?>" method="post">
+                        <form action="<?= route_to('master.jurusan.update', $editData->id) ?>" method="post">
                             <?= csrf_field() ?>
                             <div class="form-group">
-                                <label for="kode">Kode Matkul</label>
-                                <input type="text" name="kode" class="form-control" required maxlength="5">
+                                <label for="kode">Kode Jurusan</label>
+                                <input type="text" name="kode" class="form-control" value="<?=$editData->kode?>" required maxlength="5">
                             </div>
                             <div class="form-group">
-                                <label for="nama">Nama Matkul</label>
-                                <input type="text" name="nama" class="form-control" required>
+                                <label for="nama">Nama Jurusan</label>
+                                <input type="text" name="nama" class="form-control" value="<?=$editData->nama?>" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>

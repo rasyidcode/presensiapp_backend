@@ -30,7 +30,7 @@
                             <?= csrf_field() ?>
                             <div class="form-group">
                                 <label for="kode">Kode Jurusan</label>
-                                <input type="text" name="kode" class="form-control" required>
+                                <input type="text" name="kode" class="form-control" required maxlength="5">
                             </div>
                             <div class="form-group">
                                 <label for="nama">Nama Jurusan</label>

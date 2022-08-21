@@ -20,7 +20,7 @@
                                     <th>#</th>
                                     <th>Kode Matkul</th>
                                     <th>Nama Matkul</th>
-                                    <th>Created At</th>
+                                    <th>Modified At</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -97,6 +97,35 @@
                 }
             ],
             drawCallback: function(settings) {}
+        });
+
+        $('#data-matkul tbody').on('click', 'tr td a.btn-danger', function(e) {
+            var id = $(this).data().id;
+            
+            if (confirm('Are you sure want to delete this data?')) {
+                $.ajax({
+                    url: '<?=site_url('master/matkul')?>/'+id+'/delete',
+                    type: 'POST',
+                    data: {
+                        ['<?= csrf_token() ?>']: '<?= csrf_hash() ?>'
+                    },
+                    success: function(res) {
+                        console.log(res);
+
+                        if (res.success) {
+                            alert(res.message);
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
+                        }
+                    },
+                    error: function(err) {
+                        console.log(err);
+
+                        alert('Something went wrong.');
+                    }
+                })
+            }
         });
     });
 </script>

@@ -51,10 +51,10 @@ class MatkulController extends BaseWebController
             $row[]  = "<input type=\"hidden\" value=\"".$item->id."\">{$num}.";
             $row[]  = $item->kode ?? '-';
             $row[]  = $item->nama ?? '-';
-            $row[]  = $item->created_at ?? '-';
+            $row[]  = $item->updated_at ?? '-';
             $row[]  = "<div class=\"text-center\">
-                            <a href=\"".route_to('admin.error-404')."\" class=\"btn btn-info btn-xs mr-2\">Edit</a>
-                            <a href=\"".route_to('admin.error-404')."\" class=\"btn btn-danger btn-xs\">Hapus</a>
+                            <a href=\"".route_to('master.matkul.edit', $item->id)."\" class=\"btn btn-info btn-xs mr-2\">Edit</a>
+                            <a href=\"javascript:void(0)\" class=\"btn btn-danger btn-xs\" data-id=\"".$item->id."\">Hapus</a>
                         </div>";
             $resData[] = $row;
         }
@@ -96,7 +96,6 @@ class MatkulController extends BaseWebController
             'kode'  => 'required|is_unique[matkul.kode]',
             'nama'  => 'required|is_unique[matkul.nama]',
         ];
-        // todo: add custom error messages
         if (!$this->validate($rules)) {
             session()->setFlashdata('error', $this->validator->getErrors());
             return redirect()->back();
@@ -107,5 +106,80 @@ class MatkulController extends BaseWebController
 
         session()->setFlashdata('success', 'Matkul telah ditambahkan!');
         return redirect()->back();
+    }
+
+    public function edit($id)
+    {
+        $matkul = $this->matkulModel
+            ->builder('matkul')
+            ->where('id', (int) $id)
+            ->get()
+            ->getRowObject();
+        
+        return $this->renderView('matkul/v_edit', [
+            'page_title'    => 'Tambah Data',
+            'pageLinks'    => [
+                'home'      => [
+                    'url'       => route_to('admin.welcome'),
+                    'active'    => false,
+                ],
+                'data-matkul'   => [
+                    'url'       => route_to('master.matkul.list'),
+                    'active'    => false,
+                ],
+                'edit-data'   => [
+                    'url'       => route_to('master.matkul.edit', (int) $id),
+                    'active'    => true,
+                ],
+            ],
+            'editData'  => $matkul
+        ]);
+    }
+    
+    public function update($id)
+    {
+        if (!$this->validate([
+            'kode'  => 'required|max_length[5]',
+            'nama'  => 'required'
+        ])) {
+            session()->setFlashdata('error', $this->validator->getErrors());
+            return redirect()->back();
+        }
+
+        $dataPost = $this->request->getPost();
+        $checkIfKodeUsed = $this->matkulModel
+            ->builder('matkul')
+            ->where('kode', $dataPost['kode'])
+            ->where('id <>', (int) $id)
+            ->get()
+            ->getRowObject();
+        if (!is_null($checkIfKodeUsed)) {
+            session()->setFlashdata('error', ['Kode '.$dataPost['kode'] . ' is already used!']);
+            return redirect()->back();
+        }
+        
+        $dataPost['updated_at'] = date('Y-m-d H:i:s');
+        $this->matkulModel
+            ->builder('matkul')
+            ->where('id', $id)
+            ->update($dataPost);
+
+        session()->setFlashdata('success', 'Matkul telah diperbaharui!');
+        return redirect()->back();
+    }
+
+    public function delete($id)
+    {
+        $this->matkulModel
+            ->builder('matkul')
+            ->where('id', $id)
+            ->delete();
+        
+        return $this->response
+            ->setJSON([
+                'success'   => true,
+                'message'   => 'Data is removed.'
+            ])
+            ->setStatusCode(ResponseInterface::HTTP_OK);
     }
 }

@@ -126,4 +126,65 @@ class JurusanModel extends Model
             ->getResultObject();
     }
 
+    /**
+     * Get jurusan by id
+     * 
+     * @param int $id
+     * 
+     * @return object
+     */
+    public function getByID(int $id) : ?object
+    {
+        return $this->builder($this->tblName)
+            ->where('id', $id)
+            ->get()
+            ->getRowObject();
+    }
+
+    /**
+     * Get jurusan by kode where ID not equal to param $id
+     * 
+     * @param int $id
+     * 
+     * @return object
+     */
+    public function getByKode(string $kode, int $id) : ?object
+    {
+        return $this->builder($this->tblName)
+            ->where('kode', $kode)
+            ->where('id <>', $id)
+            ->get()
+            ->getRowObject();
+    }
+
+    /**
+     * Update jurusan by ID
+     * 
+     * @param array $data
+     * @param int $id
+     * 
+     * @return void
+     */
+    public function updateJurusan(array $data, int $id)
+    {
+        $data['updated_at'] = date('Y-m-d H:i:s');
+        $this->builder($this->tblName)
+            ->where('id', $id)
+            ->update($data);
+    }
+
+    /**
+     * Delete jurusan by ID
+     * 
+     * @param int $id
+     * 
+     * @return void
+     */
+    public function deleteJurusan(int $id)
+    {
+        $this->builder($this->tblName)
+            ->where('id', $id)
+            ->delete();
+    }
+
 }

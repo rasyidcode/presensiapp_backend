@@ -26,15 +26,15 @@
                                 <?= session()->getFlashdata('success') ?>
                             </div>
                         <?php endif; ?>
-                        <form action="<?= route_to('master.matkul.create') ?>" method="post">
+                        <form action="<?= route_to('master.matkul.update', $editData->id) ?>" method="post">
                             <?= csrf_field() ?>
                             <div class="form-group">
                                 <label for="kode">Kode Matkul</label>
-                                <input type="text" name="kode" class="form-control" required maxlength="5">
+                                <input type="text" name="kode" class="form-control" required value="<?=$editData->kode?>" maxlength="5">
                             </div>
                             <div class="form-group">
                                 <label for="nama">Nama Matkul</label>
-                                <input type="text" name="nama" class="form-control" required>
+                                <input type="text" name="nama" class="form-control" required value="<?=$editData->nama?>">
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>

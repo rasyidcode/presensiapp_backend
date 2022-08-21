@@ -51,10 +51,10 @@ class JurusanController extends BaseWebController
             $row[]  = "<input type=\"hidden\" value=\"".$item->id."\">{$num}.";
             $row[]  = $item->kode ?? '-';
             $row[]  = $item->nama ?? '-';
-            $row[]  = $item->created_at ?? '-';
+            $row[]  = $item->updated_at ?? '-';
             $row[]  = "<div class=\"text-center\">
-                            <a href=\"".route_to('admin.error-404')."\" class=\"btn btn-info btn-xs mr-2\">Edit</a>
-                            <a href=\"".route_to('admin.error-404')."\" class=\"btn btn-danger btn-xs\">Hapus</a>
+                            <a href=\"".route_to('master.jurusan.edit', $item->id)."\" class=\"btn btn-info btn-xs mr-2\">Edit</a>
+                            <a href=\"javascript:void(0)\" class=\"btn btn-danger btn-xs\" data-id=\"".$item->id."\">Hapus</a>
                         </div>";
             $resData[] = $row;
         }
@@ -72,13 +72,13 @@ class JurusanController extends BaseWebController
     public function add()
     {
         return $this->renderView('jurusan/v_add', [
-            'page_title'    => 'Tambah Data',
+            'page_title'    => 'Tambah Jurusan',
             'pageLinks'    => [
                 'home'      => [
                     'url'       => route_to('admin.welcome'),
                     'active'    => false,
                 ],
-                'data-user'     => [
+                'data-jurusan'     => [
                     'url'       => route_to('master.jurusan.list'),
                     'active'    => false,
                 ],
@@ -93,10 +93,10 @@ class JurusanController extends BaseWebController
     public function create()
     {
         $rules = [
-            'kode'  => 'required|is_unique[jurusan.kode]',
+            'kode'  => 'required|is_unique[jurusan.kode]|max_length[5]',
             'nama'  => 'required|is_unique[jurusan.nama]',
         ];
-        // todo: add custom error messages
+        
         if (!$this->validate($rules)) {
             session()->setFlashdata('error', $this->validator->getErrors());
             return redirect()->back();
@@ -107,5 +107,63 @@ class JurusanController extends BaseWebController
 
         session()->setFlashdata('success', 'Jurusan telah ditambahkan!');
         return redirect()->back();
+    }
+
+    public function edit($id)
+    {
+        $jurusan = $this->jurusanModel->getByID((int) $id);
+        return $this->renderView('jurusan/v_edit', [
+            'page_title'    => 'Edit Jurusan',
+            'pageLinks'    => [
+                'home'      => [
+                    'url'       => route_to('admin.welcome'),
+                    'active'    => false,
+                ],
+                'data-user'     => [
+                    'url'       => route_to('master.jurusan.list'),
+                    'active'    => false,
+                ],
+                'edit-jurusan'   => [
+                    'url'       => route_to('master.jurusan.edit', $id),
+                    'active'    => true,
+                ],
+            ],
+            'editData'      => $jurusan
+        ]);
+    }
+
+    public function update($id)
+    {
+        if (!$this->validate([
+            'kode'  => 'required|max_length[5]',
+            'nama'  => 'required'
+        ])) {
+            session()->setFlashdata('error', $this->validator->getErrors());
+            return redirect()->back();
+        }
+
+        $dataPost = $this->request->getPost();
+        $checkIfKodeUsed = $this->jurusanModel->getByKode($dataPost['kode'], (int) $id);
+        if (!is_null($checkIfKodeUsed)) {
+            session()->setFlashdata('error', ['Kode '.$dataPost['kode'] . ' is already used!']);
+            return redirect()->back();
+        }
+        
+        $this->jurusanModel->updateJurusan($dataPost, (int) $id);
+
+        session()->setFlashdata('success', 'Jurusan telah diperbaharui!');
+        return redirect()->back();
+    }
+
+    public function delete($id)
+    {
+        $this->jurusanModel->deleteJurusan((int) $id);
+        
+        return $this->response
+            ->setJSON([
+                'success'   => true,
+                'message'   => 'Data is removed.'
+            ])
+            ->setStatusCode(ResponseInterface::HTTP_OK);
     }
 }
