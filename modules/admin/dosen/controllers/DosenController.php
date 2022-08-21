@@ -58,8 +58,8 @@ class DosenController extends BaseWebController
             $row[]  = $item->jenis_kelamin ?? '-';
             $row[]  = $item->created_at ?? '-';
             $row[]  = "<div class=\"text-center\">
-                            <a href=\"".route_to('admin.error-404')."\" class=\"btn btn-info btn-xs mr-2\">Edit</a>
-                            <a href=\"".route_to('admin.error-404')."\" class=\"btn btn-danger btn-xs\">Hapus</a>
+                            <a href=\"".route_to('dosen.edit', $item->id)."\" class=\"btn btn-info btn-xs mr-2\">Edit</a>
+                            <a href=\"javascript:void(0)\" class=\"btn btn-danger btn-xs\" data-id=\"".$item->id."\">Hapus</a>
                         </div>";
             $resData[] = $row;
         }
@@ -104,7 +104,7 @@ class DosenController extends BaseWebController
             'jenis_kelamin'     => 'required',
             'alamat'            => 'required',
         ];
-        // todo: add custom error messages
+        
         if (!$this->validate($rules)) {
             session()->setFlashdata('error', $this->validator->getErrors());
             return redirect()->back();
@@ -116,7 +116,7 @@ class DosenController extends BaseWebController
             'username'  => $dataPost['nip'],
             'password'  => password_hash('12345', PASSWORD_BCRYPT),
             'level'     => 'dosen',
-            'email'     => 'dummy#'.$dataPost['nip']
+            'email'     => $dataPost['nip'] . '@presensiapp.my.id'
         ]);
 
         $lastID = $this->userModel->getLastID();
@@ -126,5 +126,114 @@ class DosenController extends BaseWebController
 
         session()->setFlashdata('success', 'Dosen telah ditambahkan!');
         return redirect()->back();
+    }
+
+    public function edit($id)
+    {
+        $dosen = $this->dosenModel
+            ->builder('dosen')
+            ->where('id', $id)
+            ->get()
+            ->getRowObject();
+        
+        return $this->renderView('v_edit', [
+            'page_title'    => 'Edit Dosen',
+            'pageLinks'    => [
+                'home'      => [
+                    'url'       => route_to('admin.welcome'),
+                    'active'    => false,
+                ],
+                'data-dosen'     => [
+                    'url'       => route_to('dosen.list'),
+                    'active'    => false,
+                ],
+                'edit-dosen'   => [
+                    'url'       => route_to('dosen.edit', $id),
+                    'active'    => true,
+                ],
+            ],
+            'editData'      => $dosen
+        ]);
+    }
+
+    public function update($id)
+    {
+        $rules = [
+            'nip'               => 'required',
+            'nama_lengkap'      => 'required',
+            'tahun_masuk'       => 'required',
+            'jenis_kelamin'     => 'required',
+            'alamat'            => 'required',
+        ];
+        
+        if (!$this->validate($rules)) {
+            session()->setFlashdata('error', $this->validator->getErrors());
+            return redirect()->back();
+        }
+
+        $dataPost = $this->request->getPost();
+
+        $dosen = $this->dosenModel
+            ->builder('dosen')
+            ->where('id', $id)
+            ->get()
+            ->getRowObject();
+
+        // check nip if already exist or not
+        $checkNIP = $this->dosenModel
+            ->builder('dosen')
+            ->where('nip', $dataPost['nip'])
+            ->where('id <>', $id)
+            ->get()
+            ->getRowObject();
+        if (!is_null($checkNIP)) {
+            session()->setFlashdata('error', ['NIP is already used!']);
+            return redirect()->back();
+        }
+
+        // update the dosen
+        $this->dosenModel
+            ->builder('dosen')
+            ->where('id', $id)
+            ->update($dataPost);
+
+        // update the username based on the changed nip
+        $this->userModel
+            ->builder('users')
+            ->where('id', $dosen->id_user)
+            ->update([
+                'username'  => $dataPost['nip']
+            ]);
+
+        session()->setFlashdata('success', 'Dosen telah diupdate!');
+        return redirect()->back();
+    }
+
+    public function delete($id)
+    {
+        $dosen = $this->dosenModel
+            ->builder('dosen')
+            ->where('id', $id)
+            ->get()
+            ->getRowObject();
+        
+        // delete dosen
+        $this->dosenModel
+            ->builder('dosen')
+            ->where('id', $id)
+            ->delete();
+        
+        // delete the user
+        $this->userModel
+            ->builder('users')
+            ->where('id', $dosen->id_user)
+            ->delete();
+
+        return $this->response
+            ->setJSON([
+                'success'   => true,
+                'message'   => 'Data is deleted'
+            ])
+            ->setStatusCode(ResponseInterface::HTTP_OK);
     }
 }
