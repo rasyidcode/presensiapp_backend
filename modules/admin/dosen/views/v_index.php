@@ -22,7 +22,7 @@
                                     <th>Nama Lengkap</th>
                                     <th>Tahun Masuk</th>
                                     <th>Jenis Kelamin</th>
-                                    <th>Created At</th>
+                                    <th>Modified At</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>

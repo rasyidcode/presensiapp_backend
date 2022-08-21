@@ -60,7 +60,7 @@ class MahasiswaController extends BaseWebController
             $row[]  = $item->nama_jurusan ?? '-';
             $row[]  = $item->tahun_masuk ?? '-';
             $row[]  = $item->jenis_kelamin ?? '-';
-            $row[]  = $item->created_at ?? '-';
+            $row[]  = $item->updated_at ?? '-';
             $row[]  = "<div class=\"text-center\">
                             <a href=\"".route_to('mahasiswa.edit', $item->id)."\" class=\"btn btn-info btn-xs mr-2\">Edit</a>
                             <a href=\"javascript:void(0)\" class=\"btn btn-danger btn-xs\" data-id=\"".$item->id."\">Hapus</a>
@@ -201,6 +201,7 @@ class MahasiswaController extends BaseWebController
         }
 
         // update the mahasiswa
+        $dataPost['updated_at'] = date('Y-m-d H:i:s');
         $this->mahasiswaModel
             ->builder('mahasiswa')
             ->where('id', $id)

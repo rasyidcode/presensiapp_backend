@@ -61,8 +61,8 @@ class KelasController extends BaseWebController
             $row[]  = $item->created_at ?? '-';
             $row[]  = "<div class=\"text-center\">
                             <a href=\"" . route_to('kelas.mahasiswa', $item->id) . "\" class=\"btn btn-warning btn-xs mr-2\">List Mahasiswa</a>
-                            <a href=\"" . route_to('admin.error-404') . "\" class=\"btn btn-info btn-xs mr-2\">Edit</a>
-                            <a href=\"" . route_to('admin.error-404') . "\" class=\"btn btn-danger btn-xs\">Hapus</a>
+                            <a href=\"" . route_to('kelas.edit', $item->id) . "\" class=\"btn btn-info btn-xs mr-2\">Edit</a>
+                            <a href=\"javascript:void(0)\" class=\"btn btn-danger btn-xs\" data-id=\"".$item->id."\">Hapus</a>
                         </div>";
             $resData[] = $row;
         }
@@ -245,6 +245,138 @@ class KelasController extends BaseWebController
 
         session()->setFlashdata('success', 'Mahasiswa telah ditambahkan dikelas '.$kelasInfo->nama_kelas.'!');
         return redirect()->back();
+    }
+
+    public function edit($id)
+    {
+        $matkulList = $this->matkulModel
+            ->builder('matkul')
+            ->get()
+            ->getResultObject();
+        $dosenList = $this->dosenModel->getList();
+        $kelas = $this->kelasModel
+            ->builder('kelas')
+            ->where('id', $id)
+            ->get()
+            ->getRowObject();
+
+        return $this->renderView('v_edit', [
+            'page_title'    => 'Edit Kelas',
+            'pageLinks'    => [
+                'home'      => [
+                    'url'       => route_to('admin.welcome'),
+                    'active'    => false,
+                ],
+                'data-kelas'     => [
+                    'url'       => route_to('kelas.list'),
+                    'active'    => false,
+                ],
+                'edit-kelas'   => [
+                    'url'       => route_to('kelas.edit', $id),
+                    'active'    => true,
+                ],
+            ],
+            'matkulList'    => $matkulList,
+            'dosenList'     => $dosenList,
+            'editData'      => $kelas
+        ]);
+    }
+
+    public function update($id)
+    {
+        $rules = [
+            'matkul'    => 'required',
+            'dosen'     => 'required',
+        ];
+        $messages = [
+            'matkul'    => [
+                'required'  => 'Pilih salah satu mata kuliah!',
+            ],
+            'dosen'     => [
+                'required'  => 'Pilih salah satu dosen!'
+            ]
+        ];
+        if (!$this->validate($rules, $messages)) {
+            session()->setFlashdata('error', $this->validator->getErrors());
+            return redirect()->back();
+        }
+
+        $dataPost = $this->request->getPost();
+
+        // check if matkul already has dosen
+        $checkIfUsed = $this->kelasModel
+            ->builder('kelas')
+            ->where('id_matkul', $dataPost['matkul'])
+            ->where('id <>', $id)
+            ->get()
+            ->getRowObject();
+        if (!is_null($checkIfUsed)) {
+            session()->setFlashdata('error', ['Matkul is already used!']);
+            return redirect()->back();
+        }
+
+        $this->kelasModel
+            ->builder('kelas')
+            ->where('id', $id)
+            ->update([
+                'id_dosen'  => $dataPost['dosen'],
+                'id_matkul' => $dataPost['matkul']
+            ]);
+        
+        session()->setFlashdata('success', 'Kelas telah diperbaharui!');
+        return redirect()->back();
+    }
+
+    public function delete($id)
+    {
+        // check if class is used by jadwal
+        $checkKelas = $this->kelasModel
+            ->builder('jadwal')
+            ->where('id_kelas', $id)
+            ->get()
+            ->getResultObject();
+        
+        if (!empty($checkKelas)) {
+            return $this->response
+                ->setJSON([
+                    'success'   => false,
+                    'message'   => 'Data cannot be deleted, is in used by other entities'
+                ])
+                ->setStatusCode(ResponseInterface::HTTP_OK);
+        }
+        
+        $this->kelasModel
+            ->builder('kelas_mahasiswa')
+            ->where('id_kelas', $id)
+            ->delete();
+
+        $this->kelasModel
+            ->builder('kelas')
+            ->where('id', $id)
+            ->delete();
+        
+        return $this->response
+            ->setJSON([
+                'success'   => true,
+                'message'   => 'Data is deleted'
+            ])
+            ->setStatusCode(ResponseInterface::HTTP_OK);
+    }
+
+    public function mahasiswaDelete($klsId, $mhsId)
+    {
+        $this->kelasModel
+            ->builder('kelas_mahasiswa')
+            ->where('id_kelas', $klsId)
+            ->where('id_mahasiswa', $mhsId)
+            ->delete();
+        
+        return $this->response
+            ->setJSON([
+                'success'   => true,
+                'message'   => 'Mahasiswa is removed'
+            ])
+            ->setStatusCode(ResponseInterface::HTTP_OK);
     }
 
 }

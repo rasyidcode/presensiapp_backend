@@ -56,7 +56,7 @@ class DosenController extends BaseWebController
             $row[]  = $item->nama_lengkap ?? '-';
             $row[]  = $item->tahun_masuk ?? '-';
             $row[]  = $item->jenis_kelamin ?? '-';
-            $row[]  = $item->created_at ?? '-';
+            $row[]  = $item->updated_at ?? '-';
             $row[]  = "<div class=\"text-center\">
                             <a href=\"".route_to('dosen.edit', $item->id)."\" class=\"btn btn-info btn-xs mr-2\">Edit</a>
                             <a href=\"javascript:void(0)\" class=\"btn btn-danger btn-xs\" data-id=\"".$item->id."\">Hapus</a>
@@ -191,6 +191,7 @@ class DosenController extends BaseWebController
             return redirect()->back();
         }
 
+        $dataPost['updated_at'] = date('Y-m-d H:i:s');
         // update the dosen
         $this->dosenModel
             ->builder('dosen')

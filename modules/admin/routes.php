@@ -81,14 +81,19 @@ $routes->group('', ['namespace' => $routes_namespace, 'filter' => 'web-auth-filt
         'namespace' => $routes_namespace . 'Kelas\Controllers\\',
         'filter' => 'web-auth-filter'
     ], function ($routes) {
-        $routes->get('/',                               'KelasController::index',                 ['as' => 'kelas.list']);
-        $routes->post('get-data',                       'KelasController::getData',               ['as' => 'kelas.get-data']);
-        $routes->get('add',                             'KelasController::add',                   ['as' => 'kelas.add']);
-        $routes->post('/',                              'KelasController::create',                ['as' => 'kelas.create']);
-        $routes->get('(:segment)/mahasiswa',            'KelasController::mahasiswa/$1',          ['as' => 'kelas.mahasiswa']);
-        $routes->post('(:segment)/mahasiswa/get-data',  'KelasController::mahasiswaGetData/$1',   ['as' => 'kelas.mahasiswa.get-data']);
-        $routes->get('(:segment)/mahasiswa/add',        'KelasController::mahasiswaAdd/$1',       ['as' => 'kelas.mahasiswa.add']);
-        $routes->post('(:segment)/mahasiswa',           'KelasController::mahasiswaCreate/$1',    ['as' => 'kelas.mahasiswa.create']);
+        $routes->get('/',                                       'KelasController::index',                   ['as' => 'kelas.list']);
+        $routes->post('get-data',                               'KelasController::getData',                 ['as' => 'kelas.get-data']);
+        $routes->get('add',                                     'KelasController::add',                     ['as' => 'kelas.add']);
+        $routes->post('/',                                      'KelasController::create',                  ['as' => 'kelas.create']);
+        $routes->get('(:segment)/edit',                         'KelasController::edit/$1',                 ['as' => 'kelas.edit']);
+        $routes->post('(:segment)/update',                      'KelasController::update/$1',               ['as' => 'kelas.update']);
+        $routes->post('(:segment)/delete',                      'KelasController::delete/$1',               ['as' => 'kelas.delete']);
+
+        $routes->get('(:segment)/mahasiswa',                    'KelasController::mahasiswa/$1',            ['as' => 'kelas.mahasiswa']);
+        $routes->post('(:segment)/mahasiswa/get-data',          'KelasController::mahasiswaGetData/$1',     ['as' => 'kelas.mahasiswa.get-data']);
+        $routes->get('(:segment)/mahasiswa/add',                'KelasController::mahasiswaAdd/$1',         ['as' => 'kelas.mahasiswa.add']);
+        $routes->post('(:segment)/mahasiswa',                   'KelasController::mahasiswaCreate/$1',      ['as' => 'kelas.mahasiswa.create']);
+        $routes->post('(:segment)/mahasiswa/(:segment)/delete', 'KelasController::mahasiswaDelete/$1/$2',   ['as' => 'kelas.mahasiswa.delete']);
     });
 
     // data jadwal
