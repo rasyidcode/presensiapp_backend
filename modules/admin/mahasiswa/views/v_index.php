@@ -116,6 +116,34 @@
             ],
             drawCallback: function(settings) {}
         });
+
+        $('#data-mahasiswa tbody').on('click', 'tr td a.btn.btn-danger', function(e) {
+            var id = $(this).data().id;
+            
+            if (confirm('Are you sure want to delete this?')) {
+                $.ajax({
+                    url: '<?=site_url('mahasiswa')?>/'+id+'/delete',
+                    type: 'POST',
+                    data: {
+                        ['<?= csrf_token() ?>']: '<?= csrf_hash() ?>'
+                    },
+                    success: function(res) {
+                        console.log(res);
+                        if (res.success) {
+                            alert(res.message);
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
+                        }
+                    },
+                    error: function(err) {
+                        console.log(err);
+
+                        alert('Something went wrong!');
+                    }
+                })
+            }
+        });
     });
 </script>
 <?= $renderer->endSection() ?>
