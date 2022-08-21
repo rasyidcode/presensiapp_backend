@@ -38,3 +38,12 @@ Presensi App Backend
 - Schedule Management
 - Present Monitorer
 - Dashboard
+
+### REST API
+-
+
+### DB Structure
+- 
+
+### Screenshots
+-
