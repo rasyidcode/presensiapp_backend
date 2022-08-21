@@ -26,15 +26,19 @@
                                 <?= session()->getFlashdata('success') ?>
                             </div>
                         <?php endif; ?>
-                        <form action="<?= route_to('user.update', $editData->id) ?>" method="post">
+                        <form action="<?= route_to('user.do-change-pass', $userId) ?>" method="post">
                             <?= csrf_field() ?>
                             <div class="form-group">
-                                <label for="username">Username</label>
-                                <input type="text" name="username" class="form-control" required value="<?=$editData->username?>" <?=$isNotAdmin ? 'readonly' : ''?>>
+                                <label for="oldpassword">Old Password</label>
+                                <input type="password" name="oldpassword" class="form-control" required>
                             </div>
                             <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" name="email" class="form-control" required value="<?=$editData->email?>">
+                                <label for="newpassword">New Password</label>
+                                <input type="password" name="newpassword" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="renewpassword">Repeat New Password</label>
+                                <input type="password" name="renewpassword" class="form-control" required>
                             </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>

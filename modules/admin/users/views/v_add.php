@@ -40,15 +40,6 @@
                                 <label for="email">Email</label>
                                 <input type="email" name="email" class="form-control" required>
                             </div>
-                            <div class="form-group">
-                                <label for="level">Level</label>
-                                <select name="level" class="form-control">
-                                    <option value="">-- Pilih Level --</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="mahasiswa">Mahasiswa</option>
-                                    <option value="dosen">Dosen</option>
-                                </select>
-                            </div>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </form>
                     </div>
@@ -57,8 +48,4 @@
         </div>
     </div><!-- /.container-fluid -->
 </div>
-<?= $renderer->endSection() ?>
-
-<?= $renderer->section('custom-js') ?>
-<script></script>
 <?= $renderer->endSection() ?>

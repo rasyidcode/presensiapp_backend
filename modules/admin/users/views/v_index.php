@@ -20,7 +20,7 @@
                                     <th>Email</th>
                                     <th>Level</th>
                                     <th>Last Login</th>
-                                    <th>Created At</th>
+                                    <th>Modified At</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -102,6 +102,36 @@
                 },
             ],
             drawCallback: function(settings) {}
+        });
+
+        $('#data-user tbody').on('click', 'tr td a.btn.btn-danger', function(e) {
+            var id = $(this).data().id;
+            
+            if (confirm('Are you sure want to delete this data?')) {
+                $.ajax({
+                    url: '<?=site_url('user')?>/'+id+'/delete',
+                    type: 'POST',
+                    data: {
+                        ['<?= csrf_token() ?>']: '<?= csrf_hash() ?>'
+                    },
+                    success: function(res) {
+                        console.log(res);
+                        if (res.success) {
+                            alert(res.message);
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
+                        } else {
+                            alert('Something went wrong');
+                        }
+                    },
+                    error: function(err) {
+                        console.log(err);
+
+                        alert('Something went wrong');
+                    }
+                })
+            }
         });
     });
 </script>

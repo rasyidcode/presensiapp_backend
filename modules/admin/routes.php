@@ -13,10 +13,15 @@ $routes->group('', ['namespace' => $routes_namespace, 'filter' => 'web-auth-filt
         'namespace' => $routes_namespace . 'Users\Controllers\\',
         'filter' => 'web-auth-filter'
     ], function ($routes) {
-        $routes->get('/',            'UserController::index',       ['as' => 'user.list']);
-        $routes->post('get-data',   'UserController::getData',      ['as' => 'user.get-data']);
-        $routes->get('add',         'UserController::add',          ['as' => 'user.add']);
-        $routes->post('delete',     'UserController::create',       ['as' => 'user.create']);
+        $routes->get('/',                       'UserController::index',            ['as' => 'user.list']);
+        $routes->post('get-data',               'UserController::getData',          ['as' => 'user.get-data']);
+        $routes->get('add',                     'UserController::add',              ['as' => 'user.add']);
+        $routes->post('create',                 'UserController::create',           ['as' => 'user.create']);
+        $routes->get('(:segment)/edit',         'UserController::edit/$1',          ['as' => 'user.edit']);
+        $routes->post('(:segment)/update',      'UserController::update/$1',        ['as' => 'user.update']);
+        $routes->get('(:segment)/change-pass',  'UserController::changePass/$1',    ['as' => 'user.change-pass']);
+        $routes->post('(:segment)/change-pass', 'UserController::doChangePass/$1',  ['as' => 'user.do-change-pass']);
+        $routes->post('(:segment)/delete',      'UserController::delete/$1',        ['as' => 'user.delete']);
     });
 
     // data master
