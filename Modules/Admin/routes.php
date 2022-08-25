@@ -101,10 +101,13 @@ $routes->group('', ['namespace' => $routes_namespace, 'filter' => 'web-auth-filt
         'namespace' => $routes_namespace . 'Jadwal\Controllers\\',
         'filter' => 'web-auth-filter'
     ], function ($routes) {
-        $routes->get('/',           'JadwalController::index',       ['as' => 'jadwal.list']);
-        $routes->post('get-data',   'JadwalController::getData',     ['as' => 'jadwal.get-data']);
-        $routes->get('add',         'JadwalController::add',         ['as' => 'jadwal.add']);
-        $routes->post('/',          'JadwalController::create',      ['as' => 'jadwal.create']);
+        $routes->get('/',                   'JadwalController::index',          ['as' => 'jadwal.list']);
+        $routes->post('get-data',           'JadwalController::getData',        ['as' => 'jadwal.get-data']);
+        $routes->get('add',                 'JadwalController::add',            ['as' => 'jadwal.add']);
+        $routes->post('/',                  'JadwalController::create',         ['as' => 'jadwal.create']);
+        $routes->get('(:segment)/edit',     'JadwalController::edit/$1',        ['as' => 'jadwal.edit']);
+        $routes->post('(:segment)/update',  'JadwalController::update/$1',      ['as' => 'jadwal.update']);
+        $routes->post('(:segment)/delete',  'JadwalController::delete/$1',      ['as' => 'jadwal.delete']);
     });
 
     // data presensi

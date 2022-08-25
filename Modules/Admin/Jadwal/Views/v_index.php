@@ -27,23 +27,23 @@
                     <div class="card-body">
                         <form id="filter_data" class="form-horizontal">
                             <div class="form-group row">
-                                <label for="searchQuery" class="col-sm-2 offset-sm-2 col-form-label">Mata Kuliah : </label>
-                                <div class="col-sm-8">
-                                    <select name="matkul" class="form-control">
-                                        <option value="">-- Pilih Mata Kuliah --</option>
-                                        <?php foreach ($matkulList as $matkulListItem) : ?>
-                                            <option value="<?= $matkulListItem->id ?>"><?= $matkulListItem->kode ?> - <?= $matkulListItem->nama ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
                                 <label for="searchQuery" class="col-sm-2 offset-sm-2 col-form-label">Dosen : </label>
                                 <div class="col-sm-8">
                                     <select name="dosen" class="form-control">
                                         <option value="">-- Pilih Dosen --</option>
                                         <?php foreach ($dosenList as $dosenListItem) : ?>
                                             <option value="<?= $dosenListItem->id ?>"><?= $dosenListItem->nama_lengkap ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="searchQuery" class="col-sm-2 offset-sm-2 col-form-label">Mata Kuliah : </label>
+                                <div class="col-sm-8">
+                                    <select name="matkul" class="form-control">
+                                        <option value="">-- Pilih Mata Kuliah --</option>
+                                        <?php foreach ($matkulList as $matkulListItem) : ?>
+                                            <option value="<?= $matkulListItem->id ?>"><?= $matkulListItem->kode ?> - <?= $matkulListItem->nama ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -67,7 +67,7 @@
                                             <th>Mata Kuliah</th>
                                             <th>Dosen</th>
                                             <th>Jumlah Mahasiswa</th>
-                                            <th>Created At</th>
+                                            <th>Modified At</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -104,10 +104,10 @@
             ajax: function(data, callback, settings) {
                 if (firstInit) {
                     var dayofweek = new Date().getDay();
-                    data.search.value = dayofweek;
+                    data.search.value = `id_dosen=|id_matkul=|dow=${dayofweek}`;
                     firstInit = false;
                 }
-                
+
                 var data = {
                     ...data,
                     ['<?= csrf_token() ?>']: '<?= csrf_hash() ?>'
@@ -177,7 +177,8 @@
 
         $('ul.nav.nav-pills.jadwal-days').on('click', 'li.nav-item', function(e) {
             var dow = $(this).find('a').data().dow;
-            table.search(dow).draw();
+            var searchQuery = `id_dosen=|id_matkul=|dow=${dow}`;
+            table.search(searchQuery).draw();
         });
 
         var dayofweek = new Date().getDay();
@@ -185,6 +186,49 @@
             var dow = $(tab).find('a').data().dow;
             if (dow == dayofweek) {
                 $(tab).find('a').addClass('active');
+            }
+        });
+
+        $('#filter_data').submit(function(e) {
+            e.preventDefault();
+            
+            var idDosen = $(this).find('select[name="dosen"]').val();
+            var idMatkul = $(this).find('select[name="matkul"]').val();
+            var activeDow = $('ul.nav.nav-pills.jadwal-days li a.active').data().dow;
+            
+            var searchQuery = `id_dosen=${idDosen}|id_matkul=${idMatkul}|dow=${activeDow}`;
+            table.search(searchQuery).draw();
+        });
+
+        $('#data-jadwal tbody').on('click', 'tr td a.btn.btn-danger', function(e) {
+            var id = $(this).data().id;
+
+            if (confirm('Are you sure want to delete this schedule?')) {
+                $.ajax({
+                    url: `<?=site_url('jadwal')?>/${id}/delete`,
+                    type: 'POST',
+                    data: {
+                        ['<?= csrf_token() ?>']: '<?= csrf_hash() ?>'
+                    },
+                    success: function(res) {
+                        console.log(res);
+
+                        if (res.success) {
+                            setTimeout(() => {
+                                alert(res.message);
+                                window.location.reload();
+                            }, 500);
+                            return;
+                        }
+
+                        alert(res.message);
+                    },
+                    error: function(err) {
+                        console.log(err);
+
+                        alert('Something went wrong!');
+                    }
+                })
             }
         });
     });

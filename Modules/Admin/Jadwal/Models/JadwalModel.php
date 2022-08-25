@@ -26,23 +26,28 @@ class JadwalModel extends Model
      */
     public function getData(array $dtParams): ?array
     {
-        $keyword = $dtParams['search']['value'];
+        $searchArr = explode('|', $dtParams['search']['value']);
+        $dosenId = explode('=', $searchArr[0])[1];
+        $matkulId = explode('=', $searchArr[1])[1];
+        $dow = explode('=', $searchArr[2])[1];
         $dayofweek = null;
-        if ($keyword == 0) {
-            $dayofweek = $keyword;
+        if ($dow == 0) {
+            $dayofweek = $dow;
         } else {
-            $dayofweek = is_null($keyword) || empty($keyword) ? 1 : $keyword;
+            $dayofweek = is_null($dow) || empty($dow) ? 1 : $dow;
         }
         
         $jadwal = $this->builder($this->tblName);
 
         $jadwal->select('
+            jadwal.id,
             jadwal.date,
-            jadwal.begin_time,
-            jadwal.end_time,
+            SUBSTR(jadwal.begin_time, 1, 5) as begin_time,
+            SUBSTR(jadwal.end_time, 1, 5) as end_time,
             matkul.nama as matkul,
             dosen.nama_lengkap as dosen,
             jadwal.created_at,
+            jadwal.updated_at,
             count(kelas_mahasiswa.id_mahasiswa) as mahasiswa_total 
         ');
         
@@ -60,6 +65,15 @@ class JadwalModel extends Model
         $dates = $this->getDatesByDOW($dayofweek);
         $jadwal->whereIn('jadwal.date', $dates);
         $jadwal->where('jadwal.deleted_at', null);
+
+        if (!empty($dosenId)) {
+            $jadwal->where('kelas.id_dosen', $dosenId);
+        }
+
+        if (!empty($matkulId)) {
+            $jadwal->where('kelas.id_matkul', $matkulId);
+        }
+
         $jadwal->orderBy('jadwal.date', 'asc');
         $jadwal->groupBy('jadwal.id');
 
@@ -77,23 +91,28 @@ class JadwalModel extends Model
      */
     public function countFilteredData(array $dtParams): int
     {
-        $keyword = $dtParams['search']['value'];
+        $searchArr = explode('|', $dtParams['search']['value']);
+        $dosenId = explode('=', $searchArr[0])[1];
+        $matkulId = explode('=', $searchArr[1])[1];
+        $dow = explode('=', $searchArr[2])[1];
         $dayofweek = null;
-        if ($keyword == 0) {
-            $dayofweek = $keyword;
+        if ($dow == 0) {
+            $dayofweek = $dow;
         } else {
-            $dayofweek = is_null($keyword) || empty($keyword) ? 1 : $keyword;
+            $dayofweek = is_null($dow) || empty($dow) ? 1 : $dow;
         }
 
         $jadwal = $this->builder($this->tblName);
 
         $jadwal->select('
+            jadwal.id,
             jadwal.date,
-            jadwal.begin_time,
-            jadwal.end_time,
+            SUBSTR(jadwal.begin_time, 1, 5) as begin_time,
+            SUBSTR(jadwal.end_time, 1, 5) as end_time,
             matkul.nama as matkul,
             dosen.nama_lengkap as dosen,
             jadwal.created_at,
+            jadwal.updated_at,
             count(kelas_mahasiswa.id_mahasiswa) as mahasiswa_total 
         ');
 
@@ -111,6 +130,15 @@ class JadwalModel extends Model
         $dates = $this->getDatesByDOW($dayofweek);
         $jadwal->whereIn('jadwal.date', $dates);
         $jadwal->where('jadwal.deleted_at', null);
+
+        if (!empty($dosenId)) {
+            $jadwal->where('kelas.id_dosen', $dosenId);
+        }
+
+        if (!empty($matkulId)) {
+            $jadwal->where('kelas.id_matkul', $matkulId);
+        }
+
         $jadwal->orderBy('jadwal.date', 'asc');
         $jadwal->groupBy('jadwal.id');
 
@@ -126,20 +154,24 @@ class JadwalModel extends Model
      */
     public function countData($dtParams): int
     {
-        $keyword = $dtParams['search']['value'];
+        $searchArr = explode('|', $dtParams['search']['value']);
+        $dosenId = explode('=', $searchArr[0])[1];
+        $matkulId = explode('=', $searchArr[1])[1];
+        $dow = explode('=', $searchArr[2])[1];
         $dayofweek = null;
-        if ($keyword == 0) {
-            $dayofweek = $keyword;
+        if ($dow == 0) {
+            $dayofweek = $dow;
         } else {
-            $dayofweek = is_null($keyword) || empty($keyword) ? 1 : $keyword;
+            $dayofweek = is_null($dow) || empty($dow) ? 1 : $dow;
         }
 
         $jadwal = $this->builder($this->tblName);
 
         $jadwal->select('
+            jadwal.id,
             jadwal.date,
-            jadwal.begin_time,
-            jadwal.end_time,
+            SUBSTR(jadwal.begin_time, 1, 5) as begin_time,
+            SUBSTR(jadwal.end_time, 1, 5) as end_time,
             matkul.nama as matkul,
             dosen.nama_lengkap as dosen,
             jadwal.created_at,
@@ -160,6 +192,15 @@ class JadwalModel extends Model
         $dates = $this->getDatesByDOW($dayofweek);
         $jadwal->whereIn('jadwal.date', $dates);
         $jadwal->where('jadwal.deleted_at', null);
+
+        if (!empty($dosenId)) {
+            $jadwal->where('kelas.id_dosen', $dosenId);
+        }
+
+        if (!empty($matkulId)) {
+            $jadwal->where('kelas.id_matkul', $matkulId);
+        }
+
         $jadwal->orderBy('jadwal.date', 'asc');
         $jadwal->groupBy('jadwal.id');
 
