@@ -65,9 +65,6 @@ class PresensiController extends BaseWebController
             }
             $row[]  = $statusPresensi;
             $row[]  = $item->created_at ?? '-';
-            $row[]  = "<div class=\"text-center\">
-                            <a href=\"" . route_to('admin.error-404') . "\" class=\"btn btn-info btn-xs mr-2\">Detail</a>
-                        </div>";
             $resData[] = $row;
         }
 

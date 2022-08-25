@@ -24,6 +24,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="<?=site_url('adminlte3/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css')?>">
     <!-- Jquery Clock Picker -->
     <link rel="stylesheet" href="https://weareoutman.github.io/clockpicker/dist/jquery-clockpicker.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="<?=site_url('adminlte3/bower_components/Ionicons/css/ionicons.min.css')?>">
 </head>
 
 <body class="hold-transition sidebar-mini">

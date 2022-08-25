@@ -46,7 +46,6 @@
                                     <th>Mahasiswa</th>
                                     <th>Status Presensi</th>
                                     <th>Created At</th>
-                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -116,11 +115,6 @@
                 },
                 {
                     targets: 3,
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    targets: 4,
                     orderable: false,
                     searchable: false
                 }
