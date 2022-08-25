@@ -173,7 +173,7 @@ class KelasController extends BaseWebController
             $row[]  = $item->jurusan ?? '-';
             $row[]  = $item->jenis_kelamin ?? '-';
             $row[]  = "<div class=\"text-center\">
-                            <a href=\"" . route_to('admin.error-404') . "\" class=\"btn btn-danger btn-xs\">Hapus Dari Kelas</a>
+                            <a href=\"javascript:void(0);\" class=\"btn btn-danger btn-xs\" data-id-mhs=\"".$item->id_mhs."\" data-id-kls=\"".$item->id_kelas."\">Hapus Dari Kelas</a>
                         </div>";
             $resData[] = $row;
         }

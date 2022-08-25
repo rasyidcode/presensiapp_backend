@@ -184,6 +184,7 @@ class KelasModel extends Model
 
         $kelasMahasiswa->select('
             kelas.id as id_kelas,
+            mahasiswa.id as id_mhs,
             mahasiswa.nim,
             mahasiswa.nama_lengkap,
             jurusan.nama as jurusan,

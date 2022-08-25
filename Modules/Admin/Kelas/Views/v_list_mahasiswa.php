@@ -117,6 +117,39 @@
             ],
             drawCallback: function(settings) {}
         });
+
+        $('#data-kelas-mahasiswa tbody').on('click', 'tr td a.btn.btn-danger', function(e) {
+            var idMhs = $(this).data().idMhs;
+            var idKls = $(this).data().idKls;
+
+            if (confirm('Are you sure want to remove this?')) {
+                $.ajax({
+                    url: '<?=site_url('kelas')?>/'+idKls+'/mahasiswa/'+idMhs+'/delete',
+                    type: 'POST',
+                    data: {
+                        ['<?= csrf_token() ?>']: '<?= csrf_hash() ?>'
+                    },
+                    success: function(res) {
+                        console.log(res);
+
+                        if (res.success) {
+                            alert(res.message);
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 500);
+                            return;
+                        }
+
+                        alert('Something went wrong');
+                    },
+                    error: function(err) {
+                        console.log(err);
+
+                        alert('Something went wrong');
+                    }
+                })
+            }
+        });
     });
 </script>
 <?= $renderer->endSection() ?>
