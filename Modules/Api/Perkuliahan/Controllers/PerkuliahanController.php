@@ -37,7 +37,7 @@ class PerkuliahanController extends BaseController
 
         $perkuliahan = $this
             ->perkuliahanModel
-            ->getList($mhsId);
+            ->getTodayList($mhsId);
 
         if (empty($perkuliahan)) {
             throw new ApiAccessErrorException(
@@ -182,6 +182,32 @@ class PerkuliahanController extends BaseController
             'id_mahasiswa'      => $mhsId,
             'status_presensi'   => $statusPresensi
         ]);
+
+        // add activity log
+        $mahasiswa = $this->perkuliahanModel
+            ->builder('mahasiswa')
+            ->where('id', $mhsId)
+            ->get()
+            ->getRowObject();
+        $kelas = $this->perkuliahanModel
+            ->builder('jadwal')
+            ->select('
+                jadwal.id_kelas,
+                kelas.id_matkul,
+                matkul.kode,
+                matkul.nama
+            ')
+            ->join('kelas', 'jadwal.id_kelas = kelas.id', 'left')
+            ->join('matkul', 'kelas.id_matkul = matkul.id', 'left')
+            ->where('jadwal.id', $idJadwal)
+            ->get()
+            ->getRowObject();
+        
+        $this->perkuliahanModel
+            ->builder('activity_logs')
+            ->insert([
+                'body'   => "<strong>".$mahasiswa->nama_lengkap."</strong> melakukan presensi pada kelas <strong>".$kelas->kode."</strong> dengan mata kuliah <strong>".$kelas->matkul."</strong>"
+            ]);
 
         return $this
             ->response

@@ -13,6 +13,45 @@ class PerkuliahanModel extends Model
     }
 
     /**
+     * Get jadwal today by id mhs v2
+     * 
+     * @param int $idMhs
+     * 
+     * @return array|null
+     */
+    public function getTodayList(int $idMhs)
+    {
+        $jadwal = $this->builder('jadwal');
+        $jadwal->select('
+            jadwal.id,
+            dosen.nip as nip_dosen,
+            dosen.nama_lengkap as nama_dosen,
+
+            matkul.kode as nama_kelas,
+            matkul.nama as matkul,
+
+            jadwal.date,
+            SUBSTR(jadwal.begin_time, 1, 5) as begin_time,
+            SUBSTR(jadwal.end_time, 1, 5) as end_time
+        ');
+        $jadwal->join('kelas', 'jadwal.id_kelas = kelas.id', 'left');
+        $jadwal->join('dosen', 'kelas.id_dosen = dosen.id', 'left');
+        $jadwal->join('matkul', 'kelas.id_matkul = matkul.id', 'left');
+        $jadwal->join('kelas_mahasiswa', 'kelas.id = kelas_mahasiswa.id_kelas', 'left');
+
+        $jadwal->where('jadwal.date', date('Y-m-d'));
+        $jadwal->where('jadwal.deleted_at', null);
+        $jadwal->where('kelas_mahasiswa.id_mahasiswa', $idMhs);
+
+        $jadwal->orderBy('jadwal.begin_time', 'asc');
+        $jadwal->orderBy('jadwal.end_time', 'asc');
+
+        return $jadwal
+            ->get()
+            ->getResultObject();
+    }
+
+    /**
      * Get jadwal today by id_mhs
      * 
      * @param int $id_mhs

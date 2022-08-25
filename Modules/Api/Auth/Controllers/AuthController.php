@@ -88,6 +88,13 @@ class AuthController extends BaseController
         // update last login
         $this->authModel->updateLastLogin($userdata->username);
 
+        // add activity log
+        $this->authModel
+            ->builder('activity_logs')
+            ->insert([
+                'body'   => "<strong>".$userdata->username."</strong> melakukan login."
+            ]);
+
         return $this->response
             ->setJSON([
                 'access_token'  => $accessToken,

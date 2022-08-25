@@ -49,6 +49,14 @@ class LoginController extends BaseWebController
             'username'  => $userdata['username'],
             'level'     => $userdata['level']
         ]);
+
+        // add activity log
+        $this->loginModel
+            ->builder('activity_logs')
+            ->insert([
+                'body'   => "<strong>".$userdata['username']."</strong> melakukan login."
+            ]);
+
         return redirect()->to(base_url());
     }
 }

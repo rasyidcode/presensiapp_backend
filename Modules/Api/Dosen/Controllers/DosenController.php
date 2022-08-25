@@ -231,7 +231,7 @@ class DosenController extends BaseController
                 statusCode: ResponseInterface::HTTP_BAD_REQUEST);
         }
 
-        // todo: batas waktu submit perkuliahan adalah, end_time + 30 menit
+        // batas waktu submit perkuliahan adalah, end_time + 30 menit
         $nowTime = date('H:i');
         $endTime = date('H:i', strtotime($jadwal->end_time . '+30 minute'));
 
@@ -258,6 +258,48 @@ class DosenController extends BaseController
         } catch (Exception $e) {
             $this->dosenModel->db->transRollback();
         }
+
+        $dosen = $this->dosenModel
+            ->builder('dosen')
+            ->where('id', $idDosen)
+            ->get()
+            ->getRowObject();
+        $kelas = $this->dosenModel
+            ->builder('jadwal')
+            ->select('
+                jadwal.id_kelas,
+                kelas.id_matkul,
+                matkul.kode,
+                matkul.nama
+            ')
+            ->join('kelas', 'jadwal.id_kelas = kelas.id', 'left')
+            ->join('matkul', 'kelas.id_matkul = matkul.id', 'left')
+            ->where('jadwal.id', $idJadwal)
+            ->get()
+            ->getRowObject();
+        $totalPresensi = $this->dosenModel
+            ->builder('presensi')
+            ->selectCount('*', 'count')
+            ->join('dosen_qrcode', 'dosen_qrcode.id = presensi.id_dosen_qrcode', 'left')
+            ->where('dosen_qrcode.id_jadwal', $idJadwal)
+            ->get()
+            ->getRowObject();
+        $totalHadir = $this->dosenModel
+            ->builder('presensi')
+            ->selectCount('*', 'count')
+            ->join('dosen_qrcode', 'dosen_qrcode.id = presensi.id_dosen_qrcode', 'left')
+            ->where('dosen_qrcode.id_jadwal', $idJadwal)
+            ->where('presensi.status_presensi', 1)
+            ->get()
+            ->getRowObject();
+        
+        $percent = ($totalHadir->count * 100) / $totalPresensi->count;
+
+        $this->dosenModel
+            ->builder('activity_logs')
+            ->insert([
+                'body'   => "<strong>".$dosen->nama_lengkap."</strong> menginput perkuliahan dengan total kehadiran sebanyak <strong>".$percent." %</strong> pada kelas <strong>".$kelas->kode."</strong>"
+            ]);
         
         return $this
             ->response
