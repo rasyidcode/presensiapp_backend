@@ -63,7 +63,11 @@ class JadwalModel extends Model
         }
 
         $dates = $this->getDatesByDOW($dayofweek);
-        $jadwal->whereIn('jadwal.date', $dates);
+        
+        if (!empty($dates)) {
+            $jadwal->whereIn('jadwal.date', $dates);
+        }
+
         $jadwal->where('jadwal.deleted_at', null);
 
         if (!empty($dosenId)) {
@@ -128,7 +132,9 @@ class JadwalModel extends Model
         }
 
         $dates = $this->getDatesByDOW($dayofweek);
-        $jadwal->whereIn('jadwal.date', $dates);
+        if (!empty($dates)) {
+            $jadwal->whereIn('jadwal.date', $dates);
+        }
         $jadwal->where('jadwal.deleted_at', null);
 
         if (!empty($dosenId)) {
@@ -190,7 +196,9 @@ class JadwalModel extends Model
         }
 
         $dates = $this->getDatesByDOW($dayofweek);
-        $jadwal->whereIn('jadwal.date', $dates);
+        if (!empty($dates)) {
+            $jadwal->whereIn('jadwal.date', $dates);
+        }
         $jadwal->where('jadwal.deleted_at', null);
 
         if (!empty($dosenId)) {
@@ -229,12 +237,16 @@ class JadwalModel extends Model
     {
         $dates = [];
 
-        $firstDate = $this->builder($this->tblName)
+        $checkFirstDate = $this->builder($this->tblName)
             ->select('date')
             ->orderBy('date', 'asc')
             ->get(1)
-            ->getRowObject()
-            ->date;
+            ->getRowObject();
+        if (is_null($checkFirstDate)) {
+            return $dates;
+        }
+        $firstDate = $checkFirstDate->date;
+
         $sixMonthsDays = round(365 / 2);
         $endDate = date('Y-m-d', strtotime($firstDate . '+' . $sixMonthsDays . ' day'));
         $first = new DateTime($firstDate);

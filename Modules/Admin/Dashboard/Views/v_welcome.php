@@ -19,9 +19,7 @@
                     <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-text">Total Mahasiswa</span>
-                        <span class="info-box-number">
-                            1000
-                        </span>
+                        <span class="info-box-number total-mhs"><?= $totalMahasiswa ?></span>
                     </div>
                 </div>
             </div>
@@ -31,7 +29,7 @@
                     <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-user"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-text">Total Dosen</span>
-                        <span class="info-box-number">31</span>
+                        <span class="info-box-number total-dosen"><?= $totalDosen ?></span>
                     </div>
                 </div>
             </div>
@@ -42,7 +40,7 @@
                     <span class="info-box-icon bg-success elevation-1"><i class="fas fa-briefcase"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-text">Total Perkuliahan</span>
-                        <span class="info-box-number">760</span>
+                        <span class="info-box-number total-jadwal"><?= $totalPerkuliahan ?></span>
                     </div>
                 </div>
             </div>
@@ -51,11 +49,8 @@
                 <div class="info-box mb-3">
                     <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-info"></i></span>
                     <div class="info-box-content">
-                        <span class="info-box-text">Total Presentase Kehadiran</span>
-                        <span class="info-box-number">
-                            20
-                            <small>%</small>
-                        </span>
+                        <span class="info-box-text">Total Mata Kuliah</span>
+                        <span class="info-box-number total-matkul"><?= $totalMatkul ?></span>
                     </div>
                 </div>
             </div>
@@ -71,18 +66,17 @@
                     <div class="card-body">
                         <div class="timeline">
 
-                            <div>
-                                <i class="fas fa-info bg-blue"></i>
-                                <div class="timeline-item">
-                                    <span class="time"><i class="fas fa-clock"></i> 12:05</span>
-                                    <div class="timeline-body">
-                                        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                                        weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                                        jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                                        quora plaxo ideeli hulu weebly balihoo...
+                            <?php foreach ($recentLogs as $recentLogItem) : ?>
+                                <div>
+                                    <i class="fas fa-info bg-blue"></i>
+                                    <div class="timeline-item">
+                                        <span class="time"><i class="fas fa-clock"></i> <?= $recentLogItem->created_at ?></span>
+                                        <div class="timeline-body">
+                                            <?= $recentLogItem->body ?>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            <?php endforeach; ?>
 
                             <div>
                                 <i class="fas fa-clock bg-gray"></i>
@@ -101,15 +95,17 @@
 
                     <div class="card-body p-0">
                         <ul class="products-list product-list-in-card pl-2 pr-2">
-                            <li class="item">
-                                <div class="product-info ml-2">
-                                    <a href="javascript:void(0)" class="product-title">Pemrograman Terpadu
-                                        <span class="badge badge-success float-right">12:30 - 18:30</span></a>
-                                    <span class="product-description">
-                                        Drs. H. Ahmad Jamil Al Rasyid, S.Kom
-                                    </span>
-                                </div>
-                            </li>
+                            <?php foreach ($perkuliahan as $perkuliahanItem) : ?>
+                                <li class="item">
+                                    <div class="product-info ml-2">
+                                        <a href="javascript:void(0)" class="product-title"><?= $perkuliahanItem->matkul ?>
+                                            <span class="badge badge-success float-right"><?= $perkuliahanItem->begin_time ?> - <?= $perkuliahanItem->end_time ?></span></a>
+                                        <span class="product-description">
+                                            <?= $perkuliahanItem->dosen ?>
+                                        </span>
+                                    </div>
+                                </li>
+                            <?php endforeach; ?>
                         </ul>
                     </div>
 

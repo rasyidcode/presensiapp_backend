@@ -35,7 +35,7 @@ class MahasiswaModel extends Model
             jurusan.nama as nama_jurusan,
             mahasiswa.tahun_masuk,
             mahasiswa.jenis_kelamin,
-            mahasiswa.created_at
+            mahasiswa.updated_at
         ');
 
         $mahasiswa->join('jurusan', 'mahasiswa.id_jurusan = jurusan.id', 'left');
@@ -92,7 +92,7 @@ class MahasiswaModel extends Model
             jurusan.nama as nama_jurusan,
             mahasiswa.tahun_masuk,
             mahasiswa.jenis_kelamin,
-            mahasiswa.created_at
+            mahasiswa.updated_at
         ');
 
         $mahasiswa->join('jurusan', 'mahasiswa.id_jurusan = jurusan.id', 'left');
