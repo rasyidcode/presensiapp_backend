@@ -102,10 +102,27 @@
             serverSide: true,
             order: [],
             ajax: function(data, callback, settings) {
+                var prevSearch = data.search.value;
+                var isReplaced = prevSearch.split('|')[3] !== undefined;
+
                 if (firstInit) {
                     var dayofweek = new Date().getDay();
                     data.search.value = `id_dosen=|id_matkul=|dow=${dayofweek}`;
                     firstInit = false;
+                } else {
+                    if (!isReplaced) {
+                        var idDosen = $('#filter_data').find('select[name="dosen"]').val();
+                        if (idDosen === undefined) {
+                            idDosen = '';
+                        }
+                        var idMatkul = $('#filter_data').find('select[name="matkul"]').val();
+                        if (idMatkul === undefined) {
+                            idMatkul = '';
+                        }
+                        var activeDow = $('ul.nav.nav-pills.jadwal-days li a.active').data().dow;
+                        var searchQuery = `id_dosen=${idDosen}|id_matkul=${idMatkul}|dow=${activeDow}`;
+                        data.search.value = searchQuery;
+                    }
                 }
 
                 var data = {
@@ -177,7 +194,15 @@
 
         $('ul.nav.nav-pills.jadwal-days').on('click', 'li.nav-item', function(e) {
             var dow = $(this).find('a').data().dow;
-            var searchQuery = `id_dosen=|id_matkul=|dow=${dow}`;
+            var idDosen = $(this).find('select[name="dosen"]').val();
+            if (idDosen === undefined) {
+                idDosen = '';
+            }
+            var idMatkul = $(this).find('select[name="matkul"]').val();
+            if (idMatkul === undefined) {
+                idMatkul = '';
+            }
+            var searchQuery = `id_dosen=${idDosen}|id_matkul=${idMatkul}|dow=${dow}|replaced=1`;
             table.search(searchQuery).draw();
         });
 
@@ -191,11 +216,11 @@
 
         $('#filter_data').submit(function(e) {
             e.preventDefault();
-            
+
             var idDosen = $(this).find('select[name="dosen"]').val();
             var idMatkul = $(this).find('select[name="matkul"]').val();
             var activeDow = $('ul.nav.nav-pills.jadwal-days li a.active').data().dow;
-            
+
             var searchQuery = `id_dosen=${idDosen}|id_matkul=${idMatkul}|dow=${activeDow}`;
             table.search(searchQuery).draw();
         });
@@ -205,7 +230,7 @@
 
             if (confirm('Are you sure want to delete this schedule?')) {
                 $.ajax({
-                    url: `<?=site_url('jadwal')?>/${id}/delete`,
+                    url: `<?= site_url('jadwal') ?>/${id}/delete`,
                     type: 'POST',
                     data: {
                         ['<?= csrf_token() ?>']: '<?= csrf_hash() ?>'
