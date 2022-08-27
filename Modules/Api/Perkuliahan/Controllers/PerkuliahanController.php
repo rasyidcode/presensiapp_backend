@@ -122,6 +122,99 @@ class PerkuliahanController extends BaseController
             );
         }
 
+        $getPresensi = $this->perkuliahanModel->getPresensi($dosenQr->id, $mhsId);
+        if (!is_null($getPresensi)) {
+            throw new ApiAccessErrorException(
+                message: 'Anda sudah presensi!',
+                statusCode: ResponseInterface::HTTP_BAD_REQUEST
+            );
+        }
+
+        $nowDate = date('Y-m-d');
+        $nowTime = date('H:i');
+
+        $lateTime = strtotime($nowDate . ' ' . $dosenQr->begin_time . ':00 +15 minute');
+        $lateTime = date('H:i', $lateTime);
+        $statusPresensi = 1;
+        if ($nowTime > $lateTime) {
+            $statusPresensi = 2;
+        }
+
+        $this->perkuliahanModel->doPresensi([
+            'id_dosen_qrcode'   => $dosenQr->id,
+            'id_mahasiswa'      => $mhsId,
+            'status_presensi'   => $statusPresensi
+        ]);
+
+        // add activity log
+        $mahasiswa = $this->perkuliahanModel
+            ->builder('mahasiswa')
+            ->where('id', $mhsId)
+            ->get()
+            ->getRowObject();
+        $kelas = $this->perkuliahanModel
+            ->builder('jadwal')
+            ->select('
+                jadwal.id_kelas,
+                kelas.id_matkul,
+                matkul.kode,
+                matkul.nama
+            ')
+            ->join('kelas', 'jadwal.id_kelas = kelas.id', 'left')
+            ->join('matkul', 'kelas.id_matkul = matkul.id', 'left')
+            ->where('jadwal.id', $idJadwal)
+            ->get()
+            ->getRowObject();
+        
+        $this->perkuliahanModel
+            ->builder('activity_logs')
+            ->insert([
+                'body'   => "<strong>".$mahasiswa->nama_lengkap."</strong> melakukan presensi pada kelas <strong>".$kelas->kode."</strong> dengan mata kuliah <strong>".$kelas->matkul."</strong>"
+            ]);
+
+        return $this
+            ->response
+            ->setJSON([
+                'message'   => 'Berhasil melakukan presensi!',
+                'status_presensi'   => $statusPresensi == 1 ? 'ontime' : ($statusPresensi == 2 ? 'late' : 'absent'),
+            ])
+            ->setStatusCode(ResponseInterface::HTTP_OK);
+    }
+
+    public function check()
+    {
+        if (!$this->validate(['id_jadwal' => 'required'], [
+            'id_jadwal' => ['required'  => 'ID Jadwal is required in this request!']
+        ]))
+            throw new ApiAccessErrorException(
+                message: 'Validation Error!',
+                statusCode: ResponseInterface::HTTP_UNPROCESSABLE_ENTITY,
+                extras: ['errors'    => $this->validator->getErrors()]
+            );
+
+        $idJadwal   = $this->request->getVar('id_jadwal');
+        // $userdata   = (object) $this->request->header('User-Data')->getValue();
+
+        $dosenQr = $this->perkuliahanModel
+            ->builder('jadwal')
+            ->select('
+                jadwal.id as id_jadwal,
+                SUBSTR(jadwal.begin_time, 1, 5) as begin_time,
+                SUBSTR(jadwal.end_time, 1, 5) as end_time
+                jadwal.date
+            ')
+            ->join('dosen_qrcode', 'dosen_qrcode.id_jadwal = jadwal.id', 'left')
+            ->where('jadwal.id', $idJadwal)
+            ->get()
+            ->getRowObject();
+        
+        if (is_null($dosenQr)) {
+            throw new ApiAccessErrorException(
+                message: 'Perkuliahan belum dimulai oleh Dosen',
+                statusCode: ResponseInterface::HTTP_BAD_REQUEST
+            );
+        }
+
         // check if the jadwal is already expired or not
         $nowDate = date('Y-m-d');
         if ($nowDate > $dosenQr->date) {
@@ -163,57 +256,12 @@ class PerkuliahanController extends BaseController
             );
         }
 
-        $getPresensi = $this->perkuliahanModel->getPresensi($dosenQr->id, $mhsId);
-        if (!is_null($getPresensi)) {
-            throw new ApiAccessErrorException(
-                message: 'Anda sudah presensi!',
-                statusCode: ResponseInterface::HTTP_BAD_REQUEST
-            );
-        }
-
-        $lateTime = strtotime($nowDate . ' ' . $dosenQr->begin_time . ':00 +15 minute');
-        $lateTime = date('H:i', $lateTime);
-        $statusPresensi = 1;
-        if ($nowTime > $lateTime) {
-            $statusPresensi = 2;
-        }
-        $this->perkuliahanModel->doPresensi([
-            'id_dosen_qrcode'   => $dosenQr->id,
-            'id_mahasiswa'      => $mhsId,
-            'status_presensi'   => $statusPresensi
-        ]);
-
-        // add activity log
-        $mahasiswa = $this->perkuliahanModel
-            ->builder('mahasiswa')
-            ->where('id', $mhsId)
-            ->get()
-            ->getRowObject();
-        $kelas = $this->perkuliahanModel
-            ->builder('jadwal')
-            ->select('
-                jadwal.id_kelas,
-                kelas.id_matkul,
-                matkul.kode,
-                matkul.nama
-            ')
-            ->join('kelas', 'jadwal.id_kelas = kelas.id', 'left')
-            ->join('matkul', 'kelas.id_matkul = matkul.id', 'left')
-            ->where('jadwal.id', $idJadwal)
-            ->get()
-            ->getRowObject();
-        
-        $this->perkuliahanModel
-            ->builder('activity_logs')
-            ->insert([
-                'body'   => "<strong>".$mahasiswa->nama_lengkap."</strong> melakukan presensi pada kelas <strong>".$kelas->kode."</strong> dengan mata kuliah <strong>".$kelas->matkul."</strong>"
-            ]);
-
         return $this
             ->response
             ->setJSON([
-                'message'   => 'Berhasil melakukan presensi!',
-                'status_presensi'   => $statusPresensi == 1 ? 'ontime' : ($statusPresensi == 2 ? 'late' : 'absent'),
+                'success'   => true,
+                'code'      => ResponseInterface::HTTP_OK,
+                'message'   => 'Check berhasil, silahkan melakukan presensi'
             ])
             ->setStatusCode(ResponseInterface::HTTP_OK);
     }

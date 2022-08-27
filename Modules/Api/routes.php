@@ -27,6 +27,7 @@ $routes->group('api/v1', ['namespace' => $routes_namespace], function ($routes) 
         $routes->get('/',               'PerkuliahanController::index');
         $routes->get('(:segment)',      'PerkuliahanController::get/$1');
         $routes->post('do-presensi',    'PerkuliahanController::doPresensi');
+        $routes->post('check',          'PerkuliahanController::check');
     });
 
     // dosen protected
