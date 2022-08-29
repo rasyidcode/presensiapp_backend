@@ -196,14 +196,14 @@ class PerkuliahanController extends BaseController
         // $userdata   = (object) $this->request->header('User-Data')->getValue();
 
         $dosenQr = $this->perkuliahanModel
-            ->builder('jadwal')
+            ->builder('dosen_qrcode')
             ->select('
                 jadwal.id as id_jadwal,
                 SUBSTR(jadwal.begin_time, 1, 5) as begin_time,
-                SUBSTR(jadwal.end_time, 1, 5) as end_time
+                SUBSTR(jadwal.end_time, 1, 5) as end_time,
                 jadwal.date
             ')
-            ->join('dosen_qrcode', 'dosen_qrcode.id_jadwal = jadwal.id', 'left')
+            ->join('jadwal', 'dosen_qrcode.id_jadwal = jadwal.id', 'left')
             ->where('jadwal.id', $idJadwal)
             ->get()
             ->getRowObject();
