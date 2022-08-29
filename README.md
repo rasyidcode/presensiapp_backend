@@ -29,15 +29,14 @@ Presensi App Backend
 
 > The project structure above is called HMVC, which stands for Hierarical Model View Controller, which will divided each feature on its own module
 ### Features
-- Admin Auth
-- Admin Panel
+- Auth
+- Dashboard
 - User Management
 - Master Data Management
 - Student Management
 - Teacher Management
 - Schedule Management
 - Present Monitorer
-- Dashboard
 
 ### REST API
 -
