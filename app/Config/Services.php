@@ -30,18 +30,18 @@ class Services extends BaseService
      * }
      */
 
-     public static function getAccessTokenKey() : string 
-     {
-         return 'jwt_access_token_presensi_app';
-     }
+    public static function getAccessTokenKey(): string
+    {
+        return 'jwt_access_token_presensi_app';
+    }
 
-     public static function getRefreshTokenKey() : string 
-     {
-         return 'jwt_refresh_token_presensi_app';
-     }
+    public static function getRefreshTokenKey(): string
+    {
+        return 'jwt_refresh_token_presensi_app';
+    }
 
-     public static function getAccessTokenLifetime() : int
-     {
-        return 3600 * 8; // hours
-     }
+    public static function getAccessTokenLifetime(): int
+    {
+        return 3600 * 8; // 8 hours
+    }
 }
