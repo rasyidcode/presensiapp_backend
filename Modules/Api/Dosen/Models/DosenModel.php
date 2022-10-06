@@ -69,6 +69,7 @@ class DosenModel extends Model
         $jadwal->join('matkul', 'kelas.id_matkul = matkul.id', 'left');
 
         $jadwal->where('kelas.id_dosen', $dosenId);
+        $jadwal->where('jadwal.date', date('Y-m-d'));
         $jadwal->where('jadwal.deleted_at', null);
 
 
