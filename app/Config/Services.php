@@ -42,6 +42,6 @@ class Services extends BaseService
 
      public static function getAccessTokenLifetime() : int
      {
-        return 600;
+        return 3600 * 8; // hours
      }
 }
