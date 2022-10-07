@@ -62,9 +62,11 @@ class DosenModel extends Model
                     \'done\',
                     \'not_started\'
                 )
-            ) as status_perkuliahan
+            ) as status_perkuliahan,
+            dosen_qrcode.qr_secret
         ');
 
+        $jadwal->join('dosen_qrcode', 'dosen_qrcode.id_jadwal = jadwal.id', 'left');
         $jadwal->join('kelas', 'kelas.id = jadwal.id_kelas', 'left');
         $jadwal->join('matkul', 'kelas.id_matkul = matkul.id', 'left');
 
@@ -115,9 +117,11 @@ class DosenModel extends Model
                     \'done\',
                     \'not_started\'
                 )
-            ) as status_perkuliahan
+            ) as status_perkuliahan,
+            dosen_qrcode.qr_secret
         ');
 
+        $jadwal->join('dosen_qrcode', 'dosen_qrcode.id_jadwal = jadwal.id', 'left');
         $jadwal->join('kelas', 'kelas.id = jadwal.id_kelas', 'left');
         $jadwal->join('matkul', 'kelas.id_matkul = matkul.id', 'left');
 
@@ -139,6 +143,25 @@ class DosenModel extends Model
         return $this
             ->db
             ->insertID();
+    }
+
+    public function getListPresensi(int $idJadwal) : array
+    {
+        $listPresensi = $this
+            ->builder('presensi')
+            ->select('
+                presensi.id,
+                mahasiswa.nim,
+                mahasiswa.nama_lengkap,
+                presensi.status_presensi,
+                presensi.created_at
+            ')
+            ->join('dosen_qrcode', 'dosen_qrcode.id = presensi.id_dosen_qrcode', 'left')
+            ->join('mahasiswa', 'mahasiswa.id = presensi.id_mahasiswa', 'left')
+            ->where('dosen_qrcode.id_jadwal', $idJadwal)
+            ->get()
+            ->getResultObject();
+        return $listPresensi;
     }
 
     public function getListMahasiswaIDs(int $idJadwal) : array

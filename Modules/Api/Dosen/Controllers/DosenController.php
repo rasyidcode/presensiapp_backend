@@ -40,6 +40,12 @@ class DosenController extends BaseController
             ->dosenModel
             ->getListPerkuliahan($idDosen);
 
+        foreach($perkuliahan as &$item) {
+            $item->mahasiswa = $this
+                ->dosenModel
+                ->getListPresensi($item->id_jadwal);
+        }
+
         return $this
             ->response
             ->setJSON([
@@ -84,7 +90,7 @@ class DosenController extends BaseController
             ]
         ]))
             throw new ApiAccessErrorException(
-                message: 'Validation Error!',
+                message: 'QR telah dibuat!',
                 statusCode: ResponseInterface::HTTP_UNPROCESSABLE_ENTITY,
                 extras: [
                     'errors'    => $this
