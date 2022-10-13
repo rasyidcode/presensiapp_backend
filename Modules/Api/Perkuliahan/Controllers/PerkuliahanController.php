@@ -169,7 +169,7 @@ class PerkuliahanController extends BaseController
         $this->perkuliahanModel
             ->builder('activity_logs')
             ->insert([
-                'body'   => "<strong>".$mahasiswa->nama_lengkap."</strong> melakukan presensi pada kelas <strong>".$kelas->kode."</strong> dengan mata kuliah <strong>".$kelas->matkul."</strong>"
+                'body'   => "<strong>".$mahasiswa->nama_lengkap."</strong> melakukan presensi pada kelas <strong>".$kelas->kode."</strong> dengan mata kuliah <strong>".$kelas->nama."</strong>"
             ]);
 
         return $this

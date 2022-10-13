@@ -324,6 +324,7 @@ class PerkuliahanModel extends Model
             ->builder('presensi')
             ->where('id_dosen_qrcode', $dosenQrCodeId)
             ->where('id_mahasiswa', $mahasiswaId)
+            ->where('status_presensi', 1)
             ->get()
             ->getRowObject();
         return $result;
