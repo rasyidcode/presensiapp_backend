@@ -1,0 +1,56 @@
+services:
+  web:
+    build: .
+    image: presensiapp-backend
+    container_name: pres-web
+    restart: unless-stopped
+    volumes:
+      - ./:/srv/presensiapp
+    depends_on:
+      - db
+    networks:
+      - pres-network
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: pres-nginx
+    restart: unless-stopped
+    volumes:
+      - ./:/srv/presensiapp
+      - ./presensiapp.conf:/etc/nginx/conf.d/presensiapp.conf
+    working_dir: /srv
+    ports:
+      - "80:80"
+    networks:
+      pres-network:
+        aliases:
+          - presensiapp-local.test
+    depends_on:
+      - web
+
+  db:
+    image: mysql:8.0
+    container_name: pres-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+    volumes:
+      - pres-data:/var/lib/mysql
+    ports:
+      - "3309:3306"
+    networks:
+      - pres-network
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    networks:
+      - pres-network
+
+networks:
+  pres-network:
+
+volumes:
+  pres-data:
